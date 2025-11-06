@@ -1,9 +1,6 @@
 // src/db/models/user.js
 import { Schema, model } from 'mongoose';
-import bcrypt from 'bcrypt';
-
-// Схема відповідає вашому JSON 'модель users'
-const userSchema = new Schema(
+const usersSchema = new Schema(
   {
     name: {
       type: String,
@@ -50,4 +47,4 @@ usersSchema.methods.toJSON = function () {
   return obj;
 };
 
-export const UsersCollection = model('users', userSchema);
+export const UsersCollection = model('users', usersSchema);

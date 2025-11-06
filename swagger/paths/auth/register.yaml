@@ -44,7 +44,7 @@ responses:
               type: string
               example: Successfully registered a user!
             data:
-              $ref: ../../components/schemas/user.yaml
+              $ref: ../../components/schemas/auth/session.yaml
   '400':
     description: Bad request
     $ref: '../../components/responses/400.yaml'

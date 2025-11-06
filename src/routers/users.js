@@ -1,19 +1,22 @@
 // src/routers/users.js
 import { Router } from 'express';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { authenticate } from '../middlewares/authenticate.js';
-import { isValidId } from '../middlewares/isValidId.js';
-import { validateBody } from '../middlewares/validateBody.js';
-import { upload } from '../middlewares/multer.js';
-import { updateUserFavoritesSchema } from '../validation/users.js';
 import {
-  getUsersController,
+  addFavoriteController,
   getCurrentUserController,
   getUserByIdController,
-  updateCurrentUserController,
-  addFavoriteController,
+  getUsersController,
   removeFavoriteController,
+  updateCurrentUserController,
 } from '../controllers/users.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import { isValidId } from '../middlewares/isValidId.js';
+import { upload } from '../middlewares/multer.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import {
+  updateUserFavoritesSchema,
+  updateUserSchema,
+} from '../validation/users.js';
 
 const usersRouter = Router();
 

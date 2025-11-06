@@ -1,17 +1,17 @@
 // src/routers/stories.js
 import { Router } from 'express';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import {
+  createStoryController,
+  getStoriesController,
+  getStoryByIdController,
+  updateStoryController,
+} from '../controllers/stories.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { isValidId } from '../middlewares/isValidId.js';
-import { validateBody } from '../middlewares/validateBody.js';
 import { upload } from '../middlewares/multer.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { createStorySchema, updateStorySchema } from '../validation/stories.js';
-import {
-  getStoriesController,
-  createStoryController,
-  updateStoryController,
-  // ... (додайте інші контролери)
-} from '../controllers/stories.js';
 
 const storiesRouter = Router();
 
