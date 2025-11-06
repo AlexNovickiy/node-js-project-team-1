@@ -1,60 +1,51 @@
 import { Router } from 'express';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+
 import {
-  registerUserSchema,
-  loginUserSchema,
-  requestResetEmailSchema,
-  resetPasswordSchema,
-  loginWithGoogleOAuthSchema,
-} from '../validation/auth.js';
-import {
-  registerUserController,
-  loginUserController,
-  logoutUserController,
-  refreshUserSessionController,
-  requestResetEmailController,
-  resetPasswordController,
-  getGoogleOAuthUrlController,
-  loginWithGoogleController,
+  loginController,
+  logoutController,
+  refreshController,
+  registerController,
 } from '../controllers/auth.js';
 import { validateBody } from '../middlewares/validateBody.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { loginUserSchema, registerUserSchema } from '../validation/auth.js';
 
 const authRouter = Router();
 
 authRouter.post(
   '/register',
   validateBody(registerUserSchema),
-  ctrlWrapper(registerUserController),
+  ctrlWrapper(registerController),
 );
 
 authRouter.post(
   '/login',
   validateBody(loginUserSchema),
-  ctrlWrapper(loginUserController),
+  ctrlWrapper(loginController),
 );
 
-authRouter.post('/logout', ctrlWrapper(logoutUserController));
+authRouter.post('/logout', ctrlWrapper(logoutController));
 
-authRouter.post('/refresh', ctrlWrapper(refreshUserSessionController));
+authRouter.post('/refresh', ctrlWrapper(refreshController));
 
-authRouter.post(
-  '/send-reset-email',
-  validateBody(requestResetEmailSchema),
-  ctrlWrapper(requestResetEmailController),
-);
+// authRouter.post(
+//   '/send-reset-email',
+//   validateBody(requestResetEmailSchema),
+//   ctrlWrapper(requestResetEmailController),
+// );
 
-authRouter.post(
-  '/reset-pwd',
-  validateBody(resetPasswordSchema),
-  ctrlWrapper(resetPasswordController),
-);
+// authRouter.post(
+//   '/reset-pwd',
+//   validateBody(resetPasswordSchema),
+//   ctrlWrapper(resetPasswordController),
+// );
 
-authRouter.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
+// authRouter.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
 
-authRouter.post(
-  '/confirm-oauth',
-  validateBody(loginWithGoogleOAuthSchema),
-  ctrlWrapper(loginWithGoogleController),
-);
+// authRouter.post(
+//   '/confirm-oauth',
+//   validateBody(loginWithGoogleOAuthSchema),
+//   ctrlWrapper(loginWithGoogleController),
+// );
 
 export default authRouter;

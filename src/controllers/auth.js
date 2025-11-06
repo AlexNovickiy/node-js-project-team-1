@@ -1,16 +1,14 @@
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import {
-  registerUser,
   loginUser,
   logoutUser,
   refreshUsersSession,
-  resetEmail,
+  registerUser,
 } from '../services/auth.js';
 
 const REFRESH_COOKIE_NAME = 'refreshToken';
 const ACCESS_COOKIE_NAME = 'accessToken';
 const SESSION_COOKIE_NAME = 'sessionId';
-import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 
 const setupAuthCookies = (res, session) => {
   res.cookie(REFRESH_COOKIE_NAME, session.refreshToken, {
@@ -76,25 +74,25 @@ export const refreshController = async (req, res) => {
   });
 };
 
-export const requestResetEmailController = async (req, res) => {
-  await requestResetToken(req.body.email);
-  res.json({
-    message: 'Reset email was successfully sent!',
-    status: 200,
-    data: {},
-  });
-};
+// export const requestResetEmailController = async (req, res) => {
+//   await requestResetToken(req.body.email);
+//   res.json({
+//     message: 'Reset email was successfully sent!',
+//     status: 200,
+//     data: {},
+//   });
+// };
 
-export const resetEmailController = async (req, res) => {
-  await resetEmail(req.body);
+// export const resetEmailController = async (req, res) => {
+//   await resetEmail(req.body);
 
-  res.clearCookie(SESSION_COOKIE_NAME);
-  res.clearCookie(REFRESH_COOKIE_NAME);
-  res.clearCookie(ACCESS_COOKIE_NAME);
+//   res.clearCookie(SESSION_COOKIE_NAME);
+//   res.clearCookie(REFRESH_COOKIE_NAME);
+//   res.clearCookie(ACCESS_COOKIE_NAME);
 
-  res.json({
-    message: 'Email was successfully reset!',
-    status: 200,
-    data: {},
-  });
-};
+//   res.json({
+//     message: 'Email was successfully reset!',
+//     status: 200,
+//     data: {},
+//   });
+// };

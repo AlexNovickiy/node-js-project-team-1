@@ -23,6 +23,6 @@ responses:
               type: string
               example: Successfully refreshed a session!
             data:
-              $ref: ../../components/schemas/session.yaml
+              $ref: ../../components/schemas/auth/session.yaml
   '401':
     $ref: ../../components/responses/401.yaml

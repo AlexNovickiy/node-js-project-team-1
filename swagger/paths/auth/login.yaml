@@ -40,6 +40,6 @@ responses:
               type: string
               example: Successfully logged in an user!
             data:
-              $ref: ../../components/schemas/session.yaml
+              $ref: '../../components/schemas/auth/session.yaml'
   '401':
     $ref: ../../components/responses/401.yaml

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { isValidObjectId } from 'mongoose';
 
 export const updateUserFavoritesSchema = Joi.object({
   storyId: Joi.string().custom((value, helper) => {
