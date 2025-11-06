@@ -10,7 +10,6 @@ export const updateUserFavoritesSchema = Joi.object({
 });
 
 export const updateUserSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email().max(64),
-  description: Joi.string().max(150),
+  userPhoto: Joi.string().optional(),
+  description: Joi.string().max(150).optional(),
 });
