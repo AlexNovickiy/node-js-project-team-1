@@ -1,12 +1,47 @@
-import { model, Schema } from 'mongoose';
+// src/db/models/user.js
+import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
 
-const usersSchema = new Schema(
+// Схема відповідає вашому JSON 'модель users'
+const userSchema = new Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    name: {
+      type: String,
+      required: [true, 'Name is required'],
+      maxLength: 32,
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      maxLength: 64,
+    },
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      minLength: 8,
+      maxLength: 128,
+    },
+    avatarUrl: {
+      type: String,
+      default: '',
+    },
+    description: {
+      type: String,
+      maxLength: 150,
+      default: '',
+    },
+    favorites: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'story',
+      },
+    ],
   },
-  { timestamps: true, versionKey: false },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
 usersSchema.methods.toJSON = function () {
@@ -15,4 +50,4 @@ usersSchema.methods.toJSON = function () {
   return obj;
 };
 
-export const UsersCollection = model('users', usersSchema);
+export const UsersCollection = model('users', userSchema);

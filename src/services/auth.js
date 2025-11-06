@@ -151,7 +151,7 @@ export const requestResetToken = async (email) => {
   }
 };
 
-export const resetPassword = async (payload) => {
+export const resetEmail = async (payload) => {
   let entries;
 
   try {
@@ -171,36 +171,10 @@ export const resetPassword = async (payload) => {
     throw createHttpError(404, 'User not found');
   }
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
-
   await UsersCollection.updateOne(
     { _id: user._id },
-    { password: encryptedPassword },
+    { email: payload.newEmail },
   );
 
   await SessionsCollection.deleteOne({ userId: user._id });
-};
-
-export const loginOrSignupWithGoogle = async (code) => {
-  const loginTicket = await validateCode(code);
-  const payload = loginTicket.getPayload();
-  if (!payload) throw createHttpError(401);
-
-  let user = await UsersCollection.findOne({ email: payload.email });
-  if (!user) {
-    const password = await bcrypt.hash(randomBytes(10), 10);
-    user = await UsersCollection.create({
-      email: payload.email,
-      name: getFullNameFromGoogleTokenPayload(payload),
-      password,
-      role: 'parent',
-    });
-  }
-
-  const newSession = createSession();
-
-  return await SessionsCollection.create({
-    userId: user._id,
-    ...newSession,
-  });
 };

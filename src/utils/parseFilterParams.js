@@ -1,25 +1,28 @@
-const parseContactType = (contactType) => {
-  const isString = typeof contactType === 'string';
-  if (!isString) return;
-  const isContactType = (type) => ['work', 'home', 'personal'].includes(type);
+const parseCategory = (category) => {
+  isString = typeof category === 'string' ? category : undefined;
 
-  if (isContactType(contactType)) return contactType;
+  if (!isString) {
+    return undefined;
+  }
+
+  const isCategory = [Азія, Пустелі, Європа, Африка].includes(category)
+    ? category
+    : undefined;
+
+  if (isCategory) {
+    return isCategory;
+  } else {
+    return undefined;
+  }
 };
 
-const parseBoolean = (value) => {
-  if (value === 'true') return true;
-  else if (value === 'false') return false;
-  else return undefined;
-};
-
+// TODO: Додайте інші фільтри, якщо вони знадобляться
 export const parseFilterParams = (query) => {
-  const { contactType, isFavourite } = query;
+  const { category } = query;
 
-  const parsedContactType = parseContactType(contactType);
-  const parsedIsFavourite = parseBoolean(isFavourite);
+  const parsedCategory = parseCategory(category);
 
   return {
-    ...(parsedContactType !== undefined && { contactType: parsedContactType }),
-    ...(parsedIsFavourite !== undefined && { isFavourite: parsedIsFavourite }),
+    ...(parsedCategory !== undefined && { category: parsedCategory }),
   };
 };
