@@ -4,6 +4,12 @@ export const getStoriesController = async (req, res) => {
   res.status(200).json({ status: 200, data });
 };
 
+export const getStoryByIdController = async (req, res) => {
+  // TODO: Сервіс для getStoryById(req.params.storyId)
+  const data = { message: 'Story GET by ID endpoint placeholder' };
+  res.status(200).json({ status: 200, data });
+};
+
 export const createStoryController = async (req, res) => {
   // TODO: Сервіс для createStory(storyData)
   // TODO: Сервіс має:

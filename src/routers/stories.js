@@ -19,6 +19,12 @@ const storiesRouter = Router();
 // GET /api/stories - ОТРИМАННЯ історій + пагінація + фільтрація
 storiesRouter.get('/', ctrlWrapper(getStoriesController));
 
+storiesRouter.get(
+  '/:storyId',
+  isValidId('storyId'),
+  ctrlWrapper(getStoryByIdController),
+);
+
 // --- Приватні роути ---
 storiesRouter.use(authenticate);
 
