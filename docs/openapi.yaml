@@ -37,6 +37,9 @@ paths:
   /users/me/current:
     get:
       $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
+  /users/me:
+    patch:
+      $ref: '../swagger/paths/users/updateUser.yaml'
 
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
