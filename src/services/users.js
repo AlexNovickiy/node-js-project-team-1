@@ -1,6 +1,12 @@
 import createHttpError from 'http-errors';
-import { StoriesCollection } from '../db/models/story.js';
 import { UsersCollection } from '../db/models/user.js';
+import { StoriesCollection } from '../db/models/story.js';
+
+export const getUserCurrentService = async (userId) => {
+  return await UsersCollection.findOne({ _id: userId })
+    .select('-password')
+    .populate('favorites');
+};
 
 export const addFavorite = async (userId, storyId) => {
   const story = await StoriesCollection.findById(storyId);

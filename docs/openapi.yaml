@@ -9,6 +9,7 @@ info:
 
 servers:
   - url: http://localhost:3000
+  - url: http://localhost:5000
 tags:
   - name: Auth
     description: User authentication and registration
@@ -33,7 +34,10 @@ paths:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
 
-  # /users:
+  /users/me/current:
+    get:
+      $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
+
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
   #   $ref: './paths/users/get-me.yaml'
