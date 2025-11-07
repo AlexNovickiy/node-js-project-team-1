@@ -32,30 +32,9 @@ paths:
   /auth/refresh:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
-
-  # /users:
-  #   $ref: './paths/users/get-users.yaml'
-  # /users/me:
-  #   $ref: './paths/users/get-me.yaml'
-  # /users/me/patch:
-  #   $ref: './paths/users/patch-me.yaml'
-  # /users/{userId}:
-  #   $ref: './paths/users/get-user-by-id.yaml'
-
-  # /users/me/favorites:
-  #   $ref: './paths/users/post-favorite.yaml'
-  # /users/me/favorites/{storyId}:
-  #   $ref: './paths/users/delete-favorite.yaml'
-
-  # /stories:
-  #   $ref: './paths/stories/get-stories.yaml'
-  # /stories/post:
-  #   $ref: './paths/stories/post-story.yaml'
-  # /stories/{storyId}:
-  #   $ref: './paths/stories/patch-story.yaml'
-
-  # /categories:
-  #   $ref: './paths/categories/get-categories.yaml'
+  /stories:
+    post:
+      $ref: '../swagger/paths/stories/post.yaml'
 
 components:
   securitySchemes:
