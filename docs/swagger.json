@@ -300,7 +300,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Patch Current User Data",
+        "summary": "Patch User Data",
         "operationId": "updateCurrentUser",
         "description": "Updates the information of the user associated with the active access token.",
         "security": [],
