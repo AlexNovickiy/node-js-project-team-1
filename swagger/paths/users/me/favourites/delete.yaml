@@ -5,8 +5,7 @@ operationId: removeSavedStory
 description: >
   Remove the specified story from the authenticated user's saved (favorites) list.
   Decrements the favoriteCount field of the story by 1.
-security:
-  - bearerAuth: []
+security: []
 parameters:
   - in: path
     name: id
