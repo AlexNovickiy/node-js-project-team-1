@@ -8,7 +8,7 @@ import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getStoriesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const filter = parseFilterParams(req.query);
+  const filter = await parseFilterParams(req.query);
 
   const stories = await getAllStories({
     page,

@@ -18,7 +18,18 @@ parameters:
     name: category
     schema:
       type: string
-      enum: ['Азія', 'Пустелі', 'Європа', 'Африка']
+      enum:
+        [
+          'Азія',
+          'Пустелі',
+          'Європа',
+          'Африка',
+          'Гори',
+          'Америка',
+          'Балкани',
+          'Кавказ',
+          'Океанія',
+        ]
       example: Азія
 responses:
   '200':
@@ -52,7 +63,7 @@ responses:
                 data:
                   type: array
                   items:
-                    $ref: '../../components/schemas/contact.yaml'
+                    $ref: '../../components/schemas/story.yaml'
                 page:
                   type: number
                   example: 2

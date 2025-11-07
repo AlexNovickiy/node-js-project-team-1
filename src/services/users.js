@@ -28,6 +28,7 @@ export const removeArticle = async (userId, storyId) => {
   });
 
   return { userId, storyId };
+};
 
 export const getUserCurrentService = async (userId) => {
   return await UsersCollection.findOne({ _id: userId })
