@@ -1,3 +1,5 @@
+import { getUserCurrentService } from "../services/users.js";
+
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
   const data = { message: 'Users GET endpoint placeholder' };
@@ -16,11 +18,12 @@ export const getUserByIdController = async (req, res) => {
 
 export const getCurrentUserController = async (req, res) => {
   // TODO: Сервіс для getUserById(req.user.id)
-  const user = req.user;
+  const userId = req.user._id;
+  const data = await getUserCurrentService(userId);
   res.status(200).json({
     status: 200,
     message: 'Successfully retrieved current user data',
-    user,
+    data,
   });
 };
 

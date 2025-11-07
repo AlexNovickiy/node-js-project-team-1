@@ -31,7 +31,7 @@ const usersSchema = new Schema(
     favorites: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'story',
+        ref: 'stories',
       },
     ],
   },

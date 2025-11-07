@@ -37,6 +37,8 @@ paths:
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
   #   $ref: './paths/users/get-me.yaml'
+  /users/me/current:
+    $ref: '../swagger/paths/users/get-me-current.yaml'
   # /users/me/patch:
   #   $ref: './paths/users/patch-me.yaml'
   # /users/{userId}:
