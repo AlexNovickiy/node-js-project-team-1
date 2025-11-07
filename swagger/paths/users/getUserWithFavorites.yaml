@@ -2,8 +2,25 @@ tags:
   - Users
 summary: Get Current User Data
 operationId: getCurrentUser
-description: Retrieves the information of the user associated with the active access token.
+description: |
+  Retrieves user information and a paginated list of their favorite stories.
+  Requires pagination query parameters (page, perPage) for the favorites list.
 security: []
+parameters:
+  - in: query
+    name: page
+    schema:
+      type: integer
+      default: 1
+    required: false
+    description: Page number for the favorites list.
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      default: 10
+    required: false
+    description: Number of favorite stories per page.
 responses:
   '200':
     description: Current user data successfully retrieved.
@@ -17,12 +34,76 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully retrieved current user data
+              example: Current user data retrieved successfully.
             data:
               type: object
               properties:
                 user:
-                  $ref: '../../components/schemas/users/user.yaml'
-
+                  allOf:
+                    - $ref: ../../components/schemas/users/user.yaml
+                    - type: object
+                      properties:
+                        favorites:
+                          description: >-
+                            Array of favorited story objects with populated
+                            owner data.
+                          type: array
+                          items:
+                            allOf:
+                              - $ref: ../../components/schemas/stories/story.yaml
+                              - type: object
+                                properties:
+                                  ownerId:
+                                    description: 'Author (owner) object, populated.'
+                                    type: object
+                                    properties:
+                                      _id:
+                                        type: string
+                                        example: 6881563901add19ee16fd017
+                                      name:
+                                        type: string
+                                        example: Матвій Савченко
+                                      avatarUrl:
+                                        type: string
+                                        format: uri
+                                        example: >-
+                                          https://ftp.goit.study/img/harmoniq/users/author.webp
+                                      description:
+                                        type: string
+                                        example: Мене звати Матвій...
+                pagination:
+                  $ref: ../../components/schemas/pagination/pagination.yaml
+        examples:
+          successResponse:
+            summary: Successful retrieval
+            value:
+              status: 200
+              message: Current user data retrieved successfully.
+              data:
+                user:
+                  _id: 690d3e43c14a8aa7610df936
+                  name: Василина 2
+                  email: vasya2@mail.com
+                  avatarUrl: 'https://res.cloudinary.com/uqwgdu/image/upload/image.png'
+                  description: A short bio about Vasylina.
+                  favorites:
+                    - _id: 68498236a100312bea079008
+                      title: 'Йорданія: шлях у Петру'
+                      img: >-
+                        https://ftp.goit.study/img/travel-blog/de37b4596c7d4a2a81a821d2bs.webp
+                      article: Петра — одне з нових чудес світу...
+                      category: 68fb50c80ae91338641121f0
+                      ownerId:
+                        _id: 6881563901add19ee16fd017
+                        name: Матвій Савченко
+                        avatarUrl: 'https://ftp.goit.study/img/harmoniq/users/author.webp'
+                        description: Мене звати Матвій...
+                pagination:
+                  page: 1
+                  perPage: 10
+                  totalItems: 2
+                  totalPages: 1
+                  hasNextPage: false
+                  hasPreviousPage: false
   '401':
     $ref: ../../components/responses/401.yaml

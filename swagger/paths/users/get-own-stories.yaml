@@ -1,10 +1,10 @@
 tags:
-  - User
-summary: Get Current User's Own Stories (Paginated)
+  - Users
+summary: Get Current User's Own Stories
 operationId: getCurrentUserStories
-description: |
-  Retrieves a paginated list of stories that were created by the currently authenticated user.
-  Includes pagination metadata in the response.
+description: >-
+  Retrieves a paginated list of stories that were created by the currently
+  authenticated user. Includes pagination metadata in the response.
 security: []
 parameters:
   - in: query
@@ -21,7 +21,6 @@ parameters:
       default: 10
     required: false
     description: Number of stories per page.
-
 responses:
   '200':
     description: Successfully retrieved the user's stories.
@@ -43,10 +42,9 @@ responses:
                   type: array
                   description: The paginated array of story objects.
                   items:
-                    $ref: '../../components/schemas/stories/story.yaml'
+                    $ref: ../../components/schemas/stories/story.yaml
                 pagination:
-                  $ref: '../../components/schemas/pagination/pagination.yaml'
-
+                  $ref: ../../components/schemas/pagination/pagination.yaml
         examples:
           storiesFound:
             summary: Stories Found
@@ -55,12 +53,12 @@ responses:
               message: Current user stories retrieved successfully.
               data:
                 stories:
-                  - _id: "65f0b4a1d286b30065d54b00"
-                    title: 'My Story Title'
+                  - _id: 65f0b4a1d286b30065d54b00
+                    title: My Story Title
                     img: 'https://example.com/story.jpg'
-                    ownerId: '690d3e43c14a8aa7610df936'
-                    article: 'This is the body of the story.'
-                    category: '65e4decdd286b30065d54b11'
+                    ownerId: 690d3e43c14a8aa7610df936
+                    article: This is the body of the story.
+                    category: 65e4decdd286b30065d54b11
                 pagination:
                   page: 1
                   perPage: 10
@@ -68,7 +66,6 @@ responses:
                   totalPages: 2
                   hasNextPage: true
                   hasPreviousPage: false
-
           noStoriesFound:
             summary: No Stories Found
             value:
@@ -83,6 +80,5 @@ responses:
                   totalPages: 0
                   hasNextPage: false
                   hasPreviousPage: false
-
   '401':
     $ref: ../../components/responses/401.yaml
