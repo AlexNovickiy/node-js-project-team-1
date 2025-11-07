@@ -1,3 +1,5 @@
+import { addFavorite } from '../services/users.js';
+
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
   const data = { message: 'Users GET endpoint placeholder' };
@@ -37,13 +39,17 @@ export const updateCurrentUserController = async (req, res) => {
 };
 
 export const addFavoriteController = async (req, res) => {
-  // TODO: Сервіс для addFavorite(req.user.id, req.body.storyId)
-  const data = {
-    message: 'Favorite POST placeholder',
-    userId: req.user.id,
-    storyId: req.body.storyId,
-  };
-  res.status(200).json({ status: 200, data });
+  const userId = req.user.id;
+  const storyId = req.body.storyId;
+
+  const updatedUser = await addFavorite(userId, storyId);
+  res.status(200).json({
+    status: 200,
+    message: 'Story successfully added to favorites',
+    data: {
+      user: updatedUser,
+    },
+  });
 };
 
 export const removeFavoriteController = async (req, res) => {
