@@ -1,4 +1,7 @@
 import { removeArticle } from '../services/users.js';
+import { getUserCurrentService } from '../services/users.js';
+import { updateUserCurrentService } from '../services/users.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
@@ -18,24 +21,38 @@ export const getUserByIdController = async (req, res) => {
 
 export const getCurrentUserController = async (req, res) => {
   // TODO: Сервіс для getUserById(req.user.id)
-
-  const data = {
-    message: 'User GET ME placeholder',
-    user: req.user, // req.user вже містить дані з 'authenticate'
-  };
-  res.status(200).json({ status: 200, data });
+  const userId = req.user._id;
+  const data = await getUserCurrentService(userId);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully retrieved current user data',
+    data,
+  });
 };
 
 export const updateCurrentUserController = async (req, res) => {
   // TODO: Сервіс для updateUser(req.user.id, req.body, req.file)
 
-  const data = {
-    message: 'User PATCH ME placeholder',
-    userId: req.user.id,
-    body: req.body,
-    file: req.file,
-  };
-  res.status(200).json({ status: 200, data });
+  const userId = req.user._id;
+  const { description } = req.body;
+  const avatar = req.file;
+  let avatarUrl;
+
+  if (avatar) {
+    avatarUrl = await saveFileToCloudinary(avatar);
+  }
+
+  const updateData = {};
+  if (description) updateData.description = description;
+  if (avatarUrl) updateData.avatarUrl = avatarUrl;
+
+  const updatedUser = await updateUserCurrentService(userId, updateData);
+
+  res.status(200).json({
+    status: 200,
+    message: 'User profile updated successfully',
+    data: updatedUser,
+  });
 };
 
 export const addFavoriteController = async (req, res) => {

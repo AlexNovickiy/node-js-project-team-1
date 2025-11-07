@@ -1,0 +1,54 @@
+type: object
+required:
+  - name
+  - email
+  - password
+properties:
+  _id:
+    description: "User's id"
+    type: string
+    example: 65e4decdd286b30065d54af9
+  name:
+    description: "User's name"
+    type: string
+    maxLength: 32
+    example: 'John Doe'
+  email:
+    description: "User's email"
+    type: string
+    format: email
+    maxLength: 64
+    example: 'john.doe@example.com'
+  password:
+    description: "User's password"
+    type: string
+    minLength: 8
+    maxLength: 128
+    writeOnly: true
+  avatarUrl:
+    description: "Link to user's avatar"
+    type: string
+    format: uri
+    default: ''
+    example: https://res.cloudinary.com/uqwgdu/image/upload/image.png
+  description:
+    description: 'Short user description/bio'
+    type: string
+    maxLength: 150
+    default: ''
+    example: 'A short bio'
+  favorites:
+    description: 'Array of favorited story objects'
+    type: array
+    items:
+      $ref: '../stories/story.yaml'
+example:
+  _id: 65e4decdd286b30065d54af9
+  name: 'John Doe'
+  email: 'john.doe@example.com'
+  avatarUrl: 'https://res.cloudinary.com/uqwgdu/image/upload/image.png'
+  description: 'A short bio'
+  favorites:
+    - _id: 65f0b4a1d286b30065d54b00
+      title: 'Sample story'
+      img: 'https://res.cloudinary.com/uqwgdu/image/upload/story.png'

@@ -28,4 +28,18 @@ export const removeArticle = async (userId, storyId) => {
   });
 
   return { userId, storyId };
+
+export const getUserCurrentService = async (userId) => {
+  return await UsersCollection.findOne({ _id: userId })
+    .select('-password')
+    .populate('favorites');
+};
+
+export const updateUserCurrentService = async (userId, updateData) => {
+  const user = await UsersCollection.findOneAndUpdate(
+    { _id: userId },
+    updateData,
+    { new: true },
+  );
+  return user;
 };
