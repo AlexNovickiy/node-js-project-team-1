@@ -3,6 +3,10 @@ import {
   getUserCurrentStoriesService,
 } from '../services/users.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+import { removeArticle } from '../services/users.js';
+import { getUserCurrentService } from '../services/users.js';
+import { updateUserCurrentService } from '../services/users.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
@@ -73,13 +77,26 @@ export const getCurrentUserStoriesController = async (req, res) => {
 export const updateCurrentUserController = async (req, res) => {
   // TODO: Сервіс для updateUser(req.user.id, req.body, req.file)
 
-  const data = {
-    message: 'User PATCH ME placeholder',
-    userId: req.user.id,
-    body: req.body,
-    file: req.file,
-  };
-  res.status(200).json({ status: 200, data });
+  const userId = req.user._id;
+  const { description } = req.body;
+  const avatar = req.file;
+  let avatarUrl;
+
+  if (avatar) {
+    avatarUrl = await saveFileToCloudinary(avatar);
+  }
+
+  const updateData = {};
+  if (description) updateData.description = description;
+  if (avatarUrl) updateData.avatarUrl = avatarUrl;
+
+  const updatedUser = await updateUserCurrentService(userId, updateData);
+
+  res.status(200).json({
+    status: 200,
+    message: 'User profile updated successfully',
+    data: updatedUser,
+  });
 };
 
 export const addFavoriteController = async (req, res) => {
@@ -94,10 +111,16 @@ export const addFavoriteController = async (req, res) => {
 
 export const removeFavoriteController = async (req, res) => {
   // TODO: Сервіс для removeFavorite(req.user.id, req.params.storyId)
-  const data = {
-    message: 'Favorite DELETE placeholder',
-    userId: req.user.id,
-    storyId: req.params.storyId,
-  };
-  res.status(200).json({ status: 200, data });
+  const storyId = req.params.storyId;
+  const userId = req.user.id;
+
+  const article = await removeArticle(userId, storyId);
+
+  res.status(200).json({
+    status: 200,
+    data: {
+      message: 'Removed from favorites',
+      ...article,
+    },
+  });
 };

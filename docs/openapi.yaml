@@ -33,6 +33,9 @@ paths:
   /auth/refresh:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
+  /stories:
+    post:
+      $ref: '../swagger/paths/stories/post.yaml'
 
   /users/me/current:
     get:
@@ -40,6 +43,10 @@ paths:
   /users/me/current/stories:
     get:
       $ref: '../swagger/paths/users/getOwnStories.yaml'
+  /users/me:
+    patch:
+      $ref: '../swagger/paths/users/updateUser.yaml'
+
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
   #   $ref: './paths/users/get-me.yaml'
@@ -50,8 +57,9 @@ paths:
 
   # /users/me/favorites:
   #   $ref: './paths/users/post-favorite.yaml'
-  # /users/me/favorites/{storyId}:
-  #   $ref: './paths/users/delete-favorite.yaml'
+  /users/me/favorites/{storyId}:
+    delete:
+      $ref: '../swagger/paths/users/me/favourites/delete.yaml'
 
   # /stories:
   #   $ref: './paths/stories/get-stories.yaml'

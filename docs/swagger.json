@@ -280,8 +280,53 @@
             },
             "required": false,
             "description": "Number of favorite stories per page."
+    "/stories": {
+      "post": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Create a new travel story",
+        "operationId": "createStory",
+        "description": "Create a new travel story with title, content, category and an image",
+        "security": [
+          {
+            "cookieAccess": []
           }
         ],
+        "requestBody": {
+    "/users/me/favorites/{storyId}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Remove a story from the saved list",
+        "operationId": "removeSavedStory",
+        "description": "Remove the specified story from the authenticated user's saved (favorites) list. Decrements the favoriteCount field of the story by 1.\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the story to remove from the saved list.",
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079008"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Story successfully removed from favorites",
+    "/users/me/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get Current User Data",
+        "operationId": "getCurrentUser",
+        "description": "Retrieves the information of the user associated with the active access token.",
+        "security": [],
         "responses": {
           "200": {
             "description": "Current user data successfully retrieved.",
@@ -297,6 +342,7 @@
                     "message": {
                       "type": "string",
                       "example": "Current user data retrieved successfully."
+                      "example": "Successfully retrieved current user data"
                     },
                     "data": {
                       "type": "object",
@@ -395,6 +441,7 @@
                           "totalPages": 1,
                           "hasNextPage": false,
                           "hasPreviousPage": false
+                          "$ref": "#/components/schemas/user"
                         }
                       }
                     }
@@ -443,6 +490,74 @@
         "responses": {
           "200": {
             "description": "Successfully retrieved the user's stories.",
+    "/users/me": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Patch User Data",
+        "operationId": "updateCurrentUser",
+        "description": "Updates the information of the user associated with the active access token.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "article",
+                  "category",
+                  "storyImage"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "The title of the travel story",
+                    "type": "string",
+                    "example": "My amazing trip to Japan"
+                  },
+                  "article": {
+                    "description": "The content of the travel story",
+                    "type": "string",
+                    "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka.."
+                  },
+                  "category": {
+                    "description": "Category of the story, e.g. Travel, Adventure",
+                    "type": "string",
+                    "enum": [
+                      "Asia",
+                      "Europa",
+                      "Desert",
+                      "Africa"
+                    ]
+                  },
+                  "storyImage": {
+                    "description": "Image associated with the story",
+                    "format": "binary",
+                    "type": "string"
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "maxLength": 150,
+                    "description": "Short user description",
+                    "example": "I love coding!"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "New avatar photo"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Story successfully created",
+          "200": {
+            "description": "Current user data successfully updated",
             "content": {
               "application/json": {
                 "schema": {
@@ -455,6 +570,27 @@
                     "message": {
                       "type": "string",
                       "example": "Current user stories retrieved successfully."
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Story created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/story"
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
                     },
                     "data": {
                       "type": "object",
@@ -525,6 +661,48 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+                        "message": {
+                          "type": "string",
+                          "example": "Removed from favorites"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "690d1e4b1754f3c839daad1c"
+                        },
+                        "storyId": {
+                          "type": "string",
+                          "example": "68498236a100312bea079008"
+                    "message": {
+                      "type": "string",
+                      "example": "User profile updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/user"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -605,6 +783,65 @@
       "story": {
         "type": "object",
         "required": [
+          "title",
+          "article",
+          "category",
+          "img",
+          "ownerId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "title": {
+            "description": "The title of the travel story",
+            "type": "string",
+            "example": "My amazing trip to Japan"
+          },
+          "article": {
+            "description": "Content of the travel story",
+            "type": "string",
+            "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka..."
+          },
+          "category": {
+            "description": "Category of the story, e.g. Travel, Adventure",
+            "type": "string",
+            "enum": [
+              "Asia",
+              "Europe",
+              "Desert",
+              "Africa"
+            ]
+          },
+          "img": {
+            "description": "URL of the image associated with the story",
+            "type": "string",
+            "example": "https://res.cloudinary.com/your-cloud-name/image/upload/v1762531328/a3lruckukgx56d4czhd4czd4.webp"
+          },
+          "ownerId": {
+            "description": "ID of the user who created the story",
+            "type": "string",
+            "example": "60f8b93b0c9eb67f80d27c68"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-07T18:37:55.344+00:00"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-07T18:37:55.344+00:00"
+          },
+          "favoriteCount": {
+            "description": "Number of favorites or likes the story has received",
+            "type": "number",
+            "example": 10
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-07T18:37:55.344+00:00"
+          }
           "img",
           "title",
           "article",
@@ -857,6 +1094,40 @@
                       "type": "string",
                       "example": "Access token expired"
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found (User not found)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "NotFound"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Error object produced by http-errors (may contain name, message, details, etc.)",
+                  "example": {
+                    "name": "NotFound",
+                    "message": "User not found"
                   }
                 }
               }
