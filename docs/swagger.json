@@ -302,10 +302,99 @@
                       "type": "object",
                       "properties": {
                         "user": {
-                          "$ref": "#/components/schemas/user"
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/user"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "favorites": {
+                                  "description": "Array of favorited story objects with populated owner data.",
+                                  "type": "array",
+                                  "items": {
+                                    "allOf": [
+                                      {
+                                        "$ref": "#/components/schemas/story"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "ownerId": {
+                                            "description": "Author (owner) object, populated.",
+                                            "type": "object",
+                                            "properties": {
+                                              "_id": {
+                                                "type": "string",
+                                                "example": "6881563901add19ee16fd017"
+                                              },
+                                              "name": {
+                                                "type": "string",
+                                                "example": "Матвій Савченко"
+                                              },
+                                              "avatarUrl": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://ftp.goit.study/img/harmoniq/users/author.webp"
+                                              },
+                                              "description": {
+                                                "type": "string",
+                                                "example": "Мене звати Матвій..."
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          ]
                         },
                         "pagination": {
                           "$ref": "#/components/schemas/pagination"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "successResponse": {
+                    "summary": "Successful retrieval",
+                    "value": {
+                      "status": 200,
+                      "message": "Current user data retrieved successfully.",
+                      "data": {
+                        "user": {
+                          "_id": "690d3e43c14a8aa7610df936",
+                          "name": "Василина 2",
+                          "email": "vasya2@mail.com",
+                          "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+                          "description": "A short bio about Vasylina.",
+                          "favorites": [
+                            {
+                              "_id": "68498236a100312bea079008",
+                              "title": "Йорданія: шлях у Петру",
+                              "img": "https://ftp.goit.study/img/travel-blog/de37b4596c7d4a2a81a821d2bs.webp",
+                              "article": "Петра — одне з нових чудес світу...",
+                              "category": "68fb50c80ae91338641121f0",
+                              "ownerId": {
+                                "_id": "6881563901add19ee16fd017",
+                                "name": "Матвій Савченко",
+                                "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/author.webp",
+                                "description": "Мене звати Матвій..."
+                              }
+                            }
+                          ]
+                        },
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 2,
+                          "totalPages": 1,
+                          "hasNextPage": false,
+                          "hasPreviousPage": false
                         }
                       }
                     }
