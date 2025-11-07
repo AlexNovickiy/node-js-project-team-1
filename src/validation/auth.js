@@ -18,9 +18,6 @@ export const registerUserSchema = Joi.object({
     'string.max': 'Password should have a maximum length of 128',
     'any.required': 'Password is required',
   }),
-  // favorites: Joi.array()
-  //   .items(Joi.string().hex().length(24)) 
-  //   .optional(),
 });
 
 export const loginUserSchema = Joi.object({

@@ -12,6 +12,7 @@ import { authenticate } from '../middlewares/authenticate.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { upload } from '../middlewares/multer.js';
 import { validateBody } from '../middlewares/validateBody.js';
+import { parsePagination } from '../middlewares/parsePagination.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   updateUserFavoritesSchema,
@@ -35,7 +36,7 @@ usersRouter.get(
 usersRouter.use(authenticate);
 
 // GET /api/users/me - отримання інформації про поточного користувача
-usersRouter.get('/me/current', ctrlWrapper(getCurrentUserController));
+usersRouter.get('/me/current', parsePagination, ctrlWrapper(getCurrentUserController));
 
 // PATCH /api/users/me - оновлення даних та аватару
 usersRouter.patch(
