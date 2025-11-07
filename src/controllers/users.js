@@ -1,6 +1,5 @@
 import { addFavorite, getUserCurrentService } from '../services/users.js';
 import { removeArticle } from '../services/users.js';
-import { getUserCurrentService } from '../services/users.js';
 import { updateUserCurrentService } from '../services/users.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 

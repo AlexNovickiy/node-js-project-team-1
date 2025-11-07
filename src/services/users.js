@@ -1,7 +1,6 @@
 import createHttpError from 'http-errors';
 import { UsersCollection } from '../db/models/user.js';
 import { StoriesCollection } from '../db/models/story.js';
-import createHttpError from 'http-errors';
 
 export const removeArticle = async (userId, storyId) => {
   const story = await StoriesCollection.findById(storyId);
@@ -55,6 +54,7 @@ export const addFavorite = async (userId, storyId) => {
   await StoriesCollection.findByIdAndUpdate(storyId, {
     $inc: { favoriteCount: 1 },
   });
+};
 
 export const updateUserCurrentService = async (userId, updateData) => {
   const user = await UsersCollection.findOneAndUpdate(
