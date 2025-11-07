@@ -13,6 +13,6 @@ export const updateUserFavoritesSchema = Joi.object({
 });
 
 export const updateUserSchema = Joi.object({
-  userPhoto: Joi.string().optional(),
+  avatarUrl: Joi.string().optional(),
   description: Joi.string().max(150).optional(),
 });
