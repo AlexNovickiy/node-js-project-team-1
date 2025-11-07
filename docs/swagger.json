@@ -596,7 +596,8 @@
         "required": [
           "name",
           "email",
-          "password"
+          "avatarUrl",
+          "description"
         ],
         "properties": {
           "_id": {
@@ -656,7 +657,10 @@
             {
               "_id": "65f0b4a1d286b30065d54b00",
               "title": "Sample story",
-              "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png"
+              "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png",
+              "article": "Story content here...",
+              "category": "65e4decdd286b30065d54b11",
+              "ownerId": "65e4decdd286b30065d54af9"
             }
           ]
         }
