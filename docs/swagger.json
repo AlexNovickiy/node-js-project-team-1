@@ -247,6 +247,83 @@
           }
         }
       }
+    },
+    "/users/save-story/{id}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Remove a story from the saved list",
+        "operationId": "removeSavedStory",
+        "description": "Remove the specified story from the authenticated user's saved (favorites) list. Decrements the favoriteCount field of the story by 1.\n",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the story to remove from the saved list.",
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079008"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Story successfully removed from favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Removed from favorites"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "690d1e4b1754f3c839daad1c"
+                        },
+                        "storyId": {
+                          "type": "string",
+                          "example": "68498236a100312bea079008"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -390,6 +467,40 @@
                       "type": "string",
                       "example": "Access token expired"
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found (User not found)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "NotFound"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Error object produced by http-errors (may contain name, message, details, etc.)",
+                  "example": {
+                    "name": "NotFound",
+                    "message": "User not found"
                   }
                 }
               }
