@@ -34,9 +34,9 @@ paths:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
 
-  # /users/me/current:
-  #   get:
-  #     $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
+  /users/me/current:
+    get:
+      $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
 
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:

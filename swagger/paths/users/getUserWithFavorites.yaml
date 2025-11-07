@@ -1,0 +1,28 @@
+tags:
+  - User
+summary: Get Current User Data
+operationId: getCurrentUser
+description: Retrieves the information of the user associated with the active access token.
+security: [] 
+responses:
+  '200':
+    description: Current user data successfully retrieved.
+    content:
+      application/json:
+        schema: 
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully retrieved current user data
+            data: 
+              type: object
+              properties:
+                user: 
+                  $ref: '../../components/schemas/users/user.yaml' 
+  
+  '401':
+    $ref: ../../components/responses/401.yaml
