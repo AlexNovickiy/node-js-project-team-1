@@ -4,7 +4,6 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const getStoriesController = async (req, res) => {
-  // TODO: Доробити userId
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
@@ -15,7 +14,6 @@ export const getStoriesController = async (req, res) => {
     sortOrder,
     sortBy,
     filter,
-    // userId: req.user.id,
   });
 
   res.status(200).json({
