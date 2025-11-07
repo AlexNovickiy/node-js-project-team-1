@@ -1,0 +1,65 @@
+type: object
+required:
+  - img
+  - title
+  - article
+  - category
+  - ownerId
+properties:
+  _id:
+    description: "Story's id"
+    type: string
+    example: 65f0b4a1d286b30065d54b00
+  img:
+    description: 'Link to story image'
+    type: string
+    format: uri
+    example: https://res.cloudinary.com/uqwgdu/image/upload/story.png
+  title:
+    description: 'Story title'
+    type: string
+    maxLength: 80
+    example: 'A short story title'
+  article:
+    description: 'Story content'
+    type: string
+    maxLength: 2500
+    example: 'Once upon a time...'
+  category:
+    description: 'Category id'
+    type: string
+    example: 65e4decdd286b30065d54b11
+  ownerId:
+    description: 'Owner (user) id'
+    type: string
+    example: 65e4decdd286b30065d54af9
+  date:
+    description: 'Story date'
+    type: string
+    format: date-time
+    example: '2024-07-01T12:00:00Z'
+  favoriteCount:
+    description: 'Number of favorites'
+    type: integer
+    example: 5
+  createdAt:
+    description: 'Creation timestamp'
+    type: string
+    format: date-time
+    example: '2024-07-01T12:00:00Z'
+  updatedAt:
+    description: 'Last update timestamp'
+    type: string
+    format: date-time
+    example: '2024-07-02T10:00:00Z'
+example:
+  _id: 65f0b4a1d286b30065d54b00
+  img: 'https://res.cloudinary.com/uqwgdu/image/upload/story.png'
+  title: 'Sample story'
+  article: 'Story content here...'
+  category: 65e4decdd286b30065d54b11
+  ownerId: 65e4decdd286b30065d54af9
+  date: '2024-07-01T12:00:00Z'
+  favoriteCount: 3
+  createdAt: '2024-07-01T12:00:00Z'
+  updatedAt: '2024-07-02T10:00:00Z'

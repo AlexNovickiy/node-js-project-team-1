@@ -9,6 +9,7 @@ info:
 
 servers:
   - url: http://localhost:3000
+  - url: http://localhost:5000
 tags:
   - name: Auth
     description: User authentication and registration
@@ -32,8 +33,19 @@ paths:
   /auth/refresh:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
+  /stories:
+    post:
+      $ref: '../swagger/paths/stories/post.yaml'
+    get:
+      $ref: '../swagger/paths/stories/get.yaml'
 
-  # /users:
+  /users/me/current:
+    get:
+      $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
+  /users/me:
+    patch:
+      $ref: '../swagger/paths/users/updateUser.yaml'
+
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
   #   $ref: './paths/users/get-me.yaml'
@@ -44,12 +56,10 @@ paths:
 
   # /users/me/favorites:
   #   $ref: './paths/users/post-favorite.yaml'
-  # /users/me/favorites/{storyId}:
-  #   $ref: './paths/users/delete-favorite.yaml'
+  /users/me/favorites/{storyId}:
+    delete:
+      $ref: '../swagger/paths/users/me/favourites/delete.yaml'
 
-  /stories:
-    get:
-      $ref: '../swagger/paths/stories/get.yaml'
   # /stories/post:
   #   $ref: './paths/stories/post-story.yaml'
   # /stories/{storyId}:
