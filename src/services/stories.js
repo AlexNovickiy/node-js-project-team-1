@@ -1,12 +1,9 @@
-import { SORT_ORDER } from '../constants/index.js';
 import { StoriesCollection } from '../db/models/story.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 export const getAllStories = async ({
   page = 1,
   perPage = 10,
-  sortOrder = SORT_ORDER.ASC,
-  sortBy = '_id',
   filter = {},
 }) => {
   const limit = perPage;
@@ -20,11 +17,7 @@ export const getAllStories = async ({
 
   const [storiesCount, stories] = await Promise.all([
     StoriesCollection.find().merge(storiesQuery).countDocuments(),
-    storiesQuery
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortOrder })
-      .exec(),
+    storiesQuery.skip(skip).limit(limit).exec(),
   ]);
 
   const paginationData = calculatePaginationData(storiesCount, perPage, page);

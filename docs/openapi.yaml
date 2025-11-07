@@ -47,8 +47,9 @@ paths:
   # /users/me/favorites/{storyId}:
   #   $ref: './paths/users/delete-favorite.yaml'
 
-  # /stories:
-  #   $ref: './paths/stories/get-stories.yaml'
+  /stories:
+    get:
+      $ref: '../swagger/paths/stories/get.yaml'
   # /stories/post:
   #   $ref: './paths/stories/post-story.yaml'
   # /stories/{storyId}:

@@ -5,7 +5,17 @@ const parseCategory = (category) => {
     return undefined;
   }
 
-  const isCategory = ['Азія', 'Пустелі', 'Європа', 'Африка'].includes(category)
+  const isCategory = [
+    '68fb50c80ae91338641121f2',
+    '68fb50c80ae91338641121f3',
+    '68fb50c80ae91338641121f0',
+    '68fb50c80ae91338641121f1',
+    '68fb50c80ae91338641121f4',
+    '68fb50c80ae91338641121f6',
+    '68fb50c80ae91338641121f7',
+    '68fb50c80ae91338641121f8',
+    '68fb50c80ae91338641121f9',
+  ].includes(category)
     ? category
     : undefined;
 
