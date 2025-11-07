@@ -1,3 +1,5 @@
+import { removeArticle } from '../services/users.js';
+
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
   const data = { message: 'Users GET endpoint placeholder' };
@@ -48,10 +50,16 @@ export const addFavoriteController = async (req, res) => {
 
 export const removeFavoriteController = async (req, res) => {
   // TODO: Сервіс для removeFavorite(req.user.id, req.params.storyId)
-  const data = {
-    message: 'Favorite DELETE placeholder',
-    userId: req.user.id,
-    storyId: req.params.storyId,
-  };
-  res.status(200).json({ status: 200, data });
+  const storyId = req.params.storyId;
+  const userId = req.user.id;
+
+  const article = await removeArticle(userId, storyId);
+
+  res.status(200).json({
+    status: 200,
+    data: {
+      message: 'Removed from favorites',
+      ...article,
+    },
+  });
 };
