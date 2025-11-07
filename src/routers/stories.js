@@ -16,7 +16,7 @@ import { createStorySchema, updateStorySchema } from '../validation/stories.js';
 const storiesRouter = Router();
 
 // --- Публічні роути ---
-// GET /stories - ОТРИМАННЯ історій + пагінація + фільтрація
+// GET /api/stories - ОТРИМАННЯ історій + пагінація + фільтрація
 storiesRouter.get('/', ctrlWrapper(getStoriesController));
 
 storiesRouter.get(

@@ -33,9 +33,6 @@ paths:
   /auth/refresh:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
-  /stories:
-    post:
-      $ref: '../swagger/paths/stories/post.yaml'
 
   /users/me/current:
     get:
