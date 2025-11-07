@@ -3,7 +3,7 @@ import { StoriesCollection } from '../db/models/story.js';
 
 export const getUserCurrentService = async (userId, { page, perPage }) => {
   const skip = (page - 1) * perPage;
- const user = await UsersCollection.findOne({ _id: userId }).select(
+  const user = await UsersCollection.findOne({ _id: userId }).select(
     'favorites name email',
   );
 
@@ -19,7 +19,23 @@ export const getUserCurrentService = async (userId, { page, perPage }) => {
   delete userObject.favorites;
   const finalUser = {
     ...userObject,
-    favorites: paginatedFavorites, 
+    favorites: paginatedFavorites,
   };
   return { user: finalUser, totalFavoritesCount };
+};
+
+export const getUserCurrentStoriesService = async (
+  userId,
+  { page, perPage },
+) => {
+  const skip = (page - 1) * perPage;
+  const searchCriteria = {
+    ownerId: userId,
+  };
+  const totalItems = await StoriesCollection.countDocuments(searchCriteria);
+  const stories = await StoriesCollection.find(searchCriteria)
+    .skip(skip)
+    .limit(perPage)
+    .sort({ createdAt: -1 });
+  return { stories, totalItems };
 };

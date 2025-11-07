@@ -1,9 +1,26 @@
 tags:
   - User
-summary: Get Current User Data
+summary: Get Current User Data (with Paginated Favorites)
 operationId: getCurrentUser
-description: Retrieves the information of the user associated with the active access token.
-security: [] 
+description: |
+  Retrieves user information and a paginated list of their favorite stories.
+  Requires pagination query parameters (page, perPage) for the favorites list.
+security: []
+parameters:
+  - in: query
+    name: page
+    schema:
+      type: integer
+      default: 1
+    required: false
+    description: Page number for the favorites list.
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      default: 10
+    required: false
+    description: Number of favorite stories per page.
 responses:
   '200':
     description: Current user data successfully retrieved.
@@ -17,12 +34,14 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully retrieved current user data
+              example: Current user data retrieved successfully.
             data: 
               type: object
               properties:
                 user: 
                   $ref: '../../components/schemas/users/user.yaml' 
+                pagination:
+                  $ref: '../../components/schemas/pagination/pagination.yaml'
   
   '401':
-    $ref: ../../components/responses/401.yaml
+    $ref: '../../components/responses/401.yaml'

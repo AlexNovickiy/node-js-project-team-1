@@ -37,7 +37,9 @@ paths:
   /users/me/current:
     get:
       $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
-
+  /users/me/current/stories:
+    get:
+      $ref: '../swagger/paths/users/getOwnStories.yaml'
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
   #   $ref: './paths/users/get-me.yaml'

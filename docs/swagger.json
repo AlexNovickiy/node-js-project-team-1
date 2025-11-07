@@ -256,10 +256,32 @@
         "tags": [
           "User"
         ],
-        "summary": "Get Current User Data",
+        "summary": "Get Current User Data (with Paginated Favorites)",
         "operationId": "getCurrentUser",
-        "description": "Retrieves the information of the user associated with the active access token.",
+        "description": "Retrieves user information and a paginated list of their favorite stories.\nRequires pagination query parameters (page, perPage) for the favorites list.\n",
         "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "required": false,
+            "description": "Page number for the favorites list."
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "required": false,
+            "description": "Number of favorite stories per page."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Current user data successfully retrieved.",
@@ -274,13 +296,136 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully retrieved current user data"
+                      "example": "Current user data retrieved successfully."
                     },
                     "data": {
                       "type": "object",
                       "properties": {
                         "user": {
                           "$ref": "#/components/schemas/user"
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/pagination"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/users/me/current/stories": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get Current User's Own Stories (Paginated)",
+        "operationId": "getCurrentUserStories",
+        "description": "Retrieves a paginated list of stories that were created by the currently authenticated user.\nIncludes pagination metadata in the response.\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "required": false,
+            "description": "Page number for pagination."
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "required": false,
+            "description": "Number of stories per page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the user's stories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Current user stories retrieved successfully."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "stories": {
+                          "type": "array",
+                          "description": "The paginated array of story objects.",
+                          "items": {
+                            "$ref": "#/components/schemas/story"
+                          }
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/pagination"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "storiesFound": {
+                    "summary": "Stories Found",
+                    "value": {
+                      "status": 200,
+                      "message": "Current user stories retrieved successfully.",
+                      "data": {
+                        "stories": [
+                          {
+                            "_id": "65f0b4a1d286b30065d54b00",
+                            "title": "My Story Title",
+                            "img": "https://example.com/story.jpg",
+                            "ownerId": "690d3e43c14a8aa7610df936",
+                            "article": "This is the body of the story.",
+                            "category": "65e4decdd286b30065d54b11"
+                          }
+                        ],
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 12,
+                          "totalPages": 2,
+                          "hasNextPage": true,
+                          "hasPreviousPage": false
+                        }
+                      }
+                    }
+                  },
+                  "noStoriesFound": {
+                    "summary": "No Stories Found",
+                    "value": {
+                      "status": 200,
+                      "message": "You haven't created any stories of your own yet.",
+                      "data": {
+                        "stories": [],
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 0,
+                          "totalPages": 0,
+                          "hasNextPage": false,
+                          "hasPreviousPage": false
                         }
                       }
                     }
@@ -516,6 +661,42 @@
               "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png"
             }
           ]
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "description": "Metadata for the pagination response.",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "description": "Current page number.",
+            "example": 1
+          },
+          "perPage": {
+            "type": "integer",
+            "description": "Maximum number of items requested per page.",
+            "example": 10
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Total number of items across all pages.",
+            "example": 45
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages available.",
+            "example": 5
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a next page available (page < totalPages).",
+            "example": true
+          },
+          "hasPreviousPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a previous page available (page > 1).",
+            "example": false
+          }
         }
       }
     },

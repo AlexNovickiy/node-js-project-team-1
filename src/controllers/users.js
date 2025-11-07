@@ -1,4 +1,7 @@
-import { getUserCurrentService } from '../services/users.js';
+import {
+  getUserCurrentService,
+  getUserCurrentStoriesService,
+} from '../services/users.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 export const getUsersController = async (req, res) => {
@@ -37,12 +40,33 @@ export const getCurrentUserController = async (req, res, next) => {
       pagination,
     },
   });
-
   const data = await getUserCurrentService(userId);
   res.status(200).json({
     status: 200,
     message: 'Successfully retrieved current user data',
     data,
+  });
+};
+
+export const getCurrentUserStoriesController = async (req, res) => {
+  const { page, perPage } = req.paginationParams;
+  const userId = req.user._id;
+  const { stories, totalItems } = await getUserCurrentStoriesService(userId, {
+    page,
+    perPage,
+  });
+  const pagination = calculatePaginationData(totalItems, perPage, page);
+  const responseMessage =
+    totalItems === 0
+      ? "You haven't created any stories of your own yet."
+      : 'Current user stories retrieved successfully.';
+  res.status(200).json({
+    status: 200,
+    message: responseMessage,
+    data: {
+      stories,
+      pagination,
+    },
   });
 };
 
