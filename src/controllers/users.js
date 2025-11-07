@@ -16,12 +16,12 @@ export const getUserByIdController = async (req, res) => {
 
 export const getCurrentUserController = async (req, res) => {
   // TODO: Сервіс для getUserById(req.user.id)
-
-  const data = {
-    message: 'User GET ME placeholder',
-    user: req.user, // req.user вже містить дані з 'authenticate'
-  };
-  res.status(200).json({ status: 200, data });
+  const user = req.user;
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully retrieved current user data',
+    user,
+  });
 };
 
 export const updateCurrentUserController = async (req, res) => {
