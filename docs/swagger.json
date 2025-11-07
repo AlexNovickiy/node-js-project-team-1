@@ -251,6 +251,20 @@
         }
       }
     },
+    "/stories": {
+      "post": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Create a new travel story",
+        "operationId": "createStory",
+        "description": "Create a new travel story with title, content, category and an image",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "requestBody": {
     "/users/me/favorites/{storyId}": {
       "delete": {
         "tags": [
@@ -334,6 +348,37 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "title",
+                  "article",
+                  "category",
+                  "storyImage"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "The title of the travel story",
+                    "type": "string",
+                    "example": "My amazing trip to Japan"
+                  },
+                  "article": {
+                    "description": "The content of the travel story",
+                    "type": "string",
+                    "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka.."
+                  },
+                  "category": {
+                    "description": "Category of the story, e.g. Travel, Adventure",
+                    "type": "string",
+                    "enum": [
+                      "Asia",
+                      "Europa",
+                      "Desert",
+                      "Africa"
+                    ]
+                  },
+                  "storyImage": {
+                    "description": "Image associated with the story",
+                    "format": "binary",
+                    "type": "string"
                 "properties": {
                   "description": {
                     "type": "string",
@@ -352,12 +397,31 @@
           }
         },
         "responses": {
+          "201": {
+            "description": "Story successfully created",
           "200": {
             "description": "Current user data successfully updated",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Story created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/story"
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -488,6 +552,65 @@
       "story": {
         "type": "object",
         "required": [
+          "title",
+          "article",
+          "category",
+          "img",
+          "ownerId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "title": {
+            "description": "The title of the travel story",
+            "type": "string",
+            "example": "My amazing trip to Japan"
+          },
+          "article": {
+            "description": "Content of the travel story",
+            "type": "string",
+            "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka..."
+          },
+          "category": {
+            "description": "Category of the story, e.g. Travel, Adventure",
+            "type": "string",
+            "enum": [
+              "Asia",
+              "Europe",
+              "Desert",
+              "Africa"
+            ]
+          },
+          "img": {
+            "description": "URL of the image associated with the story",
+            "type": "string",
+            "example": "https://res.cloudinary.com/your-cloud-name/image/upload/v1762531328/a3lruckukgx56d4czhd4czd4.webp"
+          },
+          "ownerId": {
+            "description": "ID of the user who created the story",
+            "type": "string",
+            "example": "60f8b93b0c9eb67f80d27c68"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-07T18:37:55.344+00:00"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-07T18:37:55.344+00:00"
+          },
+          "favoriteCount": {
+            "description": "Number of favorites or likes the story has received",
+            "type": "number",
+            "example": 10
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-07T18:37:55.344+00:00"
+          }
           "img",
           "title",
           "article",
