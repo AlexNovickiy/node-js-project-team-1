@@ -1,8 +1,11 @@
-import { addFavorite, getUserCurrentService,   getUserCurrentStoriesService } from '../services/users.js';
+import {
+  getUserCurrentService,
+  getUserCurrentStoriesService,
+} from '../services/users.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { removeArticle } from '../services/users.js';
 import { updateUserCurrentService } from '../services/users.js';
-// import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
