@@ -54,6 +54,8 @@ export const addFavorite = async (userId, storyId) => {
   await StoriesCollection.findByIdAndUpdate(storyId, {
     $inc: { favoriteCount: 1 },
   });
+
+  return user;
 };
 
 export const updateUserCurrentService = async (userId, updateData) => {
