@@ -1,11 +1,11 @@
 const parseCategory = (category) => {
-  isString = typeof category === 'string' ? category : undefined;
+  const isString = typeof category === 'string' ? category : undefined;
 
   if (!isString) {
     return undefined;
   }
 
-  const isCategory = [Азія, Пустелі, Європа, Африка].includes(category)
+  const isCategory = ['Азія', 'Пустелі', 'Європа', 'Африка'].includes(category)
     ? category
     : undefined;
 
