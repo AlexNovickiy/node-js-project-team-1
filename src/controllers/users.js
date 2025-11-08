@@ -1,10 +1,11 @@
 import {
+  addFavorite,
   getUserCurrentService,
   getUserCurrentStoriesService,
+  removeArticle,
+  updateUserCurrentService,
 } from '../services/users.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
-import { removeArticle } from '../services/users.js';
-import { updateUserCurrentService } from '../services/users.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getUsersController = async (req, res) => {
