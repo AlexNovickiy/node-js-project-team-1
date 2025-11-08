@@ -7,11 +7,13 @@ import {
   getUsersController,
   removeFavoriteController,
   updateCurrentUserController,
+  getCurrentUserStoriesController,
 } from '../controllers/users.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { upload } from '../middlewares/multer.js';
 import { validateBody } from '../middlewares/validateBody.js';
+import { parsePagination } from '../middlewares/parsePagination.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   updateUserFavoritesSchema,
@@ -34,8 +36,14 @@ usersRouter.get(
 // --- Приватні роути ---
 usersRouter.use(authenticate);
 
-// GET /api/users/me - отримання інформації про поточного користувача
-usersRouter.get('/me/current', ctrlWrapper(getCurrentUserController));
+// GET /api/users/me - отримання інформації про поточного користувача з фейворіт
+usersRouter.get('/me/current', parsePagination, ctrlWrapper(getCurrentUserController));
+// GET /api/users/me - отримання інформації про власні сторіси поточного користувача
+usersRouter.get(
+    '/me/current/stories', 
+    parsePagination, 
+    ctrlWrapper(getCurrentUserStoriesController)
+);
 
 // PATCH /api/users/me - оновлення даних та аватару
 usersRouter.patch(

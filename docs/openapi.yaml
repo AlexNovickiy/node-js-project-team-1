@@ -33,6 +33,21 @@ paths:
   /auth/refresh:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
+  /stories:
+    get:
+      $ref: '../swagger/paths/stories/get.yaml'
+  /auth/send-reset-email:
+    post:
+      $ref: '../swagger/paths/auth/send-reset-email.yaml'
+  /auth/reset-pwd:
+    post:
+      $ref: '../swagger/paths/auth/reset-pwd.yaml'
+  /auth/send-change-email:
+    post:
+      $ref: '../swagger/paths/auth/send-change-email.yaml'
+  /auth/confirm-email:
+    post:
+      $ref: '../swagger/paths/auth/confirm-email-change.yaml'
 
   /users:
     get:
@@ -41,6 +56,12 @@ paths:
   /users/me/current:
     get:
       $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
+  /users/me/current/stories:
+    get:
+      $ref: '../swagger/paths/users/get-own-stories.yaml'
+  /users/me:
+    patch:
+      $ref: '../swagger/paths/users/updateUser.yaml'
 
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
@@ -50,20 +71,25 @@ paths:
   # /users/{userId}:
   #   $ref: './paths/users/get-user-by-id.yaml'
 
-  # /users/me/favorites:
-  #   $ref: './paths/users/post-favorite.yaml'
+  /users/me/favorites:
+    post:
+      $ref: '../swagger/paths/users/post-favorite.yaml'
   # /users/me/favorites/{storyId}:
   #   $ref: './paths/users/delete-favorite.yaml'
+  # /users/me/favorites:
+  #   $ref: './paths/users/post-favorite.yaml'
+  /users/me/favorites/{storyId}:
+    delete:
+      $ref: '../swagger/paths/users/me/favourites/delete.yaml'
 
-  # /stories:
-  #   $ref: './paths/stories/get-stories.yaml'
   # /stories/post:
   #   $ref: './paths/stories/post-story.yaml'
   # /stories/{storyId}:
   #   $ref: './paths/stories/patch-story.yaml'
 
-  # /categories:
-  #   $ref: './paths/categories/get-categories.yaml'
+  /categories:
+    get:
+      $ref: '../swagger/paths/categories/get-categories.yaml'
 
 components:
   securitySchemes:

@@ -18,9 +18,6 @@ export const registerUserSchema = Joi.object({
     'string.max': 'Password should have a maximum length of 128',
     'any.required': 'Password is required',
   }),
-  // favorites: Joi.array()
-  //   .items(Joi.string().hex().length(24)) 
-  //   .optional(),
 });
 
 export const loginUserSchema = Joi.object({
@@ -53,4 +50,17 @@ export const resetEmailSchema = Joi.object({
     'string.base': 'Token must be a string',
     'any.required': 'Token is required',
   }),
+});
+export const resetPasswordSchema = Joi.object({
+  password: Joi.string().required(),
+  token: Joi.string().required(),
+});
+
+export const requestChangeEmailSchema = Joi.object({
+  newEmail: Joi.string().email().required(),
+});
+
+export const confirmEmailChangeSchema = Joi.object({
+  token: Joi.string().required(),
+  newEmail: Joi.string().email().required(),
 });
