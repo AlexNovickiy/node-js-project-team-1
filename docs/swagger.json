@@ -15,6 +15,9 @@
     },
     {
       "url": "http://localhost:5000"
+    },
+    {
+      "url": "https://node-js-project-team-1.onrender.com"
     }
   ],
   "tags": [
