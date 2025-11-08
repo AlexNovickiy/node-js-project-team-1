@@ -2,7 +2,7 @@ tags:
   - Auth
 summary: Register new user
 operationId: registerUser
-description: 'Register a new user'
+description: 'Register a new user and create session'
 security: []
 requestBody:
   required: true

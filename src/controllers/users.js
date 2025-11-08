@@ -7,11 +7,19 @@ import {
 } from '../services/users.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { getUsers } from '../services/users.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
-  const data = { message: 'Users GET endpoint placeholder' };
-  res.status(200).json({ status: 200, data });
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+
+  const data = await getUsers(page, perPage, sortBy, sortOrder);
+  res
+    .status(200)
+    .json({ status: 200, message: 'Successfully found users!', data });
 };
 
 export const getUserByIdController = async (req, res) => {

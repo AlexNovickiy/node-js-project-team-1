@@ -10,6 +10,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { UPLOAD_DIR } from './constants/index.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
+import usersRouter from './routers/users.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
 
@@ -35,6 +36,8 @@ export const setupServer = () => {
       message: 'Hello world!',
     });
   });
+
+  app.use('/api/users', usersRouter);
 
   app.use(router);
 
