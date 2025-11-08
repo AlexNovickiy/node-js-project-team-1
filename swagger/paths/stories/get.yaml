@@ -2,6 +2,7 @@ tags:
   - Stories
 summary: Get list of stories
 operationId: getStories
+security: []
 description: 'Get list of stories with this endpoint'
 parameters:
   - in: query
@@ -82,5 +83,22 @@ responses:
                 hasPreviousPage:
                   type: boolean
                   example: true
+  '404':
+    description: Stories not found
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: Stories not found
+
   '500':
     $ref: '../../components/responses/500.yaml'
