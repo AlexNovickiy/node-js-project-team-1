@@ -2,7 +2,7 @@ tags:
   - Auth
 summary: Register new user
 operationId: registerUser
-description: 'Register a new user'
+description: 'Register a new user and create session'
 security: []
 requestBody:
   required: true
@@ -44,7 +44,13 @@ responses:
               type: string
               example: Successfully registered a user!
             data:
-              $ref: ../../components/schemas/auth/session.yaml
+              type: object
+              required:
+                - user
+              properties:
+                user:
+                  type: object
+                  $ref: ../../components/schemas/auth/session.yaml
   '400':
     description: Bad request
     $ref: '../../components/responses/400.yaml'

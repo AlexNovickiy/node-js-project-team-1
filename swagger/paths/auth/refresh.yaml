@@ -5,7 +5,7 @@ operationId: refreshSession
 description: 'Refresh access token using refresh token from cookie'
 security: []
 responses:
-  '200': 
+  '200':
     description: Successfully refreshed a session
     content:
       application/json:
@@ -14,15 +14,13 @@ responses:
           required:
             - status
             - message
-            - data
           properties:
             status:
               type: integer
               example: 200
             message:
               type: string
-              example: Successfully refreshed a session!
-            data:
-              $ref: ../../components/schemas/auth/session.yaml
+              example: Session refreshed successfully!
+
   '401':
     $ref: ../../components/responses/401.yaml

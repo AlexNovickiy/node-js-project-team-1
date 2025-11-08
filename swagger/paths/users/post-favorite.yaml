@@ -1,0 +1,68 @@
+tags:
+  - Users
+summary: Add story to favorites
+operationId: addFavoriteStory
+description: 'Add a story to current user favorites list'
+security:
+  - cookieAccess: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - storyId
+        properties:
+          storyId:
+            type: string
+            format: ObjectId
+            example: '68498236a100312bea079008'
+responses:
+  '200':
+    description: 'Story successfully added to favorites'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Story successfully added to favorites'
+            data:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      example: '690dd01a85cc808bb9cc909b'
+                    name:
+                      type: string
+                      example: 'Test User'
+                    email:
+                      type: string
+                      example: 'test@example.com'
+                    favorites:
+                      type: array
+                      items:
+                        type: string
+                      example: ['68498236a100312bea079008']
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '409':
+    $ref: '../../components/responses/409.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

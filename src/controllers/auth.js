@@ -1,9 +1,13 @@
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import {
+  confirmEmailChange,
   loginUser,
   logoutUser,
   refreshUsersSession,
   registerUser,
+  requestChangeEmailToken,
+  requestResetToken,
+  resetPassword,
 } from '../services/auth.js';
 
 const REFRESH_COOKIE_NAME = 'refreshToken';
@@ -28,25 +32,37 @@ const setupAuthCookies = (res, session) => {
 };
 
 // --- Контролери ---
+export const registerController = async (req, res, next) => {
+  try {
+    const { user, session } = await registerUser(req.body);
 
-export const registerController = async (req, res) => {
-  const user = await registerUser(req.body);
+    setupAuthCookies(res, session);
 
-  res.status(201).json({
-    status: 201,
-    message: 'User registered successfully',
-    data: { user },
-  });
+    res.status(201).json({
+      status: 201,
+      message: 'User registered successfully',
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const loginController = async (req, res) => {
-  const session = await loginUser(req.body);
-  setupAuthCookies(res, session);
+export const loginController = async (req, res, next) => {
+  try {
+    const { session, user } = await loginUser(req.body);
+    setupAuthCookies(res, session);
 
-  res.status(200).json({
-    status: 200,
-    message: 'User logged in successfully',
-  });
+    res.status(200).json({
+      status: 200,
+      message: 'User logged in successfully',
+      data: { user },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const logoutController = async (req, res) => {
@@ -74,25 +90,41 @@ export const refreshController = async (req, res) => {
   });
 };
 
-// export const requestResetEmailController = async (req, res) => {
-//   await requestResetToken(req.body.email);
-//   res.json({
-//     message: 'Reset email was successfully sent!',
-//     status: 200,
-//     data: {},
-//   });
-// };
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
+};
+export const requestChangeEmailController = async (req, res) => {
+  const oldEmail = req.user.email;
+  const { newEmail } = req.body;
 
-// export const resetEmailController = async (req, res) => {
-//   await resetEmail(req.body);
+  await requestChangeEmailToken(oldEmail, newEmail);
 
-//   res.clearCookie(SESSION_COOKIE_NAME);
-//   res.clearCookie(REFRESH_COOKIE_NAME);
-//   res.clearCookie(ACCESS_COOKIE_NAME);
+  res.json({
+    message:
+      'Confirmation email was successfully sent to your current address!',
+    status: 200,
+    data: {},
+  });
+};
 
-//   res.json({
-//     message: 'Email was successfully reset!',
-//     status: 200,
-//     data: {},
-//   });
-// };
+export const confirmEmailChangeController = async (req, res) => {
+  await confirmEmailChange(req.body);
+  res.json({
+    message: 'Email was successfully changed!',
+    status: 200,
+    data: {},
+  });
+};

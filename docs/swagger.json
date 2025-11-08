@@ -43,7 +43,7 @@
         ],
         "summary": "Register new user",
         "operationId": "registerUser",
-        "description": "Register a new user",
+        "description": "Register a new user and create session",
         "security": [],
         "requestBody": {
           "required": true,
@@ -97,7 +97,16 @@
                       "example": "Successfully registered a user!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/session"
+                      "type": "object",
+                      "required": [
+                        "user"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/session"
+                        }
+                      }
                     }
                   }
                 }
@@ -172,10 +181,19 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully logged in an user!"
+                      "example": "User logged in successfully!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/session"
+                      "type": "object",
+                      "required": [
+                        "user"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/session"
+                        }
+                      }
                     }
                   }
                 }
@@ -183,7 +201,41 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/401"
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "UnauthorizedError"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "message"
+                      ],
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -225,6 +277,83 @@
                   "type": "object",
                   "required": [
                     "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Session refreshed successfully!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/stories": {
+      "get": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Get list of stories",
+        "operationId": "getStories",
+        "security": [],
+        "description": "Get list of stories with this endpoint",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Азія",
+                "Пустелі",
+                "Європа",
+                "Африка",
+                "Гори",
+                "Америка",
+                "Балкани",
+                "Кавказ",
+                "Океанія"
+              ],
+              "example": "Азія"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found stories!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
                     "message",
                     "data"
                   ],
@@ -235,10 +364,632 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully refreshed a session!"
+                      "example": "Successfully found stories!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/session"
+                      "type": "object",
+                      "required": [
+                        "data",
+                        "page",
+                        "perPage",
+                        "totalItems",
+                        "totalPages",
+                        "hasNextPage",
+                        "hasPreviousPage"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/story"
+                          }
+                        },
+                        "page": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "perPage": {
+                          "type": "number",
+                          "example": 4
+                        },
+                        "totalItems": {
+                          "type": "number",
+                          "example": 4
+                        },
+                        "totalPages": {
+                          "type": "number",
+                          "example": 4
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stories not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Stories not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/send-reset-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request password reset",
+        "operationId": "requestResetEmail",
+        "description": "Send password reset email to the user",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_resetEmail"
+          },
+          "404": {
+            "description": "userId not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-pwd": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Reset password",
+        "operationId": "resetPassword",
+        "description": "Reset the user's password using a token from email",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "newPassword"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "NewStrongPassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_resetPwd"
+          },
+          "404": {
+            "description": "userId not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/send-change-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request change of user email (private)",
+        "operationId": "sendChangeEmail",
+        "description": "Allows an **authenticated user** to request changing their email address.   The system will send a confirmation link to the **current (old)** email address.   This link contains a token of type `reset-email` used to confirm the change.\n",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "newEmail"
+                ],
+                "properties": {
+                  "newEmail": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@newmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmation email was successfully sent to your current address!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Confirmation email was successfully sent to your current address!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing new email"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/confirm-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Access email change confirmation",
+        "description": "Accepts a token from the email and a new address. Validates a token of type `reset-email` and updates the user's email in the database.\n",
+        "operationId": "confirmEmailChange",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "newEmail"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  },
+                  "newEmail": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@newmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email was successfully changed!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email was successfully changed!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get users",
+        "security": [],
+        "operationId": "getUsers",
+        "description": "Get a list of users with pagination (`page`, `perPage`)  \nand sorting support (`sortBy`, `sortOrder`).\n",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "_id",
+                "name",
+                "articlesAmount"
+              ],
+              "example": "name"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "example": "asc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found users!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found users!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/getUsers"
+                          }
+                        },
+                        "pageInfo": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer",
+                              "example": 42
+                            },
+                            "page": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "perPage": {
+                              "type": "integer",
+                              "example": 10
+                            },
+                            "totalPages": {
+                              "type": "integer",
+                              "example": 5
+                            },
+                            "hasNextPage": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "hasPrevPage": {
+                              "type": "boolean",
+                              "example": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/me/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get Current User Data",
+        "operationId": "getCurrentUser",
+        "description": "Retrieves user information and a paginated list of their favorite stories.\nRequires pagination query parameters (page, perPage) for the favorites list.\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "required": false,
+            "description": "Page number for the favorites list."
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "required": false,
+            "description": "Number of favorite stories per page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current user data successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Current user data retrieved successfully."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/user"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "favorites": {
+                                  "description": "Array of favorited story objects with populated owner data.",
+                                  "type": "array",
+                                  "items": {
+                                    "allOf": [
+                                      {
+                                        "$ref": "#/components/schemas/story"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "ownerId": {
+                                            "description": "Author (owner) object, populated.",
+                                            "type": "object",
+                                            "properties": {
+                                              "_id": {
+                                                "type": "string",
+                                                "example": "6881563901add19ee16fd017"
+                                              },
+                                              "name": {
+                                                "type": "string",
+                                                "example": "Матвій Савченко"
+                                              },
+                                              "avatarUrl": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://ftp.goit.study/img/harmoniq/users/author.webp"
+                                              },
+                                              "description": {
+                                                "type": "string",
+                                                "example": "Мене звати Матвій..."
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/pagination"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "successResponse": {
+                    "summary": "Successful retrieval",
+                    "value": {
+                      "status": 200,
+                      "message": "Current user data retrieved successfully.",
+                      "data": {
+                        "user": {
+                          "_id": "690d3e43c14a8aa7610df936",
+                          "name": "Василина 2",
+                          "email": "vasya2@mail.com",
+                          "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+                          "description": "A short bio about Vasylina.",
+                          "favorites": [
+                            {
+                              "_id": "68498236a100312bea079008",
+                              "title": "Йорданія: шлях у Петру",
+                              "img": "https://ftp.goit.study/img/travel-blog/de37b4596c7d4a2a81a821d2bs.webp",
+                              "article": "Петра — одне з нових чудес світу...",
+                              "category": "68fb50c80ae91338641121f0",
+                              "ownerId": {
+                                "_id": "6881563901add19ee16fd017",
+                                "name": "Матвій Савченко",
+                                "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/author.webp",
+                                "description": "Мене звати Матвій..."
+                              }
+                            }
+                          ]
+                        },
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 2,
+                          "totalPages": 1,
+                          "hasNextPage": false,
+                          "hasPreviousPage": false
+                        }
+                      }
                     }
                   }
                 }
@@ -247,6 +998,489 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/users/me/current/stories": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get Current User's Own Stories",
+        "operationId": "getCurrentUserStories",
+        "description": "Retrieves a paginated list of stories that were created by the currently authenticated user. Includes pagination metadata in the response.",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "required": false,
+            "description": "Page number for pagination."
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "required": false,
+            "description": "Number of stories per page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the user's stories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Current user stories retrieved successfully."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "stories": {
+                          "type": "array",
+                          "description": "The paginated array of story objects.",
+                          "items": {
+                            "$ref": "#/components/schemas/story"
+                          }
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/pagination"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "storiesFound": {
+                    "summary": "Stories Found",
+                    "value": {
+                      "status": 200,
+                      "message": "Current user stories retrieved successfully.",
+                      "data": {
+                        "stories": [
+                          {
+                            "_id": "65f0b4a1d286b30065d54b00",
+                            "title": "My Story Title",
+                            "img": "https://example.com/story.jpg",
+                            "ownerId": "690d3e43c14a8aa7610df936",
+                            "article": "This is the body of the story.",
+                            "category": "65e4decdd286b30065d54b11"
+                          }
+                        ],
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 12,
+                          "totalPages": 2,
+                          "hasNextPage": true,
+                          "hasPreviousPage": false
+                        }
+                      }
+                    }
+                  },
+                  "noStoriesFound": {
+                    "summary": "No Stories Found",
+                    "value": {
+                      "status": 200,
+                      "message": "You haven't created any stories of your own yet.",
+                      "data": {
+                        "stories": [],
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 0,
+                          "totalPages": 0,
+                          "hasNextPage": false,
+                          "hasPreviousPage": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Patch User Data",
+        "operationId": "updateCurrentUser",
+        "description": "Updates the information of the user associated with the active access token.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "maxLength": 150,
+                    "description": "Short user description",
+                    "example": "I love coding!"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "New avatar photo"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Current user data successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User profile updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/user"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/me/favorites": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Add story to favorites",
+        "operationId": "addFavoriteStory",
+        "description": "Add a story to current user favorites list",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "storyId"
+                ],
+                "properties": {
+                  "storyId": {
+                    "type": "string",
+                    "format": "ObjectId",
+                    "example": "68498236a100312bea079008"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Story successfully added to favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Story successfully added to favorites"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "example": "690dd01a85cc808bb9cc909b"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Test User"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "test@example.com"
+                            },
+                            "favorites": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "68498236a100312bea079008"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/me/favorites/{storyId}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Remove a story from the saved list",
+        "operationId": "removeSavedStory",
+        "description": "Remove the specified story from the authenticated user's saved (favorites) list. Decrements the favoriteCount field of the story by 1.\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "storyId",
+            "required": true,
+            "description": "ID of the story to remove from the saved list.",
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079008"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Story successfully removed from favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Removed from favorites"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "690d1e4b1754f3c839daad1c"
+                        },
+                        "storyId": {
+                          "type": "string",
+                          "example": "68498236a100312bea079008"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get all сategories",
+        "operationId": "getAllCategories",
+        "description": "Retrieve a list of all available tags",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list of tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "List of tag objects",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "_id",
+                          "name"
+                        ],
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "68fb50c80ae91338641121f0"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Азія"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found (categories not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "NotFound"
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true,
+                      "description": "Error object produced by http-errors (may contain name, message, details, etc.)",
+                      "example": {
+                        "name": "NotFound",
+                        "message": "Categories not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "InternalServerError"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -509,9 +1743,37 @@
             "example": "65e4decdd286b30065d54b11"
           },
           "ownerId": {
-            "description": "Owner (user) id",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
+            "description": "Story author reference or populated user object (if populated via Mongoose).\n",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "User ID reference (if not populated)",
+                "example": "65e4decdd286b30065d54af9"
+              },
+              {
+                "type": "object",
+                "description": "Populated user object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "6881563901add19ee16fd017"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Матвій Савченко"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://ftp.goit.study/img/harmoniq/users/author.webp"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Мене звати Матвій..."
+                  }
+                }
+              }
+            ]
           },
           "date": {
             "description": "Story date",
@@ -543,11 +1805,49 @@
           "title": "Sample story",
           "article": "Story content here...",
           "category": "65e4decdd286b30065d54b11",
-          "ownerId": "65e4decdd286b30065d54af9",
+          "ownerId": {
+            "_id": "6881563901add19ee16fd017",
+            "name": "Матвій Савченко",
+            "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/author.webp",
+            "description": "Мене звати Матвій..."
+          },
           "date": "2024-07-01T12:00:00Z",
           "favoriteCount": 3,
           "createdAt": "2024-07-01T12:00:00Z",
           "updatedAt": "2024-07-02T10:00:00Z"
+        }
+      },
+      "getUsers": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "MongoDB ObjectId",
+            "example": "6881563901add19ee16fcff5"
+          },
+          "name": {
+            "type": "string",
+            "example": "Дмитро Романенко"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "format": "url",
+            "example": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fcff5.webp"
+          },
+          "articlesAmount": {
+            "type": "integer",
+            "example": 13
+          },
+          "description": {
+            "type": "string",
+            "example": "Привіт! Я Дмитро. Люблю знаходити приховані перлини у кожній поїздці та ділитися ними. Світ повний дивовижних відкриттів!"
+          },
+          "favorites": {
+            "type": "array",
+            "example": [
+              "65e4decdd286b30065d54ads"
+            ]
+          }
         }
       },
       "user": {
@@ -555,7 +1855,8 @@
         "required": [
           "name",
           "email",
-          "password"
+          "avatarUrl",
+          "description"
         ],
         "properties": {
           "_id": {
@@ -615,28 +1916,49 @@
             {
               "_id": "65f0b4a1d286b30065d54b00",
               "title": "Sample story",
-              "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png"
+              "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png",
+              "article": "Story content here...",
+              "category": "65e4decdd286b30065d54b11",
+              "ownerId": "65e4decdd286b30065d54af9"
             }
           ]
         }
       },
-      "userWithArticles.data": {
+      "pagination": {
         "type": "object",
+        "description": "Metadata for the pagination response.",
         "properties": {
-          "user": {
-            "$ref": "#/components/schemas/user"
+          "page": {
+            "type": "integer",
+            "description": "Current page number.",
+            "example": 1
           },
-          "articles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/story"
-            }
+          "perPage": {
+            "type": "integer",
+            "description": "Maximum number of items requested per page.",
+            "example": 10
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Total number of items across all pages.",
+            "example": 45
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages available.",
+            "example": 5
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a next page available (page < totalPages).",
+            "example": true
+          },
+          "hasPreviousPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a previous page available (page > 1).",
+            "example": false
           }
-        },
-        "required": [
-          "user",
-          "articles"
-        ]
+        }
       }
     },
     "responses": {
@@ -806,6 +2128,54 @@
                   "type": "string",
                   "description": "Human-readable internal error message (from err.message)",
                   "example": "Database connection failed"
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_resetEmail": {
+        "description": "Successfully sent reset password email",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Reset password email was successfully sent!"
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_resetPwd": {
+        "description": "Successfully reset user password",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Password was successfully reset!"
                 }
               }
             }
