@@ -4,6 +4,7 @@ import {
   logoutUser,
   refreshUsersSession,
   registerUser,
+  requestResetToken,
 } from '../services/auth.js';
 
 const REFRESH_COOKIE_NAME = 'refreshToken';
@@ -74,14 +75,14 @@ export const refreshController = async (req, res) => {
   });
 };
 
-// export const requestResetEmailController = async (req, res) => {
-//   await requestResetToken(req.body.email);
-//   res.json({
-//     message: 'Reset email was successfully sent!',
-//     status: 200,
-//     data: {},
-//   });
-// };
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
 
 // export const resetEmailController = async (req, res) => {
 //   await resetEmail(req.body);

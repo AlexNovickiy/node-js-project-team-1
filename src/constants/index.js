@@ -8,12 +8,9 @@ export const SORT_ORDER = {
 export const FIFTEEN_MINUTES = 15 * 60 * 1000;
 export const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
 
-export const SMTP = {
-  SMTP_HOST: 'SMTP_HOST',
-  SMTP_PORT: 'SMTP_PORT',
-  SMTP_USER: 'SMTP_USER',
-  SMTP_PASSWORD: 'SMTP_PASSWORD',
-  SMTP_FROM: 'SMTP_FROM',
+export const API_BREVO = {
+  API_BREVO_KEY: 'API_BREVO_KEY',
+  API_BREVO_FROM: 'API_BREVO_FROM',
 };
 
 export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
