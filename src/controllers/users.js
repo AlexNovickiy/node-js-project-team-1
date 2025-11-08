@@ -43,12 +43,6 @@ export const getCurrentUserController = async (req, res, next) => {
       pagination,
     },
   });
-  const data = await getUserCurrentService(userId);
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully retrieved current user data',
-    data,
-  });
 };
 
 export const getCurrentUserStoriesController = async (req, res) => {
