@@ -1,10 +1,6 @@
-import { StoriesCollection } from '../db/models/story.js';
-//import { UsersCollection } from '../db/models/user.js';
 import createHttpError from 'http-errors';
-import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
-
-import { getAllStories } from '../services/stories.js';
+import { getAllStories, createStory } from '../services/stories.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
@@ -37,16 +33,12 @@ export const createStoryController = async (req, res, next) => {
       return next(createHttpError(400, 'Story image is required'));
     }
 
-    const imgUrl = await saveFileToCloudinary(req.file);
-
     const storyData = {
       ...req.body,
       ownerId: req.user._id,
-      img: imgUrl,
-      createdAt: new Date(),
     };
 
-    const newStory = await StoriesCollection.create(storyData);
+    const newStory = await createStory(storyData, req.file);
 
     res.status(201).json({
       status: 201,

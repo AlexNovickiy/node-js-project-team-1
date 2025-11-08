@@ -287,6 +287,101 @@
       }
     },
     "/stories": {
+      "post": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Create a new travel story",
+        "operationId": "createStory",
+        "description": "Create a new travel story with title, content, category and an image",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "article",
+                  "category",
+                  "storyImage"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "The title of the travel story",
+                    "type": "string",
+                    "example": "My amazing trip to Japan"
+                  },
+                  "article": {
+                    "description": "The content of the travel story",
+                    "type": "string",
+                    "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka.."
+                  },
+                  "category": {
+                    "description": "Category of the story, e.g. Travel, Adventure",
+                    "type": "string",
+                    "enum": [
+                      "Asia",
+                      "Europa",
+                      "Desert",
+                      "Africa"
+                    ]
+                  },
+                  "storyImage": {
+                    "description": "Image associated with the story",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Story successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Story created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/story"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
       "get": {
         "tags": [
           "Stories"
