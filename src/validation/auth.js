@@ -55,3 +55,12 @@ export const resetPasswordSchema = Joi.object({
   password: Joi.string().required(),
   token: Joi.string().required(),
 });
+
+export const requestChangeEmailSchema = Joi.object({
+  newEmail: Joi.string().email().required(),
+});
+
+export const confirmEmailChangeSchema = Joi.object({
+  token: Joi.string().required(),
+  newEmail: Joi.string().email().required(),
+});

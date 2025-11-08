@@ -1,9 +1,11 @@
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import {
+  confirmEmailChange,
   loginUser,
   logoutUser,
   refreshUsersSession,
   registerUser,
+  requestChangeEmailToken,
   requestResetToken,
   resetPassword,
 } from '../services/auth.js';
@@ -88,6 +90,28 @@ export const resetPasswordController = async (req, res) => {
   await resetPassword(req.body);
   res.json({
     message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
+};
+export const requestChangeEmailController = async (req, res) => {
+  const oldEmail = req.user.email;
+  const { newEmail } = req.body;
+
+  await requestChangeEmailToken(oldEmail, newEmail);
+
+  res.json({
+    message:
+      'Confirmation email was successfully sent to your current address!',
+    status: 200,
+    data: {},
+  });
+};
+
+export const confirmEmailChangeController = async (req, res) => {
+  await confirmEmailChange(req.body);
+  res.json({
+    message: 'Email was successfully changed!',
     status: 200,
     data: {},
   });

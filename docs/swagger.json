@@ -419,6 +419,153 @@
         }
       }
     },
+    "/auth/send-change-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request change of user email (private)",
+        "operationId": "sendChangeEmail",
+        "description": "Allows an **authenticated user** to request changing their email address.   The system will send a confirmation link to the **current (old)** email address.   This link contains a token of type `reset-email` used to confirm the change.\n",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "newEmail"
+                ],
+                "properties": {
+                  "newEmail": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@newmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmation email was successfully sent to your current address!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Confirmation email was successfully sent to your current address!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing new email"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/confirm-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Access email change confirmation",
+        "description": "Accepts a token from the email and a new address. Validates a token of type `reset-email` and updates the user's email in the database.\n",
+        "operationId": "confirmEmailChange",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "newEmail"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  },
+                  "newEmail": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@newmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email was successfully changed!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email was successfully changed!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/users/me/current": {
       "get": {
         "tags": [
@@ -1172,9 +1319,37 @@
             "example": "65e4decdd286b30065d54b11"
           },
           "ownerId": {
-            "description": "Owner (user) id",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
+            "description": "Story author reference or populated user object (if populated via Mongoose).\n",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "User ID reference (if not populated)",
+                "example": "65e4decdd286b30065d54af9"
+              },
+              {
+                "type": "object",
+                "description": "Populated user object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "6881563901add19ee16fd017"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Матвій Савченко"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://ftp.goit.study/img/harmoniq/users/author.webp"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Мене звати Матвій..."
+                  }
+                }
+              }
+            ]
           },
           "date": {
             "description": "Story date",
@@ -1206,7 +1381,12 @@
           "title": "Sample story",
           "article": "Story content here...",
           "category": "65e4decdd286b30065d54b11",
-          "ownerId": "65e4decdd286b30065d54af9",
+          "ownerId": {
+            "_id": "6881563901add19ee16fd017",
+            "name": "Матвій Савченко",
+            "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/author.webp",
+            "description": "Мене звати Матвій..."
+          },
           "date": "2024-07-01T12:00:00Z",
           "favoriteCount": 3,
           "createdAt": "2024-07-01T12:00:00Z",

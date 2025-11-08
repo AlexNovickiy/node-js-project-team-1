@@ -1,0 +1,50 @@
+tags:
+  - Auth
+summary: Request change of user email (private)
+operationId: sendChangeEmail
+description: >
+  Allows an **authenticated user** to request changing their email address.  
+  The system will send a confirmation link to the **current (old)** email address.  
+  This link contains a token of type `reset-email` used to confirm the change.
+security:
+  - cookieAccess: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - newEmail
+        properties:
+          newEmail:
+            type: string
+            format: email
+            example: user@newmail.com
+responses:
+  '200':
+    description: Confirmation email was successfully sent to your current address!
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Confirmation email was successfully sent to your current address!
+            status:
+              type: integer
+              example: 200
+            data:
+              type: object
+              example: {}
+  '400':
+    description: Invalid or missing new email
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '409':
+    $ref: '../../components/responses/409.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

@@ -39,6 +39,12 @@ paths:
   /auth/reset-pwd:
     post:
       $ref: '../swagger/paths/auth/reset-pwd.yaml'
+  /auth/send-change-email:
+    post:
+      $ref: '../swagger/paths/auth/send-change-email.yaml'
+  /auth/confirm-email:
+    post:
+      $ref: '../swagger/paths/auth/confirm-email-change.yaml'
 
   /users/me/current:
     get:

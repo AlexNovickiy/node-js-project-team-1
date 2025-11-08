@@ -6,13 +6,13 @@ import jwt from 'jsonwebtoken';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {
-  API_BREVO,
   FIFTEEN_MINUTES,
   TEMPLATES_DIR,
   THIRTY_DAYS,
 } from '../constants/index.js';
 import { SessionsCollection } from '../db/models/session.js';
 import { UsersCollection } from '../db/models/user.js';
+import { createActionToken } from '../utils/createActionToken.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { sendEmail } from '../utils/sendMail.js';
 export const registerUser = async (payload) => {
@@ -100,55 +100,46 @@ export const requestResetToken = async (email) => {
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
-  const resetToken = jwt.sign(
-    {
-      sub: user._id,
-      email,
-    },
-    getEnvVar('JWT_SECRET'),
-    {
-      expiresIn: '15m',
-    },
-  );
-
+  const resetToken = createActionToken(user, 'reset-password');
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
     'reset-password-email.html',
   );
-
   const templateSource = (
     await fs.readFile(resetPasswordTemplatePath)
   ).toString();
-
   const template = handlebars.compile(templateSource);
+
   const html = template({
     name: user.name,
     link: `${getEnvVar('APP_DOMAIN')}/reset-pwd?token=${resetToken}`,
   });
 
   await sendEmail({
-    from: getEnvVar(API_BREVO.API_BREVO_FROM),
+    from: getEnvVar('API_BREVO_FROM'),
     to: email,
-    subject: 'Reset your password',
+    subject: 'Скидання пароля',
     html,
   });
 };
-
 export const resetPassword = async (payload) => {
-  let entries;
+  let decoded;
 
   try {
-    entries = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
+    decoded = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
   } catch (err) {
     if (err instanceof Error) throw createHttpError(401, err.message);
     throw err;
   }
 
-  const user = await UsersCollection.findOne({
-    email: entries.email,
-    _id: entries.sub,
-  });
+  if (decoded.type !== 'reset-password') {
+    throw createHttpError(400, 'Invalid token type');
+  }
 
+  const user = await UsersCollection.findOne({
+    _id: decoded.sub,
+    email: decoded.email,
+  });
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
@@ -158,5 +149,75 @@ export const resetPassword = async (payload) => {
   await UsersCollection.updateOne(
     { _id: user._id },
     { password: encryptedPassword },
+  );
+};
+export const requestChangeEmailToken = async (oldEmail, newEmail) => {
+  const user = await UsersCollection.findOne({ email: oldEmail });
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const existing = await UsersCollection.findOne({ email: newEmail });
+  if (existing) {
+    throw createHttpError(409, 'Email already in use');
+  }
+
+  const token = createActionToken(user, 'reset-email');
+
+  const templatePath = path.join(TEMPLATES_DIR, 'reset-email.html');
+  const templateSource = (await fs.readFile(templatePath)).toString();
+  const template = handlebars.compile(templateSource);
+
+  const html = template({
+    name: user.name,
+    newEmail,
+    link: `${getEnvVar(
+      'APP_DOMAIN',
+    )}/confirm-email?token=${token}&new=${encodeURIComponent(newEmail)}`,
+  });
+
+  await sendEmail({
+    from: getEnvVar('API_BREVO_FROM'),
+    to: oldEmail,
+    subject: 'Confirm your email change',
+    html,
+  });
+};
+
+export const confirmEmailChange = async (payload) => {
+  let decoded;
+
+  try {
+    decoded = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
+  } catch (err) {
+    if (err instanceof Error) throw createHttpError(401, err.message);
+    throw err;
+  }
+
+  if (decoded.type !== 'reset-email') {
+    throw createHttpError(400, 'Invalid token type');
+  }
+
+  const user = await UsersCollection.findOne({
+    _id: decoded.sub,
+    email: decoded.email,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  if (!payload.newEmail) {
+    throw createHttpError(400, 'New email is required');
+  }
+
+  const existing = await UsersCollection.findOne({ email: payload.newEmail });
+  if (existing) {
+    throw createHttpError(409, 'Email already in use');
+  }
+
+  await UsersCollection.updateOne(
+    { _id: user._id },
+    { email: payload.newEmail },
   );
 };
