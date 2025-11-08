@@ -5,7 +5,7 @@ security: []
 operationId: getUsers
 description: |
   Get a list of users with pagination (`page`, `perPage`)  
-   and sorting support (`sortBy`, `sortOrder`).
+  and sorting support (`sortBy`, `sortOrder`).
 parameters:
   - in: query
     name: page
@@ -49,7 +49,7 @@ responses:
                 users:
                   type: array
                   items:
-                    $ref: '../components/schemas.yaml#/User'
+                    $ref: ../../components/schemas/users/getUsers.yaml
                 pageInfo:
                   type: object
                   properties:
@@ -72,4 +72,4 @@ responses:
                       type: boolean
                       example: false
   '500':
-    $ref: '../components/responses.yaml#/ServerError'
+    $ref: ../../components/responses/500.yaml

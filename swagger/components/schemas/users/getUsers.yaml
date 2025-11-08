@@ -1,20 +1,22 @@
-User:
-  type: object
-  properties:
-    _id:
-      type: string
-      description: MongoDB ObjectId
-      example: "6881563901add19ee16fcff5"
-    name:
-      type: string
-      example: "Дмитро Романенко"
-    avatarUrl:
-      type: string
-      format: url
-      example: "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fcff5.webp"
-    articlesAmount:
-      type: integer
-      example: 13
-    description:
-      type: string
-      example: "Привіт! Я Дмитро. Люблю знаходити приховані перлини у кожній поїздці та ділитися ними. Світ повний дивовижних відкриттів!"
+type: object
+properties:
+  _id:
+    type: string
+    description: MongoDB ObjectId
+    example: '6881563901add19ee16fcff5'
+  name:
+    type: string
+    example: 'Дмитро Романенко'
+  avatarUrl:
+    type: string
+    format: url
+    example: 'https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fcff5.webp'
+  articlesAmount:
+    type: integer
+    example: 13
+  description:
+    type: string
+    example: 'Привіт! Я Дмитро. Люблю знаходити приховані перлини у кожній поїздці та ділитися ними. Світ повний дивовижних відкриттів!'
+  favorites:
+    type: array
+    example: ['65e4decdd286b30065d54ads']

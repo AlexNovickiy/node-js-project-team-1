@@ -9,8 +9,9 @@ export const getUsers = async (page, perPage, sortBy, sortOrder) => {
     UsersCollection.find()
       .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
       .skip(skip)
-      .limit(perPage),
-    UsersCollection.countDocuments(),
+      .limit(perPage)
+      .exec(),
+    UsersCollection.countDocuments().exec(),
   ]);
 
   const totalPages = Math.ceil(total / perPage);
