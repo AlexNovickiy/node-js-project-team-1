@@ -97,7 +97,16 @@
                       "example": "Successfully registered a user!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/session"
+                      "type": "object",
+                      "required": [
+                        "user"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/session"
+                        }
+                      }
                     }
                   }
                 }
@@ -162,8 +171,7 @@
                   "type": "object",
                   "required": [
                     "status",
-                    "message",
-                    "data"
+                    "message"
                   ],
                   "properties": {
                     "status": {
@@ -172,10 +180,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully logged in an user!"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/session"
+                      "example": "User logged in successfully!"
                     }
                   }
                 }
@@ -183,7 +188,41 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/401"
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "UnauthorizedError"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "message"
+                      ],
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -225,8 +264,7 @@
                   "type": "object",
                   "required": [
                     "status",
-                    "message",
-                    "data"
+                    "message"
                   ],
                   "properties": {
                     "status": {
@@ -235,10 +273,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully refreshed a session!"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/session"
+                      "example": "Session refreshed successfully!"
                     }
                   }
                 }
