@@ -1,26 +1,18 @@
-const parseCategory = (category) => {
-  const isString = typeof category === 'string' ? category : undefined;
+import { CategoriesCollection } from '../db/models/category.js';
 
-  if (!isString) {
-    return undefined;
-  }
+const parseCategory = async (category) => {
+  if (typeof category !== 'string') return undefined;
 
-  const isCategory = ['Азія', 'Пустелі', 'Європа', 'Африка'].includes(category)
-    ? category
-    : undefined;
+  const foundCategory = await CategoriesCollection.findOne({ name: category });
 
-  if (isCategory) {
-    return isCategory;
-  } else {
-    return undefined;
-  }
+  return foundCategory ? foundCategory._id : undefined;
 };
 
 // TODO: Додайте інші фільтри, якщо вони знадобляться
-export const parseFilterParams = (query) => {
+export const parseFilterParams = async (query) => {
   const { category } = query;
 
-  const parsedCategory = parseCategory(category);
+  const parsedCategory = await parseCategory(category);
 
   return {
     ...(parsedCategory !== undefined && { category: parsedCategory }),

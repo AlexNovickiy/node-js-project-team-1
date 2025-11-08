@@ -1,7 +1,22 @@
+import { getAllStories } from '../services/stories.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+
 export const getStoriesController = async (req, res) => {
-  // TODO: Сервіс для getAllStories(req.query) (пагінація, фільтрація)
-  const data = { message: 'Stories GET endpoint placeholder' };
-  res.status(200).json({ status: 200, data });
+  const { page, perPage } = parsePaginationParams(req.query);
+  const filter = await parseFilterParams(req.query);
+
+  const stories = await getAllStories({
+    page,
+    perPage,
+    filter,
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found stories!',
+    data: stories,
+  });
 };
 
 export const getStoryByIdController = async (req, res) => {
