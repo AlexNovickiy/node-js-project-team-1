@@ -8,7 +8,7 @@ description: >
 security: []
 parameters:
   - in: path
-    name: id
+    name: storyId
     required: true
     description: ID of the story to remove from the saved list.
     schema:

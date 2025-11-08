@@ -1,10 +1,6 @@
 import { getAllStories } from '../services/stories.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
-import { StoriesCollection } from '../db/models/story.js';
-//import { UsersCollection } from '../db/models/user.js';
-import createHttpError from 'http-errors';
-import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getStoriesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -29,31 +25,20 @@ export const getStoryByIdController = async (req, res) => {
   res.status(200).json({ status: 200, data });
 };
 
-export const createStoryController = async (req, res, next) => {
-  try {
-    if (!req.file) {
-      return next(createHttpError(400, 'Story image is required'));
-    }
-
-    const imgUrl = await saveFileToCloudinary(req.file);
-
-    const storyData = {
-      ...req.body,
-      ownerId: req.user._id,
-      img: imgUrl,
-      createdAt: new Date(),
-    };
-
-    const newStory = await StoriesCollection.create(storyData);
-
-    res.status(201).json({
-      status: 201,
-      data: newStory,
-      message: 'Story created successfully',
-    });
-  } catch (err) {
-    next(createHttpError(500, err.message));
-  }
+export const createStoryController = async (req, res) => {
+  // TODO: Сервіс для createStory(storyData)
+  // TODO: Сервіс має:
+  // 1. $inc: { articlesAmount: 1 } (або інша логіка) в User
+  const storyData = {
+    ...req.body,
+    ownerId: req.user.id,
+    img: req.file,
+  };
+  const data = {
+    message: 'Story POST endpoint placeholder',
+    data: storyData,
+  };
+  res.status(201).json({ status: 201, data });
 };
 
 export const updateStoryController = async (req, res) => {

@@ -1,5 +1,9 @@
+import {
+  getUserCurrentService,
+  getUserCurrentStoriesService,
+} from '../services/users.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { removeArticle } from '../services/users.js';
-import { getUserCurrentService } from '../services/users.js';
 import { updateUserCurrentService } from '../services/users.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
@@ -19,14 +23,47 @@ export const getUserByIdController = async (req, res) => {
   res.status(200).json({ status: 200, data });
 };
 
-export const getCurrentUserController = async (req, res) => {
-  // TODO: Сервіс для getUserById(req.user.id)
+export const getCurrentUserController = async (req, res, next) => {
+  const { page, perPage } = req.paginationParams;
   const userId = req.user._id;
-  const data = await getUserCurrentService(userId);
+  const { user, totalFavoritesCount } = await getUserCurrentService(userId, {
+    page,
+    perPage,
+  });
+  const pagination = calculatePaginationData(
+    totalFavoritesCount,
+    perPage,
+    page,
+  );
   res.status(200).json({
     status: 200,
-    message: 'Successfully retrieved current user data',
-    data,
+    message: 'Current user data retrieved successfully.',
+    data: {
+      user,
+      pagination,
+    },
+  });
+};
+
+export const getCurrentUserStoriesController = async (req, res) => {
+  const { page, perPage } = req.paginationParams;
+  const userId = req.user._id;
+  const { stories, totalItems } = await getUserCurrentStoriesService(userId, {
+    page,
+    perPage,
+  });
+  const pagination = calculatePaginationData(totalItems, perPage, page);
+  const responseMessage =
+    totalItems === 0
+      ? "You haven't created any stories of your own yet."
+      : 'Current user stories retrieved successfully.';
+  res.status(200).json({
+    status: 200,
+    message: responseMessage,
+    data: {
+      stories,
+      pagination,
+    },
   });
 };
 
@@ -56,13 +93,17 @@ export const updateCurrentUserController = async (req, res) => {
 };
 
 export const addFavoriteController = async (req, res) => {
-  // TODO: Сервіс для addFavorite(req.user.id, req.body.storyId)
-  const data = {
-    message: 'Favorite POST placeholder',
-    userId: req.user.id,
-    storyId: req.body.storyId,
-  };
-  res.status(200).json({ status: 200, data });
+  const userId = req.user.id;
+  const storyId = req.body.storyId;
+
+  const updatedUser = await addFavorite(userId, storyId);
+  res.status(200).json({
+    status: 200,
+    message: 'Story successfully added to favorites',
+    data: {
+      user: updatedUser,
+    },
+  });
 };
 
 export const removeFavoriteController = async (req, res) => {

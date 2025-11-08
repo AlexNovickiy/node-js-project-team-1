@@ -13,4 +13,3 @@ const categorySchema = new Schema(
 );
 
 export const CategoriesCollection = model('categories', categorySchema);
-

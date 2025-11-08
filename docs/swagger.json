@@ -251,44 +251,6 @@
         }
       }
     },
-    "/stories": {
-      "post": {
-        "tags": [
-          "Stories"
-        ],
-        "summary": "Create a new travel story",
-        "operationId": "createStory",
-        "description": "Create a new travel story with title, content, category and an image",
-        "security": [
-          {
-            "cookieAccess": []
-          }
-        ],
-        "requestBody": {
-    "/users/me/favorites/{storyId}": {
-      "delete": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Remove a story from the saved list",
-        "operationId": "removeSavedStory",
-        "description": "Remove the specified story from the authenticated user's saved (favorites) list. Decrements the favoriteCount field of the story by 1.\n",
-        "security": [],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "description": "ID of the story to remove from the saved list.",
-            "schema": {
-              "type": "string",
-              "example": "68498236a100312bea079008"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Story successfully removed from favorites",
     "/users/me/current": {
       "get": {
         "tags": [
@@ -296,8 +258,30 @@
         ],
         "summary": "Get Current User Data",
         "operationId": "getCurrentUser",
-        "description": "Retrieves the information of the user associated with the active access token.",
+        "description": "Retrieves user information and a paginated list of their favorite stories.\nRequires pagination query parameters (page, perPage) for the favorites list.\n",
         "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "required": false,
+            "description": "Page number for the favorites list."
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "required": false,
+            "description": "Number of favorite stories per page."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Current user data successfully retrieved.",
@@ -312,13 +296,225 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully retrieved current user data"
+                      "example": "Current user data retrieved successfully."
                     },
                     "data": {
                       "type": "object",
                       "properties": {
                         "user": {
-                          "$ref": "#/components/schemas/user"
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/user"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "favorites": {
+                                  "description": "Array of favorited story objects with populated owner data.",
+                                  "type": "array",
+                                  "items": {
+                                    "allOf": [
+                                      {
+                                        "$ref": "#/components/schemas/story"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "ownerId": {
+                                            "description": "Author (owner) object, populated.",
+                                            "type": "object",
+                                            "properties": {
+                                              "_id": {
+                                                "type": "string",
+                                                "example": "6881563901add19ee16fd017"
+                                              },
+                                              "name": {
+                                                "type": "string",
+                                                "example": "Матвій Савченко"
+                                              },
+                                              "avatarUrl": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://ftp.goit.study/img/harmoniq/users/author.webp"
+                                              },
+                                              "description": {
+                                                "type": "string",
+                                                "example": "Мене звати Матвій..."
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/pagination"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "successResponse": {
+                    "summary": "Successful retrieval",
+                    "value": {
+                      "status": 200,
+                      "message": "Current user data retrieved successfully.",
+                      "data": {
+                        "user": {
+                          "_id": "690d3e43c14a8aa7610df936",
+                          "name": "Василина 2",
+                          "email": "vasya2@mail.com",
+                          "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+                          "description": "A short bio about Vasylina.",
+                          "favorites": [
+                            {
+                              "_id": "68498236a100312bea079008",
+                              "title": "Йорданія: шлях у Петру",
+                              "img": "https://ftp.goit.study/img/travel-blog/de37b4596c7d4a2a81a821d2bs.webp",
+                              "article": "Петра — одне з нових чудес світу...",
+                              "category": "68fb50c80ae91338641121f0",
+                              "ownerId": {
+                                "_id": "6881563901add19ee16fd017",
+                                "name": "Матвій Савченко",
+                                "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/author.webp",
+                                "description": "Мене звати Матвій..."
+                              }
+                            }
+                          ]
+                        },
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 2,
+                          "totalPages": 1,
+                          "hasNextPage": false,
+                          "hasPreviousPage": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/users/me/current/stories": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get Current User's Own Stories",
+        "operationId": "getCurrentUserStories",
+        "description": "Retrieves a paginated list of stories that were created by the currently authenticated user. Includes pagination metadata in the response.",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "required": false,
+            "description": "Page number for pagination."
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "required": false,
+            "description": "Number of stories per page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the user's stories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Current user stories retrieved successfully."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "stories": {
+                          "type": "array",
+                          "description": "The paginated array of story objects.",
+                          "items": {
+                            "$ref": "#/components/schemas/story"
+                          }
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/pagination"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "storiesFound": {
+                    "summary": "Stories Found",
+                    "value": {
+                      "status": 200,
+                      "message": "Current user stories retrieved successfully.",
+                      "data": {
+                        "stories": [
+                          {
+                            "_id": "65f0b4a1d286b30065d54b00",
+                            "title": "My Story Title",
+                            "img": "https://example.com/story.jpg",
+                            "ownerId": "690d3e43c14a8aa7610df936",
+                            "article": "This is the body of the story.",
+                            "category": "65e4decdd286b30065d54b11"
+                          }
+                        ],
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 12,
+                          "totalPages": 2,
+                          "hasNextPage": true,
+                          "hasPreviousPage": false
+                        }
+                      }
+                    }
+                  },
+                  "noStoriesFound": {
+                    "summary": "No Stories Found",
+                    "value": {
+                      "status": 200,
+                      "message": "You haven't created any stories of your own yet.",
+                      "data": {
+                        "stories": [],
+                        "pagination": {
+                          "page": 1,
+                          "perPage": 10,
+                          "totalItems": 0,
+                          "totalPages": 0,
+                          "hasNextPage": false,
+                          "hasPreviousPage": false
                         }
                       }
                     }
@@ -348,37 +544,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "title",
-                  "article",
-                  "category",
-                  "storyImage"
-                ],
-                "properties": {
-                  "title": {
-                    "description": "The title of the travel story",
-                    "type": "string",
-                    "example": "My amazing trip to Japan"
-                  },
-                  "article": {
-                    "description": "The content of the travel story",
-                    "type": "string",
-                    "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka.."
-                  },
-                  "category": {
-                    "description": "Category of the story, e.g. Travel, Adventure",
-                    "type": "string",
-                    "enum": [
-                      "Asia",
-                      "Europa",
-                      "Desert",
-                      "Africa"
-                    ]
-                  },
-                  "storyImage": {
-                    "description": "Image associated with the story",
-                    "format": "binary",
-                    "type": "string"
                 "properties": {
                   "description": {
                     "type": "string",
@@ -397,10 +562,79 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Story successfully created",
           "200": {
             "description": "Current user data successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User profile updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/user"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/me/favorites": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Add story to favorites",
+        "operationId": "addFavoriteStory",
+        "description": "Add a story to current user favorites list",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "storyId"
+                ],
+                "properties": {
+                  "storyId": {
+                    "type": "string",
+                    "format": "ObjectId",
+                    "example": "68498236a100312bea079008"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Story successfully added to favorites",
             "content": {
               "application/json": {
                 "schema": {
@@ -413,15 +647,94 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 201
+                      "example": 200
                     },
                     "message": {
                       "type": "string",
-                      "example": "Story created successfully"
+                      "example": "Story successfully added to favorites"
                     },
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/story"
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "example": "690dd01a85cc808bb9cc909b"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Test User"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "test@example.com"
+                            },
+                            "favorites": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "68498236a100312bea079008"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/me/favorites/{storyId}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Remove a story from the saved list",
+        "operationId": "removeSavedStory",
+        "description": "Remove the specified story from the authenticated user's saved (favorites) list. Decrements the favoriteCount field of the story by 1.\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "storyId",
+            "required": true,
+            "description": "ID of the story to remove from the saved list.",
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079008"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Story successfully removed from favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -441,15 +754,6 @@
                         "storyId": {
                           "type": "string",
                           "example": "68498236a100312bea079008"
-                    "message": {
-                      "type": "string",
-                      "example": "User profile updated successfully"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "user": {
-                          "$ref": "#/components/schemas/user"
                         }
                       }
                     }
@@ -552,65 +856,6 @@
       "story": {
         "type": "object",
         "required": [
-          "title",
-          "article",
-          "category",
-          "img",
-          "ownerId",
-          "createdAt",
-          "updatedAt"
-        ],
-        "properties": {
-          "title": {
-            "description": "The title of the travel story",
-            "type": "string",
-            "example": "My amazing trip to Japan"
-          },
-          "article": {
-            "description": "Content of the travel story",
-            "type": "string",
-            "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka..."
-          },
-          "category": {
-            "description": "Category of the story, e.g. Travel, Adventure",
-            "type": "string",
-            "enum": [
-              "Asia",
-              "Europe",
-              "Desert",
-              "Africa"
-            ]
-          },
-          "img": {
-            "description": "URL of the image associated with the story",
-            "type": "string",
-            "example": "https://res.cloudinary.com/your-cloud-name/image/upload/v1762531328/a3lruckukgx56d4czhd4czd4.webp"
-          },
-          "ownerId": {
-            "description": "ID of the user who created the story",
-            "type": "string",
-            "example": "60f8b93b0c9eb67f80d27c68"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2025-10-07T18:37:55.344+00:00"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2025-10-07T18:37:55.344+00:00"
-          },
-          "favoriteCount": {
-            "description": "Number of favorites or likes the story has received",
-            "type": "number",
-            "example": 10
-          },
-          "date": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2025-10-07T18:37:55.344+00:00"
-          }
           "img",
           "title",
           "article",
@@ -693,7 +938,8 @@
         "required": [
           "name",
           "email",
-          "password"
+          "avatarUrl",
+          "description"
         ],
         "properties": {
           "_id": {
@@ -753,9 +999,48 @@
             {
               "_id": "65f0b4a1d286b30065d54b00",
               "title": "Sample story",
-              "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png"
+              "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png",
+              "article": "Story content here...",
+              "category": "65e4decdd286b30065d54b11",
+              "ownerId": "65e4decdd286b30065d54af9"
             }
           ]
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "description": "Metadata for the pagination response.",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "description": "Current page number.",
+            "example": 1
+          },
+          "perPage": {
+            "type": "integer",
+            "description": "Maximum number of items requested per page.",
+            "example": 10
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Total number of items across all pages.",
+            "example": 45
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages available.",
+            "example": 5
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a next page available (page < totalPages).",
+            "example": true
+          },
+          "hasPreviousPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a previous page available (page > 1).",
+            "example": false
+          }
         }
       }
     },
