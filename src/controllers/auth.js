@@ -32,25 +32,37 @@ const setupAuthCookies = (res, session) => {
 };
 
 // --- Контролери ---
+export const registerController = async (req, res, next) => {
+  try {
+    const { user, session } = await registerUser(req.body);
 
-export const registerController = async (req, res) => {
-  const user = await registerUser(req.body);
+    setupAuthCookies(res, session);
 
-  res.status(201).json({
-    status: 201,
-    message: 'User registered successfully',
-    data: { user },
-  });
+    res.status(201).json({
+      status: 201,
+      message: 'User registered successfully',
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const loginController = async (req, res) => {
-  const session = await loginUser(req.body);
-  setupAuthCookies(res, session);
+export const loginController = async (req, res, next) => {
+  try {
+    const { session, user } = await loginUser(req.body);
+    setupAuthCookies(res, session);
 
-  res.status(200).json({
-    status: 200,
-    message: 'User logged in successfully',
-  });
+    res.status(200).json({
+      status: 200,
+      message: 'User logged in successfully',
+      data: { user },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const logoutController = async (req, res) => {

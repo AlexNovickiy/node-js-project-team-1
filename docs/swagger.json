@@ -43,7 +43,7 @@
         ],
         "summary": "Register new user",
         "operationId": "registerUser",
-        "description": "Register a new user",
+        "description": "Register a new user and create session",
         "security": [],
         "requestBody": {
           "required": true,
@@ -171,7 +171,8 @@
                   "type": "object",
                   "required": [
                     "status",
-                    "message"
+                    "message",
+                    "data"
                   ],
                   "properties": {
                     "status": {
@@ -181,6 +182,18 @@
                     "message": {
                       "type": "string",
                       "example": "User logged in successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "user"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/session"
+                        }
+                      }
                     }
                   }
                 }
@@ -497,6 +510,30 @@
               }
             }
           },
+          "404": {
+            "description": "Stories not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Stories not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -776,6 +813,125 @@
           },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get users",
+        "security": [],
+        "operationId": "getUsers",
+        "description": "Get a list of users with pagination (`page`, `perPage`)  \nand sorting support (`sortBy`, `sortOrder`).\n",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "_id",
+                "name",
+                "articlesAmount"
+              ],
+              "example": "name"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "example": "asc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found users!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found users!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/getUsers"
+                          }
+                        },
+                        "pageInfo": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer",
+                              "example": 42
+                            },
+                            "page": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "perPage": {
+                              "type": "integer",
+                              "example": 10
+                            },
+                            "totalPages": {
+                              "type": "integer",
+                              "example": 5
+                            },
+                            "hasNextPage": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "hasPrevPage": {
+                              "type": "boolean",
+                              "example": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1608,6 +1764,39 @@
           "favoriteCount": 3,
           "createdAt": "2024-07-01T12:00:00Z",
           "updatedAt": "2024-07-02T10:00:00Z"
+        }
+      },
+      "getUsers": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "MongoDB ObjectId",
+            "example": "6881563901add19ee16fcff5"
+          },
+          "name": {
+            "type": "string",
+            "example": "Дмитро Романенко"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "format": "url",
+            "example": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fcff5.webp"
+          },
+          "articlesAmount": {
+            "type": "integer",
+            "example": 13
+          },
+          "description": {
+            "type": "string",
+            "example": "Привіт! Я Дмитро. Люблю знаходити приховані перлини у кожній поїздці та ділитися ними. Світ повний дивовижних відкриттів!"
+          },
+          "favorites": {
+            "type": "array",
+            "example": [
+              "65e4decdd286b30065d54ads"
+            ]
+          }
         }
       },
       "user": {

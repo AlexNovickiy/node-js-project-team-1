@@ -2,6 +2,33 @@ import createHttpError from 'http-errors';
 import { UsersCollection } from '../db/models/user.js';
 import { StoriesCollection } from '../db/models/story.js';
 
+export const getUsers = async (page, perPage, sortBy, sortOrder) => {
+  const skip = (page - 1) * perPage;
+
+  const [users, total] = await Promise.all([
+    UsersCollection.find()
+      .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
+      .skip(skip)
+      .limit(perPage)
+      .exec(),
+    UsersCollection.countDocuments().exec(),
+  ]);
+
+  const totalPages = Math.ceil(total / perPage);
+
+  return {
+    users,
+    pageInfo: {
+      total,
+      page,
+      perPage,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1,
+    },
+  };
+};
+
 export const removeArticle = async (userId, storyId) => {
   const story = await StoriesCollection.findById(storyId);
   if (!story) {
@@ -43,11 +70,10 @@ export const getUserCurrentService = async (userId, { page, perPage }) => {
   const paginatedFavoriteIds = user.favorites.slice(skip, skip + perPage);
   const paginatedFavorites = await StoriesCollection.find({
     _id: { $in: paginatedFavoriteIds },
-  })
-  .populate({
-        path: 'ownerId', 
-        select: 'name email avatarUrl description'
-    });
+  }).populate({
+    path: 'ownerId',
+    select: 'name email avatarUrl description',
+  });
   const userObject = user.toObject();
   delete userObject.favorites;
   const finalUser = {

@@ -51,6 +51,10 @@ paths:
     post:
       $ref: '../swagger/paths/auth/confirm-email-change.yaml'
 
+  /users:
+    get:
+      $ref: '../swagger/paths/users/getUsers.yaml'
+
   /users/me/current:
     get:
       $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
