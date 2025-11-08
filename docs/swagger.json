@@ -322,14 +322,9 @@
                     "example": "I had an amazing trip to Japan where I visited Tokyo, Kyoto, and Osaka.."
                   },
                   "category": {
-                    "description": "Category of the story, e.g. Travel, Adventure",
+                    "description": "Id category of the story",
                     "type": "string",
-                    "enum": [
-                      "Asia",
-                      "Europa",
-                      "Desert",
-                      "Africa"
-                    ]
+                    "example": "68fb50c80ae91338641121f0"
                   },
                   "storyImage": {
                     "description": "Image associated with the story",
