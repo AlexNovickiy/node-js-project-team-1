@@ -31,6 +31,7 @@ responses:
           required:
             - status
             - message
+            - data
           properties:
             status:
               type: integer
@@ -38,6 +39,14 @@ responses:
             message:
               type: string
               example: User logged in successfully!
+            data:
+              type: object
+              required:
+                - user
+              properties:
+                user:
+                  type: object
+                  $ref: ../../components/schemas/auth/session.yaml
   '401':
     description: Unauthorized error
     content:
