@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Скидання пароля</title>
+    <title>Підтвердження зміни електронної пошти</title>
     <style>
       body {
         margin: 0;
@@ -89,20 +89,23 @@
     <div class="card">
       <div class="brand">Подорожники</div>
 
-      <h1>Скидання пароля</h1>
+      <h1>Підтвердження нової електронної пошти</h1>
       <p>
         Привіт, <strong>{{name}}</strong>!<br />
-        Натисніть кнопку нижче, щоб задати новий пароль для вашого акаунта.
+        Ви запросили зміну електронної адреси на
+        <strong>{{newEmail}}</strong>.<br />
+        Будь ласка, натисніть кнопку нижче, щоб підтвердити цю дію.
       </p>
 
       <div class="btn-container">
         <a href="{{link}}" class="btn" target="_blank" rel="noopener"
-          >Скинути пароль</a
+          >Підтвердити e-mail</a
         >
       </div>
 
       <p class="note">
-        Якщо ви не запитували скидання пароля, просто ігноруйте цей лист.
+        Якщо ви не ініціювали зміну електронної пошти — просто проігноруйте цей
+        лист.
       </p>
     </div>
 
