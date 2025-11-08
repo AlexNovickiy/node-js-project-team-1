@@ -7,7 +7,7 @@ import {
 } from '../services/users.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { getUserCurrentService, getUsers } from '../services/users.js';
+import { getUsers } from '../services/users.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 
