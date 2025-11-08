@@ -63,7 +63,7 @@ responses:
                 data:
                   type: array
                   items:
-                    $ref: '../../components/schemas/story.yaml'
+                    $ref: '../../components/schemas/stories/story.yaml'
                 page:
                   type: number
                   example: 2
