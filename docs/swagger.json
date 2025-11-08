@@ -97,7 +97,16 @@
                       "example": "Successfully registered a user!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/session"
+                      "type": "object",
+                      "required": [
+                        "user"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/session"
+                        }
+                      }
                     }
                   }
                 }
@@ -162,8 +171,7 @@
                   "type": "object",
                   "required": [
                     "status",
-                    "message",
-                    "data"
+                    "message"
                   ],
                   "properties": {
                     "status": {
@@ -172,10 +180,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully logged in an user!"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/session"
+                      "example": "User logged in successfully!"
                     }
                   }
                 }
@@ -183,7 +188,41 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/401"
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "UnauthorizedError"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "message"
+                      ],
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -225,8 +264,7 @@
                   "type": "object",
                   "required": [
                     "status",
-                    "message",
-                    "data"
+                    "message"
                   ],
                   "properties": {
                     "status": {
@@ -235,10 +273,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully refreshed a session!"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/session"
+                      "example": "Session refreshed successfully!"
                     }
                   }
                 }
@@ -365,6 +400,286 @@
                 }
               }
             }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/send-reset-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request password reset",
+        "operationId": "requestResetEmail",
+        "description": "Send password reset email to the user",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_resetEmail"
+          },
+          "404": {
+            "description": "userId not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-pwd": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Reset password",
+        "operationId": "resetPassword",
+        "description": "Reset the user's password using a token from email",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "newPassword"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "NewStrongPassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_resetPwd"
+          },
+          "404": {
+            "description": "userId not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/send-change-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request change of user email (private)",
+        "operationId": "sendChangeEmail",
+        "description": "Allows an **authenticated user** to request changing their email address.   The system will send a confirmation link to the **current (old)** email address.   This link contains a token of type `reset-email` used to confirm the change.\n",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "newEmail"
+                ],
+                "properties": {
+                  "newEmail": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@newmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmation email was successfully sent to your current address!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Confirmation email was successfully sent to your current address!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing new email"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/confirm-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Access email change confirmation",
+        "description": "Accepts a token from the email and a new address. Validates a token of type `reset-email` and updates the user's email in the database.\n",
+        "operationId": "confirmEmailChange",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "newEmail"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  },
+                  "newEmail": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@newmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email was successfully changed!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email was successfully changed!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -900,6 +1215,118 @@
           }
         }
       }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get all сategories",
+        "operationId": "getAllCategories",
+        "description": "Retrieve a list of all available tags",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list of tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "List of tag objects",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "_id",
+                          "name"
+                        ],
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "68fb50c80ae91338641121f0"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Азія"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found (categories not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "NotFound"
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true,
+                      "description": "Error object produced by http-errors (may contain name, message, details, etc.)",
+                      "example": {
+                        "name": "NotFound",
+                        "message": "Categories not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "InternalServerError"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1013,9 +1440,37 @@
             "example": "65e4decdd286b30065d54b11"
           },
           "ownerId": {
-            "description": "Owner (user) id",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
+            "description": "Story author reference or populated user object (if populated via Mongoose).\n",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "User ID reference (if not populated)",
+                "example": "65e4decdd286b30065d54af9"
+              },
+              {
+                "type": "object",
+                "description": "Populated user object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "6881563901add19ee16fd017"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Матвій Савченко"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://ftp.goit.study/img/harmoniq/users/author.webp"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Мене звати Матвій..."
+                  }
+                }
+              }
+            ]
           },
           "date": {
             "description": "Story date",
@@ -1047,7 +1502,12 @@
           "title": "Sample story",
           "article": "Story content here...",
           "category": "65e4decdd286b30065d54b11",
-          "ownerId": "65e4decdd286b30065d54af9",
+          "ownerId": {
+            "_id": "6881563901add19ee16fd017",
+            "name": "Матвій Савченко",
+            "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/author.webp",
+            "description": "Мене звати Матвій..."
+          },
           "date": "2024-07-01T12:00:00Z",
           "favoriteCount": 3,
           "createdAt": "2024-07-01T12:00:00Z",
@@ -1332,6 +1792,54 @@
                   "type": "string",
                   "description": "Human-readable internal error message (from err.message)",
                   "example": "Database connection failed"
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_resetEmail": {
+        "description": "Successfully sent reset password email",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Reset password email was successfully sent!"
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_resetPwd": {
+        "description": "Successfully reset user password",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Password was successfully reset!"
                 }
               }
             }

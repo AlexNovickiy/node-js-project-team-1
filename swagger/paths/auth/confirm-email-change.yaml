@@ -1,0 +1,48 @@
+tags:
+  - Auth
+summary: Access email change confirmation
+description: >
+  Accepts a token from the email and a new address.
+  Validates a token of type `reset-email` and updates the user's email in the database.
+operationId: confirmEmailChange
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - token
+          - newEmail
+        properties:
+          token:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          newEmail:
+            type: string
+            format: email
+            example: user@newmail.com
+responses:
+  '200':
+    description: Email was successfully changed!
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Email was successfully changed!
+            status:
+              type: integer
+              example: 200
+            data:
+              type: object
+              example: {}
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '409':
+    $ref: '../../components/responses/409.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

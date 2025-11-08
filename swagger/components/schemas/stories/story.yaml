@@ -30,9 +30,28 @@ properties:
     type: string
     example: 65e4decdd286b30065d54b11
   ownerId:
-    description: 'Owner (user) id'
-    type: string
-    example: 65e4decdd286b30065d54af9
+    description: >
+      Story author reference or populated user object (if populated via Mongoose).
+    oneOf:
+      - type: string
+        description: 'User ID reference (if not populated)'
+        example: 65e4decdd286b30065d54af9
+      - type: object
+        description: 'Populated user object'
+        properties:
+          _id:
+            type: string
+            example: 6881563901add19ee16fd017
+          name:
+            type: string
+            example: Матвій Савченко
+          avatarUrl:
+            type: string
+            format: uri
+            example: https://ftp.goit.study/img/harmoniq/users/author.webp
+          description:
+            type: string
+            example: Мене звати Матвій...
   date:
     description: 'Story date'
     type: string
@@ -52,13 +71,18 @@ properties:
     type: string
     format: date-time
     example: '2024-07-02T10:00:00Z'
+
 example:
   _id: 65f0b4a1d286b30065d54b00
   img: 'https://res.cloudinary.com/uqwgdu/image/upload/story.png'
   title: 'Sample story'
   article: 'Story content here...'
   category: 65e4decdd286b30065d54b11
-  ownerId: 65e4decdd286b30065d54af9
+  ownerId:
+    _id: 6881563901add19ee16fd017
+    name: Матвій Савченко
+    avatarUrl: 'https://ftp.goit.study/img/harmoniq/users/author.webp'
+    description: Мене звати Матвій...
   date: '2024-07-01T12:00:00Z'
   favoriteCount: 3
   createdAt: '2024-07-01T12:00:00Z'

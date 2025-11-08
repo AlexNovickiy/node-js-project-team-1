@@ -1,0 +1,76 @@
+tags:
+  - Categories
+summary: Get all сategories
+operationId: getAllCategories
+description: 'Retrieve a list of all available tags'
+security: []
+responses:
+  '200':
+    description: Successfully retrieved list of tags
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            data:
+              type: array
+              description: List of tag objects
+              items:
+                type: object
+                required:
+                  - _id
+                  - name
+                properties:
+                  _id:
+                    type: string
+                    example: 68fb50c80ae91338641121f0
+                  name:
+                    type: string
+                    example: Азія
+  '404':
+    description: Not found (categories not found)
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: NotFound
+            data:
+              type: object
+              additionalProperties: true
+              description: Error object produced by http-errors (may contain name, message, details, etc.)
+              example:
+                name: NotFound
+                message: 'Categories not found'
+
+  '500':
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: InternalServerError

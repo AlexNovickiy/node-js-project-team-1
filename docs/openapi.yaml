@@ -36,6 +36,19 @@ paths:
   /stories:
     get:
       $ref: '../swagger/paths/stories/get.yaml'
+  /auth/send-reset-email:
+    post:
+      $ref: '../swagger/paths/auth/send-reset-email.yaml'
+  /auth/reset-pwd:
+    post:
+      $ref: '../swagger/paths/auth/reset-pwd.yaml'
+  /auth/send-change-email:
+    post:
+      $ref: '../swagger/paths/auth/send-change-email.yaml'
+  /auth/confirm-email:
+    post:
+      $ref: '../swagger/paths/auth/confirm-email-change.yaml'
+
   /users/me/current:
     get:
       $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
@@ -70,8 +83,9 @@ paths:
   # /stories/{storyId}:
   #   $ref: './paths/stories/patch-story.yaml'
 
-  # /categories:
-  #   $ref: './paths/categories/get-categories.yaml'
+  /categories:
+    get:
+      $ref: '../swagger/paths/categories/get-categories.yaml'
 
 components:
   securitySchemes:
