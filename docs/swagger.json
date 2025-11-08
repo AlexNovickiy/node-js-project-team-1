@@ -388,6 +388,7 @@
         ],
         "summary": "Get list of stories",
         "operationId": "getStories",
+        "security": [],
         "description": "Get list of stories with this endpoint",
         "parameters": [
           {
