@@ -38,6 +38,10 @@ paths:
     get:
       $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
 
+  /users/{userId}:
+    get:
+      $ref: ../swagger/paths/users/{userId}/get.yaml
+
   #   $ref: './paths/users/get-users.yaml'
   # /users/me:
   #   $ref: './paths/users/get-me.yaml'

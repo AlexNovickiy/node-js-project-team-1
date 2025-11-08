@@ -1,4 +1,8 @@
-import { getUserCurrentService } from "../services/users.js";
+import { getUserCurrentService,
+  getUserByIdService
+ } from "../services/users.js";
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
@@ -8,13 +12,29 @@ export const getUsersController = async (req, res) => {
 
 export const getUserByIdController = async (req, res) => {
   // TODO: Сервіс для getUserById(req.params.userId)
-  // TODO: Не забути .populate('favorites')
-  const data = {
+  const { userId } = req.params;  
+  const { page, perPage } = parsePaginationParams(req.query);  
+  let { sortBy, sortOrder } = parseSortParams(req.query);
+  sortBy = 'favoriteCount';
+
+  const result = await getUserByIdService({
+    userId,
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+  });
+
+  res.status(200).json({
+    status: 200,
     message: 'User GET by ID placeholder',
-    userId: req.params.userId,
-  };
-  res.status(200).json({ status: 200, data });
-};
+    data: result.data,   
+    page: result.page,
+    perPage: result.perPage,
+    total: result.total,
+    pages: result.pages,
+  });
+};  
 
 export const getCurrentUserController = async (req, res) => {
   // TODO: Сервіс для getUserById(req.user.id)

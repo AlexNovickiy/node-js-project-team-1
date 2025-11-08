@@ -1,0 +1,11 @@
+type: object
+properties:
+  user:
+    $ref: ./user.yaml
+  articles:
+    type: array
+    items:
+      $ref: ../stories/story.yaml
+required:
+  - user
+  - articles

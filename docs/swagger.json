@@ -250,6 +250,152 @@
           }
         }
       }
+    },
+    "/users/me/current": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get Current User Data",
+        "operationId": "getCurrentUser",
+        "description": "Retrieves the information of the user associated with the active access token.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Current user data successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully retrieved current user data"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/user"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get traveller by id (public)",
+        "operationId": "getUserByIdPublic",
+        "description": "Повертає публічні дані мандрівника та список його статей. Сортування завжди за полем `favoriteCount`; напрям визначається `sortOrder` (default: `desc`).\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "description": "ID користувача (Mongo ObjectId)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Номер сторінки (1..N)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "description": "Кількість елементів на сторінці",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "description": "Напрям сортування по `favoriteCount`",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "data",
+                    "page",
+                    "perPage"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User GET by ID placeholder"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/userWithArticles.data"
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "perPage": {
+                      "type": "integer",
+                      "example": 10
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -323,6 +469,174 @@
             "description": "Date when session was last updated"
           }
         }
+      },
+      "story": {
+        "type": "object",
+        "required": [
+          "img",
+          "title",
+          "article",
+          "category",
+          "ownerId"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Story's id",
+            "type": "string",
+            "example": "65f0b4a1d286b30065d54b00"
+          },
+          "img": {
+            "description": "Link to story image",
+            "type": "string",
+            "format": "uri",
+            "example": "https://res.cloudinary.com/uqwgdu/image/upload/story.png"
+          },
+          "title": {
+            "description": "Story title",
+            "type": "string",
+            "maxLength": 80,
+            "example": "A short story title"
+          },
+          "article": {
+            "description": "Story content",
+            "type": "string",
+            "maxLength": 2500,
+            "example": "Once upon a time..."
+          },
+          "category": {
+            "description": "Category id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54b11"
+          },
+          "ownerId": {
+            "description": "Owner (user) id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "date": {
+            "description": "Story date",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-07-01T12:00:00Z"
+          },
+          "favoriteCount": {
+            "description": "Number of favorites",
+            "type": "integer",
+            "example": 5
+          },
+          "createdAt": {
+            "description": "Creation timestamp",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-07-01T12:00:00Z"
+          },
+          "updatedAt": {
+            "description": "Last update timestamp",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-07-02T10:00:00Z"
+          }
+        },
+        "example": {
+          "_id": "65f0b4a1d286b30065d54b00",
+          "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png",
+          "title": "Sample story",
+          "article": "Story content here...",
+          "category": "65e4decdd286b30065d54b11",
+          "ownerId": "65e4decdd286b30065d54af9",
+          "date": "2024-07-01T12:00:00Z",
+          "favoriteCount": 3,
+          "createdAt": "2024-07-01T12:00:00Z",
+          "updatedAt": "2024-07-02T10:00:00Z"
+        }
+      },
+      "user": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "_id": {
+            "description": "User's id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "name": {
+            "description": "User's name",
+            "type": "string",
+            "maxLength": 32,
+            "example": "John Doe"
+          },
+          "email": {
+            "description": "User's email",
+            "type": "string",
+            "format": "email",
+            "maxLength": 64,
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "description": "User's password",
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "writeOnly": true
+          },
+          "avatarUrl": {
+            "description": "Link to user's avatar",
+            "type": "string",
+            "format": "uri",
+            "default": "",
+            "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+          },
+          "description": {
+            "description": "Short user description/bio",
+            "type": "string",
+            "maxLength": 150,
+            "default": "",
+            "example": "A short bio"
+          },
+          "favorites": {
+            "description": "Array of favorited story objects",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/story"
+            }
+          }
+        },
+        "example": {
+          "_id": "65e4decdd286b30065d54af9",
+          "name": "John Doe",
+          "email": "john.doe@example.com",
+          "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+          "description": "A short bio",
+          "favorites": [
+            {
+              "_id": "65f0b4a1d286b30065d54b00",
+              "title": "Sample story",
+              "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png"
+            }
+          ]
+        }
+      },
+      "userWithArticles.data": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/user"
+          },
+          "articles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/story"
+            }
+          }
+        },
+        "required": [
+          "user",
+          "articles"
+        ]
       }
     },
     "responses": {
@@ -393,6 +707,40 @@
                       "type": "string",
                       "example": "Access token expired"
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found (User not found)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "NotFound"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Error object produced by http-errors (may contain name, message, details, etc.)",
+                  "example": {
+                    "name": "NotFound",
+                    "message": "User not found"
                   }
                 }
               }
