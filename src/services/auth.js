@@ -133,61 +133,30 @@ export const requestResetToken = async (email) => {
     html,
   });
 };
-//   const resetPasswordTemplatePath = path.join(
-//     TEMPLATES_DIR,
-//     'reset-password-email.html',
-//   );
 
-//   const templateSource = (
-//     await fs.readFile(resetPasswordTemplatePath)
-//   ).toString();
+export const resetPassword = async (payload) => {
+  let entries;
 
-//   const template = handlebars.compile(templateSource);
-//   const html = template({
-//     name: user.name,
-//     link: `${getEnvVar('APP_DOMAIN')}/reset-password?token=${resetToken}`,
-//   });
+  try {
+    entries = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
+  } catch (err) {
+    if (err instanceof Error) throw createHttpError(401, err.message);
+    throw err;
+  }
 
-//   try {
-//     await sendEmail({
-//       from: getEnvVar(SMTP.SMTP_FROM),
-//       to: email,
-//       subject: 'Reset your password',
-//       html,
-//     });
-//   } catch (error) {
-//     throw createHttpError(
-//       500,
-//       'Failed to send the email, please try again later.',
-//       { message: error.message },
-//     );
-//   }
-// };
+  const user = await UsersCollection.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
 
-// export const resetEmail = async (payload) => {
-//   let entries;
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
 
-//   try {
-//     entries = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
-//   } catch (err) {
-//     if (err instanceof Error)
-//       throw createHttpError(401, 'Token is expired or invalid.');
-//     throw err;
-//   }
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-//   const user = await UsersCollection.findOne({
-//     email: entries.email,
-//     _id: entries.sub,
-//   });
-
-//   if (!user) {
-//     throw createHttpError(404, 'User not found');
-//   }
-
-//   await UsersCollection.updateOne(
-//     { _id: user._id },
-//     { email: payload.newEmail },
-//   );
-
-//   await SessionsCollection.deleteOne({ userId: user._id });
-// };
+  await UsersCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
+};
