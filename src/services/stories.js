@@ -1,5 +1,6 @@
 import { StoriesCollection } from '../db/models/story.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getAllStories = async ({
   page = 1,
@@ -26,4 +27,17 @@ export const getAllStories = async ({
     data: stories,
     ...paginationData,
   };
+};
+
+export const createStory = async (storyData, file) => {
+  const imgUrl = await saveFileToCloudinary(file);
+
+  const newStoryData = {
+    ...storyData,
+    img: imgUrl,
+  };
+
+  const newStory = await StoriesCollection.create(newStoryData);
+
+  return newStory;
 };

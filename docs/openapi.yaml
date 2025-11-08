@@ -35,6 +35,8 @@ paths:
     post:
       $ref: '../swagger/paths/auth/refresh.yaml'
   /stories:
+    post:
+      $ref: '../swagger/paths/stories/post.yaml'
     get:
       $ref: '../swagger/paths/stories/get.yaml'
   /auth/send-reset-email:

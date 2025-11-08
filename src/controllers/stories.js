@@ -1,4 +1,6 @@
-import { getAllStories } from '../services/stories.js';
+import createHttpError from 'http-errors';
+
+import { getAllStories, createStory } from '../services/stories.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
@@ -25,20 +27,27 @@ export const getStoryByIdController = async (req, res) => {
   res.status(200).json({ status: 200, data });
 };
 
-export const createStoryController = async (req, res) => {
-  // TODO: Сервіс для createStory(storyData)
-  // TODO: Сервіс має:
-  // 1. $inc: { articlesAmount: 1 } (або інша логіка) в User
-  const storyData = {
-    ...req.body,
-    ownerId: req.user.id,
-    img: req.file,
-  };
-  const data = {
-    message: 'Story POST endpoint placeholder',
-    data: storyData,
-  };
-  res.status(201).json({ status: 201, data });
+export const createStoryController = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return next(createHttpError(400, 'Story image is required'));
+    }
+
+    const storyData = {
+      ...req.body,
+      ownerId: req.user._id,
+    };
+
+    const newStory = await createStory(storyData, req.file);
+
+    res.status(201).json({
+      status: 201,
+      data: newStory,
+      message: 'Story created successfully',
+    });
+  } catch (err) {
+    next(createHttpError(500, err.message));
+  }
 };
 
 export const updateStoryController = async (req, res) => {
