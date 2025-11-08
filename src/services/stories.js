@@ -35,7 +35,6 @@ export const createStory = async (storyData, file) => {
   const newStoryData = {
     ...storyData,
     img: imgUrl,
-    createdAt: new Date(),
   };
 
   const newStory = await StoriesCollection.create(newStoryData);
