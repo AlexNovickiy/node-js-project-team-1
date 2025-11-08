@@ -76,8 +76,9 @@ paths:
   # /stories/{storyId}:
   #   $ref: './paths/stories/patch-story.yaml'
 
-  # /categories:
-  #   $ref: './paths/categories/get-categories.yaml'
+  /categories:
+    get:
+      $ref: '../swagger/paths/categories/get-categories.yaml'
 
 components:
   securitySchemes:
