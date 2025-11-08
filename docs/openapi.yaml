@@ -10,6 +10,7 @@ info:
 servers:
   - url: http://localhost:3000
   - url: http://localhost:5000
+  - url: https://node-js-project-team-1.onrender.com
 tags:
   - name: Auth
     description: User authentication and registration
