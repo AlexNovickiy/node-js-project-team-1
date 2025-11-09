@@ -4,6 +4,7 @@ import {
   getUserCurrentStoriesService,
   removeArticle,
   updateUserCurrentService,
+  getUserByIdService,
 } from '../services/users.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
@@ -24,13 +25,31 @@ export const getUsersController = async (req, res) => {
 
 export const getUserByIdController = async (req, res) => {
   // TODO: Сервіс для getUserById(req.params.userId)
-  // TODO: Не забути .populate('favorites')
-  const data = {
+  const { userId } = req.params;  
+  const { page, perPage } = parsePaginationParams(req.query);  
+  let { sortBy, sortOrder } = parseSortParams(req.query);
+  sortBy = 'favoriteCount';
+
+  const result = await getUserByIdService({
+    userId,
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+  });
+
+  res.status(200).json({
+    status: 200,
     message: 'User GET by ID placeholder',
-    userId: req.params.userId,
-  };
-  res.status(200).json({ status: 200, data });
-};
+    data: result.data,   
+    page: result.page,
+    perPage: result.perPage,
+    totalItems: result.totalItems,
+    totalPages: result.totalPages,
+    hasNextPage: result.hasNextPage,
+    hasPreviousPage: result.hasPreviousPage,
+  });
+};  
 
 export const getCurrentUserController = async (req, res, next) => {
   const { page, perPage } = req.paginationParams;
