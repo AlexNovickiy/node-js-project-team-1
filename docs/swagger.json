@@ -1715,20 +1715,10 @@
                     "example": "Гуйлінь славиться своїми карстовими горами і річкою Лі. Ми вирушили у …"
                   },
                   "category": {
+                    "category": null,
+                    "description": "Id category of the story",
                     "type": "string",
-                    "description": "Story category.",
-                    "enum": [
-                      "Азія",
-                      "Пустелі",
-                      "Європа",
-                      "Африка",
-                      "Гори",
-                      "Америка",
-                      "Балкани",
-                      "Кавказ",
-                      "Океанія"
-                    ],
-                    "example": "Азія"
+                    "example": "68fb50c80ae91338641121f0"
                   },
                   "storyImage": {
                     "type": "string",

@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import * as fs from 'node:fs/promises';
+
 import {
   getAllStories,
   createStory,
