@@ -1285,6 +1285,105 @@
         }
       }
     },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get traveller by id (public)",
+        "operationId": "getUserByIdPublic",
+        "description": "Повертає публічні дані мандрівника та список його статей. Сортування завжди за полем `favoriteCount`; напрям визначається `sortOrder` (default: `desc`).\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "description": "ID користувача (Mongo ObjectId)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Номер сторінки (1..N)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "description": "Кількість елементів на сторінці",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "description": "Напрям сортування по `favoriteCount`",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "status",
+                        "data"
+                      ],
+                      "properties": {
+                        "status": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "User GET by ID placeholder"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/userWithArticles.data"
+                        }
+                      }
+                    },
+                    {
+                      "$ref": "#/components/schemas/pagination"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/users/me/favorites": {
       "post": {
         "tags": [
@@ -1578,120 +1677,71 @@
         }
       }
     },
-    "/users/me/current": {
-      "get": {
+    "/stories/{id}": {
+      "patch": {
         "tags": [
-          "User"
+          "Stories"
         ],
-        "summary": "Get Current User Data",
-        "operationId": "getCurrentUser",
-        "description": "Retrieves the information of the user associated with the active access token.",
+        "summary": "Update an existing story",
+        "operationId": "updateStory",
         "security": [],
-        "responses": {
-          "200": {
-            "description": "Current user data successfully retrieved.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully retrieved current user data"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "user": {
-                          "$ref": "#/components/schemas/user"
-                        }
-                      }
-                    }
+        "description": "Allows an authenticated user to update their own story by providing new data.\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079011"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "The updated title of the story.",
+                    "maxLength": 80,
+                    "example": "Китай: чарівність Гуйліня"
+                  },
+                  "article": {
+                    "type": "string",
+                    "description": "The main text of the story.",
+                    "example": "Гуйлінь славиться своїми карстовими горами і річкою Лі. Ми вирушили у …"
+                  },
+                  "category": {
+                    "category": null,
+                    "description": "Id category of the story",
+                    "type": "string",
+                    "example": "68fb50c80ae91338641121f0"
+                  },
+                  "storyImage": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Storie's image. Must be uploaded as `multipart/form-data`.",
+                    "example": "https://res.cloudinary.com/dyy6iuikt/image/upload/v1762698144/e5h42xisez5iddvdsmzc.jpg"
                   }
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
           }
-        }
-      }
-    },
-    "/users/{userId}": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get traveller by id (public)",
-        "operationId": "getUserByIdPublic",
-        "description": "Повертає публічні дані мандрівника та список його статей. Сортування завжди за полем `favoriteCount`; напрям визначається `sortOrder` (default: `desc`).\n",
-        "security": [],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "description": "ID користувача (Mongo ObjectId)",
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Номер сторінки (1..N)",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          },
-          {
-            "name": "perPage",
-            "in": "query",
-            "required": false,
-            "description": "Кількість елементів на сторінці",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            }
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "required": false,
-            "description": "Напрям сортування по `favoriteCount`",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
-              "default": "desc"
-            }
-          }
-        ],
+        },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Successfully patched a story!",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "required": [
                     "status",
-                    "data",
-                    "page",
-                    "perPage"
+                    "message",
+                    "data"
                   ],
                   "properties": {
                     "status": {
@@ -1700,26 +1750,24 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "User GET by ID placeholder"
+                      "example": "Successfully patched a story!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/userWithArticles.data"
-                    },
-                    "page": {
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "perPage": {
-                      "type": "integer",
-                      "example": 10
+                      "$ref": "#/components/schemas/story"
                     }
                   }
                 }
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -2003,6 +2051,7 @@
           "_id": "65e4decdd286b30065d54af9",
           "name": "John Doe",
           "email": "john.doe@example.com",
+          "password": "qwerty1324",
           "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
           "description": "A short bio",
           "favorites": [
@@ -2052,6 +2101,24 @@
             "example": false
           }
         }
+      },
+      "userWithArticles.data": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/user"
+          },
+          "articles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/story"
+            }
+          }
+        },
+        "required": [
+          "user",
+          "articles"
+        ]
       }
     },
     "responses": {

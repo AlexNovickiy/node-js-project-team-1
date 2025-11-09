@@ -1,8 +1,13 @@
 import createHttpError from 'http-errors';
 
-import { getAllStories, createStory } from '../services/stories.js';
+import {
+  getAllStories,
+  createStory,
+  updateStory,
+} from '../services/stories.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getStoriesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -51,13 +56,25 @@ export const createStoryController = async (req, res, next) => {
 };
 
 export const updateStoryController = async (req, res) => {
-  // TODO: Сервіс для updateStory(req.params.storyId, req.body, req.user.id)
-  const data = {
-    message: 'Story PATCH endpoint placeholder',
-    storyId: req.params.storyId,
-    body: req.body,
-    file: req.file,
-    userId: req.user.id,
+  let img;
+  if (req.file) {
+    const response = await saveFileToCloudinary(req.file);
+    img = response;
+  }
+  const storyData = {
+    ...req.body,
+    img,
   };
-  res.status(200).json({ status: 200, data });
+
+  const result = await updateStory(req.params.storyId, req.user.id, storyData);
+
+  if (!result) {
+    throw createHttpError(404, 'Story not found');
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully patched a story!',
+    data: result.story,
+  });
 };
