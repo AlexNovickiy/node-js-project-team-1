@@ -10,18 +10,22 @@ parameters:
   - in: path
     name: userId
     required: true
+    description: ID користувача (Mongo ObjectId)
     schema:
       type: string
       pattern: "^[a-fA-F0-9]{24}$"
   - in: query
     name: page
+    description: Номер сторінки (1..N)
     schema: { type: integer, minimum: 1, default: 1 }
   - in: query
     name: perPage
+    description: Кількість елементів на сторінці
     schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
   - in: query
     name: sortOrder
-    schema: { type: string, enum: [asc, desc], default: desc }
+    description: Напрям сортування по `favoriteCount`
+    schema: { type: string, enum: [asc, desc], default: desc,  }
 
 responses:
   '200':
