@@ -97,6 +97,9 @@ paths:
   /categories:
     get:
       $ref: '../swagger/paths/categories/get-categories.yaml'
+  /categories/{id}:
+    get:
+      $ref: '../swagger/paths/categories/{id}/get.yaml'
 
   /stories/{id}:
     patch:

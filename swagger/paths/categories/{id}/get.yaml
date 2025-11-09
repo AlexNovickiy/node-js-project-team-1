@@ -1,0 +1,73 @@
+tags:
+  - Categories
+summary: Get category by id
+operationId: getCategoryById
+description: 'Retrieve one tag'
+security: []
+responses:
+  '200':
+    description: Successfully retrieved tag
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            data:
+              type: object
+              required:
+                - _id
+                - name
+              properties:
+                _id:
+                  type: string
+                  example: 68fb50c80ae91338641121f0
+                name:
+                  type: string
+                  example: Азія
+  '404':
+    description: Not found
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: NotFound
+            data:
+              type: object
+              additionalProperties: true
+              description: Error object produced by http-errors (may contain name, message, details, etc.)
+              example:
+                name: NotFound
+                message: 'Category not found'
+
+  '500':
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: InternalServerError
