@@ -41,7 +41,9 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Register new user",
         "operationId": "registerUser",
         "description": "Register a new user and create session",
@@ -52,7 +54,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["name", "email", "password"],
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -79,7 +85,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -91,7 +101,9 @@
                     },
                     "data": {
                       "type": "object",
-                      "required": ["user"],
+                      "required": [
+                        "user"
+                      ],
                       "properties": {
                         "user": {
                           "type": "object",
@@ -121,7 +133,9 @@
     },
     "/auth/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Login user",
         "operationId": "loginUser",
         "description": "Authenticate user and create session",
@@ -132,7 +146,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["email", "password"],
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -155,7 +172,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -167,7 +188,9 @@
                     },
                     "data": {
                       "type": "object",
-                      "required": ["user"],
+                      "required": [
+                        "user"
+                      ],
                       "properties": {
                         "user": {
                           "type": "object",
@@ -186,7 +209,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -198,7 +225,9 @@
                     },
                     "data": {
                       "type": "object",
-                      "required": ["message"],
+                      "required": [
+                        "message"
+                      ],
                       "properties": {
                         "message": {
                           "type": "string",
@@ -216,7 +245,9 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Logout user",
         "operationId": "logoutUser",
         "description": "Invalidate user session and clear cookies",
@@ -233,7 +264,9 @@
     },
     "/auth/refresh": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Refresh user session",
         "operationId": "refreshSession",
         "description": "Refresh access token using refresh token from cookie",
@@ -245,7 +278,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message"],
+                  "required": [
+                    "status",
+                    "message"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -268,7 +304,9 @@
     },
     "/stories": {
       "post": {
-        "tags": ["Stories"],
+        "tags": [
+          "Stories"
+        ],
         "summary": "Create a new travel story",
         "operationId": "createStory",
         "description": "Create a new travel story with title, content, category and an image",
@@ -282,7 +320,12 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["title", "article", "category", "storyImage"],
+                "required": [
+                  "title",
+                  "article",
+                  "category",
+                  "storyImage"
+                ],
                 "properties": {
                   "title": {
                     "description": "The title of the travel story",
@@ -316,7 +359,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -347,7 +394,9 @@
         }
       },
       "get": {
-        "tags": ["Stories"],
+        "tags": [
+          "Stories"
+        ],
         "summary": "Get list of stories",
         "operationId": "getStories",
         "security": [],
@@ -396,7 +445,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -461,7 +514,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message"],
+                  "required": [
+                    "status",
+                    "message"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -484,7 +540,9 @@
     },
     "/auth/send-reset-email": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Request password reset",
         "operationId": "requestResetEmail",
         "description": "Send password reset email to the user",
@@ -495,7 +553,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["email"],
+                "required": [
+                  "email"
+                ],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -516,7 +576,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -540,7 +604,9 @@
     },
     "/auth/reset-pwd": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Reset password",
         "operationId": "resetPassword",
         "description": "Reset the user's password using a token from email",
@@ -551,7 +617,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["token", "newPassword"],
+                "required": [
+                  "token",
+                  "newPassword"
+                ],
                 "properties": {
                   "token": {
                     "type": "string",
@@ -576,7 +645,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -600,7 +673,9 @@
     },
     "/auth/send-change-email": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Request change of user email (private)",
         "operationId": "sendChangeEmail",
         "description": "Allows an **authenticated user** to request changing their email address.   The system will send a confirmation link to the **current (old)** email address.   This link contains a token of type `reset-email` used to confirm the change.\n",
@@ -615,7 +690,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["newEmail"],
+                "required": [
+                  "newEmail"
+                ],
                 "properties": {
                   "newEmail": {
                     "type": "string",
@@ -672,7 +749,9 @@
     },
     "/auth/confirm-email": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Access email change confirmation",
         "description": "Accepts a token from the email and a new address. Validates a token of type `reset-email` and updates the user's email in the database.\n",
         "operationId": "confirmEmailChange",
@@ -683,7 +762,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["token", "newEmail"],
+                "required": [
+                  "token",
+                  "newEmail"
+                ],
                 "properties": {
                   "token": {
                     "type": "string",
@@ -738,7 +820,9 @@
     },
     "/users": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get users",
         "security": [],
         "operationId": "getUsers",
@@ -765,7 +849,11 @@
             "name": "sortBy",
             "schema": {
               "type": "string",
-              "enum": ["_id", "name", "articlesAmount"],
+              "enum": [
+                "_id",
+                "name",
+                "articlesAmount"
+              ],
               "example": "name"
             }
           },
@@ -774,7 +862,10 @@
             "name": "sortOrder",
             "schema": {
               "type": "string",
-              "enum": ["asc", "desc"],
+              "enum": [
+                "asc",
+                "desc"
+              ],
               "example": "asc"
             }
           }
@@ -848,7 +939,9 @@
     },
     "/users/me/current": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get Current User Data",
         "operationId": "getCurrentUser",
         "description": "Retrieves user information and a paginated list of their favorite stories.\nRequires pagination query parameters (page, perPage) for the favorites list.\n",
@@ -1004,7 +1097,9 @@
     },
     "/users/me/current/stories": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get Current User's Own Stories",
         "operationId": "getCurrentUserStories",
         "description": "Retrieves a paginated list of stories that were created by the currently authenticated user. Includes pagination metadata in the response.",
@@ -1122,7 +1217,9 @@
     },
     "/users/me": {
       "patch": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Patch User Data",
         "operationId": "updateCurrentUser",
         "description": "Updates the information of the user associated with the active access token.",
@@ -1188,9 +1285,110 @@
         }
       }
     },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get traveller by id (public)",
+        "operationId": "getUserByIdPublic",
+        "description": "Повертає публічні дані мандрівника та список його статей. Сортування завжди за полем `favoriteCount`; напрям визначається `sortOrder` (default: `desc`).\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "description": "ID користувача (Mongo ObjectId)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Номер сторінки (1..N)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "description": "Кількість елементів на сторінці",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "description": "Напрям сортування по `favoriteCount`",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "status",
+                        "data"
+                      ],
+                      "properties": {
+                        "status": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "User GET by ID placeholder"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/userWithArticles.data"
+                        }
+                      }
+                    },
+                    {
+                      "$ref": "#/components/schemas/pagination"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/users/me/favorites": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Add story to favorites",
         "operationId": "addFavoriteStory",
         "description": "Add a story to current user favorites list",
@@ -1205,7 +1403,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["storyId"],
+                "required": [
+                  "storyId"
+                ],
                 "properties": {
                   "storyId": {
                     "type": "string",
@@ -1224,7 +1424,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -1257,7 +1461,9 @@
                               "items": {
                                 "type": "string"
                               },
-                              "example": ["68498236a100312bea079008"]
+                              "example": [
+                                "68498236a100312bea079008"
+                              ]
                             }
                           }
                         }
@@ -1288,7 +1494,9 @@
     },
     "/users/me/favorites/{storyId}": {
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Remove a story from the saved list",
         "operationId": "removeSavedStory",
         "description": "Remove the specified story from the authenticated user's saved (favorites) list. Decrements the favoriteCount field of the story by 1.\n",
@@ -1359,7 +1567,9 @@
     },
     "/categories": {
       "get": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Get all сategories",
         "operationId": "getAllCategories",
         "description": "Retrieve a list of all available tags",
@@ -1371,7 +1581,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "data"],
+                  "required": [
+                    "status",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -1382,7 +1595,10 @@
                       "description": "List of tag objects",
                       "items": {
                         "type": "object",
-                        "required": ["_id", "name"],
+                        "required": [
+                          "_id",
+                          "name"
+                        ],
                         "properties": {
                           "_id": {
                             "type": "string",
@@ -1406,7 +1622,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -1436,7 +1656,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message"],
+                  "required": [
+                    "status",
+                    "message"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -1454,143 +1677,11 @@
         }
       }
     },
-    "/users/me/current": {
-      "get": {
-        "tags": ["User"],
-        "summary": "Get Current User Data",
-        "operationId": "getCurrentUser",
-        "description": "Retrieves the information of the user associated with the active access token.",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "Current user data successfully retrieved.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully retrieved current user data"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "user": {
-                          "$ref": "#/components/schemas/user"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          }
-        }
-      }
-    },
-    "/users/{userId}": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "Get traveller by id (public)",
-        "operationId": "getUserByIdPublic",
-        "description": "Повертає публічні дані мандрівника та список його статей. Сортування завжди за полем `favoriteCount`; напрям визначається `sortOrder` (default: `desc`).\n",
-        "security": [],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "description": "ID користувача (Mongo ObjectId)",
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Номер сторінки (1..N)",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          },
-          {
-            "name": "perPage",
-            "in": "query",
-            "required": false,
-            "description": "Кількість елементів на сторінці",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            }
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "required": false,
-            "description": "Напрям сортування по `favoriteCount`",
-            "schema": {
-              "type": "string",
-              "enum": ["asc", "desc"],
-              "default": "desc"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": ["status", "data", "page", "perPage"],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User GET by ID placeholder"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/userWithArticles.data"
-                    },
-                    "page": {
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "perPage": {
-                      "type": "integer",
-                      "example": 10
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          }
-        }
-      }
-    },
     "/stories/{id}": {
       "patch": {
-        "tags": ["Stories"],
+        "tags": [
+          "Stories"
+        ],
         "summary": "Update an existing story",
         "operationId": "updateStory",
         "security": [],
@@ -1639,11 +1730,11 @@
                     ],
                     "example": "Азія"
                   },
-                  "img": {
+                  "storyImage": {
                     "type": "string",
                     "format": "binary",
-                    "description": "Storie's photo. Must be uploaded as `multipart/form-data`.",
-                    "example": "http://localhost:8080/photos/1760298573710-175228118_IMG_0473.jpg"
+                    "description": "Storie's image. Must be uploaded as `multipart/form-data`.",
+                    "example": "https://res.cloudinary.com/dyy6iuikt/image/upload/v1762698144/e5h42xisez5iddvdsmzc.jpg"
                   }
                 }
               }
@@ -1657,7 +1748,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -1762,7 +1857,13 @@
       },
       "story": {
         "type": "object",
-        "required": ["img", "title", "article", "category", "ownerId"],
+        "required": [
+          "img",
+          "title",
+          "article",
+          "category",
+          "ownerId"
+        ],
         "properties": {
           "_id": {
             "description": "Story's id",
@@ -1894,13 +1995,20 @@
           },
           "favorites": {
             "type": "array",
-            "example": ["65e4decdd286b30065d54ads"]
+            "example": [
+              "65e4decdd286b30065d54ads"
+            ]
           }
         }
       },
       "user": {
         "type": "object",
-        "required": ["name", "email", "avatarUrl", "description"],
+        "required": [
+          "name",
+          "email",
+          "avatarUrl",
+          "description"
+        ],
         "properties": {
           "_id": {
             "description": "User's id",
@@ -1953,6 +2061,7 @@
           "_id": "65e4decdd286b30065d54af9",
           "name": "John Doe",
           "email": "john.doe@example.com",
+          "password": "qwerty1324",
           "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
           "description": "A short bio",
           "favorites": [
@@ -2002,6 +2111,24 @@
             "example": false
           }
         }
+      },
+      "userWithArticles.data": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/user"
+          },
+          "articles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/story"
+            }
+          }
+        },
+        "required": [
+          "user",
+          "articles"
+        ]
       }
     },
     "responses": {
@@ -2011,7 +2138,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -2028,7 +2159,9 @@
                   "example": {
                     "name": "BadRequest",
                     "message": "Validation failed",
-                    "details": ["name is required"]
+                    "details": [
+                      "name is required"
+                    ]
                   }
                 }
               }
@@ -2042,7 +2175,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -2054,7 +2191,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -2073,7 +2212,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -2103,7 +2246,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -2133,7 +2280,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "error"],
+              "required": [
+                "status",
+                "message",
+                "error"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -2159,7 +2310,10 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message"],
+              "required": [
+                "status",
+                "message"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -2180,7 +2334,10 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message"],
+              "required": [
+                "status",
+                "message"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",

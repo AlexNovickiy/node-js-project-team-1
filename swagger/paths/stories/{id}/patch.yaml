@@ -43,11 +43,11 @@ requestBody:
                 'Океанія',
               ]
             example: Азія
-          img:
+          storyImage:
             type: string
             format: binary
-            description: Storie's photo. Must be uploaded as `multipart/form-data`.
-            example: http://localhost:8080/photos/1760298573710-175228118_IMG_0473.jpg
+            description: Storie's image. Must be uploaded as `multipart/form-data`.
+            example: https://res.cloudinary.com/dyy6iuikt/image/upload/v1762698144/e5h42xisez5iddvdsmzc.jpg
 responses:
   '200':
     description: Successfully patched a story!
