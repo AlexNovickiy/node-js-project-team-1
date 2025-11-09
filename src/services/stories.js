@@ -41,3 +41,21 @@ export const createStory = async (storyData, file) => {
 
   return newStory;
 };
+
+export const updateStory = async (storyId, ownerId, payload, options = {}) => {
+  const rawResult = await StoriesCollection.findOneAndUpdate(
+    { _id: storyId, ownerId },
+    payload,
+    {
+      new: true,
+      includeResultMetadata: true,
+      ...options,
+    },
+  );
+
+  if (!rawResult || !rawResult.value) return null;
+  return {
+    story: rawResult.value,
+    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+  };
+};

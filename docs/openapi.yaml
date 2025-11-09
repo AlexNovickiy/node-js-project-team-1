@@ -94,6 +94,9 @@ paths:
     get:
       $ref: '../swagger/paths/categories/get-categories.yaml'
 
+  /stories/{id}:
+    patch:
+      $ref: '../swagger/paths/stories/{id}/patch.yaml'
 components:
   securitySchemes:
     cookieAccess:
