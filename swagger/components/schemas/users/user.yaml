@@ -47,6 +47,7 @@ example:
   _id: 65e4decdd286b30065d54af9
   name: 'John Doe'
   email: 'john.doe@example.com'
+  password: 'qwerty1324'
   avatarUrl: 'https://res.cloudinary.com/uqwgdu/image/upload/image.png'
   description: 'A short bio'
   favorites:
