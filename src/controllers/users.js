@@ -44,8 +44,10 @@ export const getUserByIdController = async (req, res) => {
     data: result.data,   
     page: result.page,
     perPage: result.perPage,
-    total: result.total,
-    pages: result.pages,
+    totalItems: result.totalItems,
+    totalPages: result.totalPages,
+    hasNextPage: result.hasNextPage,
+    hasPreviousPage: result.hasPreviousPage,
   });
 };  
 

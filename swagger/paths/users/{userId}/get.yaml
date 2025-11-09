@@ -1,70 +1,46 @@
-tags:
-  - Users
+tags: [Users]
 summary: Get traveller by id (public)
 operationId: getUserByIdPublic
 description: >
   Повертає публічні дані мандрівника та список його статей.
   Сортування завжди за полем `favoriteCount`; напрям визначається `sortOrder` (default: `desc`).
 security: []
+
 parameters:
   - in: path
     name: userId
     required: true
-    description: ID користувача (Mongo ObjectId)
     schema:
       type: string
       pattern: "^[a-fA-F0-9]{24}$"
-  - name: page
-    in: query
-    required: false
-    description: Номер сторінки (1..N)
-    schema:
-      type: integer
-      minimum: 1
-      default: 1
-  - name: perPage
-    in: query
-    required: false
-    description: Кількість елементів на сторінці
-    schema:
-      type: integer
-      minimum: 1
-      maximum: 100
-      default: 10
-  - name: sortOrder
-    in: query
-    required: false
-    description: Напрям сортування по `favoriteCount`
-    schema:
-      type: string
-      enum: [asc, desc]
-      default: desc
+  - in: query
+    name: page
+    schema: { type: integer, minimum: 1, default: 1 }
+  - in: query
+    name: perPage
+    schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
+  - in: query
+    name: sortOrder
+    schema: { type: string, enum: [asc, desc], default: desc }
+
 responses:
   '200':
     description: OK
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - status
-            - data
-            - page
-            - perPage
-          properties:
-            status:
-              type: integer
-              example: 200
-            message:
-              type: string
-              example: User GET by ID placeholder
-            data:
-              $ref: ../../../components/schemas/users/userWithArticles.data.yaml
-            page:
-              type: integer
-              example: 1
-            perPage:
-              type: integer
-              example: 10
-  '404':
-    $ref: ../../../components/responses/404.yaml
+          allOf:            
+            - type: object
+              required: [status, data]
+              properties:
+                status:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: User GET by ID placeholder
+                data:
+                  $ref: ../../../components/schemas/users/userWithArticles.data.yaml            
+            - $ref: ../../../components/schemas/pagination/pagination.yaml
+  '404': { $ref: ../../../components/responses/404.yaml }
+  '500': { $ref: ../../../components/responses/500.yaml }
