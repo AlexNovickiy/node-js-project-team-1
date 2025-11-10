@@ -18,7 +18,12 @@ export const getAllStories = async ({
 
   const [storiesCount, stories] = await Promise.all([
     StoriesCollection.find().merge(storiesQuery).countDocuments(),
-    storiesQuery.skip(skip).limit(limit).exec(),
+    storiesQuery
+      .skip(skip)
+      .limit(limit)
+      .populate({ path: 'ownerId', select: 'name avatarUrl' })
+      .populate({ path: 'category', select: 'name' })
+      .exec(),
   ]);
 
   const paginationData = calculatePaginationData(storiesCount, perPage, page);
