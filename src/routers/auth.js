@@ -2,7 +2,9 @@ import { Router } from 'express';
 
 import {
   confirmEmailChangeController,
+  getGoogleOAuthUrlController,
   loginController,
+  loginWithGoogleController,
   logoutController,
   refreshController,
   registerController,
@@ -15,6 +17,7 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   confirmEmailChangeSchema,
+  googleLoginSchema,
   loginUserSchema,
   registerUserSchema,
   requestChangeEmailSchema,
@@ -64,5 +67,10 @@ authRouter.post(
   validateBody(confirmEmailChangeSchema),
   ctrlWrapper(confirmEmailChangeController),
 );
-
+authRouter.post(
+  '/login/google',
+  validateBody(googleLoginSchema),
+  ctrlWrapper(loginWithGoogleController),
+);
+authRouter.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
 export default authRouter;

@@ -1,0 +1,7 @@
+type: object
+required:
+  - code
+properties:
+  code:
+    type: string
+    example: 4/0AVGzR1C_pl1wMJYJEHUbMcoZJxJMhNFiylBYgsZAGYlQ2sjC45CcdrrBpbWsLGk6LXPkog

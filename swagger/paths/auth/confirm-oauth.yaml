@@ -1,0 +1,19 @@
+tags:
+  - Auth
+summary: Confirm Oauth
+operationId: code
+description: Confirm Oauth Code
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/schemas/auth/confirmOauth.yaml'
+responses:
+  '200':
+    $ref: ../../components/responses/auth/200_confirmOauth.yaml
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '500':
+    $ref: '../../components/responses/500.yaml'
