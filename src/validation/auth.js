@@ -64,3 +64,8 @@ export const confirmEmailChangeSchema = Joi.object({
   token: Joi.string().required(),
   newEmail: Joi.string().email().required(),
 });
+export const googleLoginSchema = Joi.object({
+  code: Joi.string().required().messages({
+    'string.empty': 'Google authorization code is required',
+  }),
+});

@@ -15,6 +15,10 @@ import { UsersCollection } from '../db/models/user.js';
 import { createActionToken } from '../utils/createActionToken.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { sendEmail } from '../utils/sendMail.js';
+import {
+  getFullNameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuth2.js';
 
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
@@ -235,4 +239,54 @@ export const confirmEmailChange = async (payload) => {
     { _id: user._id },
     { email: payload.newEmail },
   );
+};
+
+export const loginOrSignupWithGoogle = async (code) => {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+  if (!payload) throw createHttpError(401, 'Invalid Google token');
+
+  let user = await UsersCollection.findOne({ email: payload.email });
+
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10).toString('hex'), 10);
+    user = await UsersCollection.create({
+      email: payload.email,
+      name: getFullNameFromGoogleTokenPayload(payload),
+      avatarURL: payload.picture || null,
+      password,
+      role: 'parent',
+    });
+  } else {
+    const updatedData = {};
+    const fullName = getFullNameFromGoogleTokenPayload(payload);
+
+    if (fullName && fullName !== user.name) {
+      updatedData.name = fullName;
+    }
+    if (payload.picture && payload.picture !== user.avatarURL) {
+      updatedData.avatarURL = payload.picture;
+    }
+
+    if (Object.keys(updatedData).length > 0) {
+      user = await UsersCollection.findByIdAndUpdate(user._id, updatedData, {
+        new: true,
+      });
+    }
+  }
+
+  await SessionsCollection.deleteOne({ userId: user._id });
+
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  const session = await SessionsCollection.create({
+    userId: user._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
+  });
+
+  return { session, user };
 };

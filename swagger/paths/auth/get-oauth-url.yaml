@@ -1,0 +1,13 @@
+tags:
+  - Auth
+summary: Get oauth url
+operationId: Email
+description: Get URL Auth GOOGLE
+security: []
+responses:
+  '200':
+    $ref: ../../components/responses/auth/200_getOauthUrl.yaml
+  '404':
+    $ref: ../../components/responses/auth/404_oauthProvider.yaml
+  '500':
+    $ref: '../../components/responses/500.yaml'

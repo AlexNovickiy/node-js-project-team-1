@@ -1,6 +1,7 @@
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import {
   confirmEmailChange,
+  loginOrSignupWithGoogle,
   loginUser,
   logoutUser,
   refreshUsersSession,
@@ -9,6 +10,7 @@ import {
   requestResetToken,
   resetPassword,
 } from '../services/auth.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 
 const REFRESH_COOKIE_NAME = 'refreshToken';
 const ACCESS_COOKIE_NAME = 'accessToken';
@@ -126,5 +128,29 @@ export const confirmEmailChangeController = async (req, res) => {
     message: 'Email was successfully changed!',
     status: 200,
     data: {},
+  });
+};
+
+export const loginWithGoogleController = async (req, res, next) => {
+  try {
+    const { session, user } = await loginOrSignupWithGoogle(req.body.code);
+    setupAuthCookies(res, session);
+
+    res.status(200).json({
+      status: 200,
+      message: 'User logged in successfully via Google OAuth',
+      data: { user },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully retrieved Google OAuth URL',
+    data: { url },
   });
 };
