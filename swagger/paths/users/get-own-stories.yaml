@@ -5,7 +5,8 @@ operationId: getCurrentUserStories
 description: >-
   Retrieves a paginated list of stories that were created by the currently
   authenticated user. Includes pagination metadata in the response.
-security: []
+security:
+  - cookieAccess: []
 parameters:
   - in: query
     name: page

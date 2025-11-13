@@ -5,7 +5,8 @@ operationId: getCurrentUser
 description: |
   Retrieves user information and a paginated list of their favorite stories.
   Requires pagination query parameters (page, perPage) for the favorites list.
-security: []
+security:
+  - cookieAccess: []
 parameters:
   - in: query
     name: page

@@ -3,7 +3,8 @@ tags:
 summary: Patch User Data
 operationId: updateCurrentUser
 description: Updates the information of the user associated with the active access token.
-security: []
+security:
+  - cookieAccess: []
 requestBody:
   required: true
   content:

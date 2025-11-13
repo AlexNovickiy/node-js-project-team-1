@@ -37,10 +37,10 @@ usersRouter.get(
 usersRouter.use(authenticate);
 
 // GET /api/users/me - отримання інформації про поточного користувача з фейворіт
-usersRouter.get('/me/current', parsePagination, ctrlWrapper(getCurrentUserController));
+usersRouter.get('/me', parsePagination, ctrlWrapper(getCurrentUserController));
 // GET /api/users/me - отримання інформації про власні сторіси поточного користувача
 usersRouter.get(
-    '/me/current/stories', 
+    '/me/stories', 
     parsePagination, 
     ctrlWrapper(getCurrentUserStoriesController)
 );

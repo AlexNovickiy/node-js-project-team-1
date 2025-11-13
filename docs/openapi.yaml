@@ -8,9 +8,9 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
+  - url: https://node-js-project-team-1.onrender.com
   - url: http://localhost:3000
   - url: http://localhost:5000
-  - url: https://node-js-project-team-1.onrender.com
 tags:
   - name: Auth
     description: User authentication and registration
@@ -62,43 +62,26 @@ paths:
     get:
       $ref: '../swagger/paths/users/getUsers.yaml'
 
-  /users/me/current:
+  /users/me:
     get:
       $ref: '../swagger/paths/users/getUserWithFavorites.yaml'
-  /users/me/current/stories:
-    get:
-      $ref: '../swagger/paths/users/get-own-stories.yaml'
-  /users/me:
     patch:
       $ref: '../swagger/paths/users/updateUser.yaml'
+  /users/me/stories:
+    get:
+      $ref: '../swagger/paths/users/get-own-stories.yaml'
 
   /users/{userId}:
     get:
       $ref: ../swagger/paths/users/{userId}/get.yaml
 
-  #   $ref: './paths/users/get-users.yaml'
-  # /users/me:
-  #   $ref: './paths/users/get-me.yaml'
-  # /users/me/patch:
-  #   $ref: './paths/users/patch-me.yaml'
-  # /users/{userId}:
-  #   $ref: './paths/users/get-user-by-id.yaml'
-
   /users/me/favorites:
     post:
       $ref: '../swagger/paths/users/post-favorite.yaml'
-  # /users/me/favorites/{storyId}:
-  #   $ref: './paths/users/delete-favorite.yaml'
-  # /users/me/favorites:
-  #   $ref: './paths/users/post-favorite.yaml'
+
   /users/me/favorites/{storyId}:
     delete:
       $ref: '../swagger/paths/users/me/favourites/delete.yaml'
-
-  # /stories/post:
-  #   $ref: './paths/stories/post-story.yaml'
-  # /stories/{storyId}:
-  #   $ref: './paths/stories/patch-story.yaml'
 
   /categories:
     get:
