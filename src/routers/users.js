@@ -22,32 +22,25 @@ import {
 
 const usersRouter = Router();
 
-// --- Публічні роути ---
-// GET /api/users - отримання даних про користувачів(авторів) + пагінація
-usersRouter.get('/', ctrlWrapper(getUsersController));
-
-// GET /api/users/:userId - отримання даних про користувача за ID
-usersRouter.get(
-  '/:userId',
-  isValidId('userId'),
-  ctrlWrapper(getUserByIdController),
-);
-
-// --- Приватні роути ---
-usersRouter.use(authenticate);
-
 // GET /api/users/me - отримання інформації про поточного користувача з фейворіт
-usersRouter.get('/me', parsePagination, ctrlWrapper(getCurrentUserController));
+usersRouter.get(
+  '/me',
+  authenticate,
+  parsePagination,
+  ctrlWrapper(getCurrentUserController),
+);
 // GET /api/users/me - отримання інформації про власні сторіси поточного користувача
 usersRouter.get(
-    '/me/stories', 
-    parsePagination, 
-    ctrlWrapper(getCurrentUserStoriesController)
+  '/me/stories',
+  authenticate,
+  parsePagination,
+  ctrlWrapper(getCurrentUserStoriesController),
 );
 
 // PATCH /api/users/me - оновлення даних та аватару
 usersRouter.patch(
   '/me',
+  authenticate,
   upload.single('avatar'),
   validateBody(updateUserSchema),
   ctrlWrapper(updateCurrentUserController),
@@ -56,6 +49,7 @@ usersRouter.patch(
 // POST /api/users/me/favorites - додавання статті до збережених
 usersRouter.post(
   '/me/favorites',
+  authenticate,
   validateBody(updateUserFavoritesSchema),
   ctrlWrapper(addFavoriteController),
 );
@@ -63,8 +57,20 @@ usersRouter.post(
 // DELETE /api/users/me/favorites/:storyId - видалення статті зі збережених
 usersRouter.delete(
   '/me/favorites/:storyId',
+  authenticate,
   isValidId('storyId'),
   ctrlWrapper(removeFavoriteController),
+);
+
+// --- Публічні роути ---
+// GET /api/users - отримання даних про користувачів(авторів) + пагінація
+usersRouter.get('/', ctrlWrapper(getUsersController));
+
+// GET /users/:userId - отримання даних про користувача за ID
+usersRouter.get(
+  '/:userId',
+  isValidId('userId'),
+  ctrlWrapper(getUserByIdController),
 );
 
 export default usersRouter;
