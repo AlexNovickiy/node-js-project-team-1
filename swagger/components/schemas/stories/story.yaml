@@ -57,6 +57,11 @@ properties:
     type: string
     format: date-time
     example: '2024-07-01T12:00:00Z'
+  shortDescription:
+    description: 'Short description of the story'
+    type: string
+    maxLength: 150
+    example: 'This is a brief summary of the story.'
   favoriteCount:
     description: 'Number of favorites'
     type: integer
@@ -78,6 +83,7 @@ example:
   title: 'Sample story'
   article: 'Story content here...'
   category: 65e4decdd286b30065d54b11
+  shortDescription: 'This is a brief summary of the story.'
   ownerId:
     _id: 6881563901add19ee16fd017
     name: Матвій Савченко

@@ -17,6 +17,11 @@ const storySchema = new Schema(
       required: true,
       maxLength: 2500, //
     },
+    shortDescription: {
+      type: String,
+      maxLength: 150,
+      required: false,
+    },
     category: {
       type: Schema.Types.ObjectId,
       ref: 'categories',
