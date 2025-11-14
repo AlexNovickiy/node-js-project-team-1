@@ -32,6 +32,10 @@ requestBody:
             description: "Image associated with the story"
             format: binary
             type: string
+          shortDescription:
+            description: "A brief summary of the travel story"
+            type: string
+            example: "A quick overview of my unforgettable journey to Japan."
 responses:
   '201':
     description: Story successfully created
