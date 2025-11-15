@@ -22,22 +22,33 @@ responses:
       application/json:
         schema:
           type: object
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
               example: 200
+            message:
+              type: string
+              example: 'Story successfully added to favorites'
             data:
               type: object
               properties:
-                message:
-                  type: string
-                  example: Removed from favorites
-                userId:
-                  type: string
-                  example: 690d1e4b1754f3c839daad1c
-                storyId:
-                  type: string
-                  example: 68498236a100312bea079008
+                favorites:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - _id: '68498236a100312bea079011'
+                      img: 'https://ftp.goit.study/img/travel-blog/68498236a100312bea079011.webp'
+                      title: 'Швейцарія: Альпи і вершина Юнгфрау'
+                      article: 'Ми сіли на поїзд, який піднімається на вершину Юнгфрау — «даху Європи». Альпи вражали з кожним метром підйому. На вершині нас чекали льодові печери і панорама гір, що здавались безкінечними. Прогулянки навколо показали, що Швейцарія — це країна, де природа і комфорт гармонійно поєднані.'
+                      category: '68fb50c80ae91338641121f1'
+                      ownerId: '6881563901add19ee16fd009'
+                      date: '2024-10-26T00:00:00.000Z'
+                      favoriteCount: 26
   '400':
     $ref: '../../../../components/responses/400.yaml'
   '401':
