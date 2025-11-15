@@ -19,7 +19,7 @@ export const getAllStories = async ({
   const [storiesCount, stories] = await Promise.all([
     StoriesCollection.find().merge(storiesQuery).countDocuments(),
     storiesQuery
-      .sort({ favoriteCount: -1 })
+      .sort({ favoriteCount: -1, _id: -1 })
       .skip(skip)
       .limit(limit)
       .populate({ path: 'ownerId', select: 'name avatarUrl' })
