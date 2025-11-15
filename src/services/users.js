@@ -56,7 +56,10 @@ export const removeArticle = async (userId, storyId) => {
     $inc: { favoriteCount: -1 },
   });
 
-  return { userId, storyId };
+  const populatedUser = await UsersCollection.findById(userId).populate(
+    'favorites',
+  );
+  return populatedUser.favorites;
 };
 
 export const getUserCurrentService = async (userId, { page, perPage }) => {
@@ -119,8 +122,10 @@ export const addFavorite = async (userId, storyId) => {
   await StoriesCollection.findByIdAndUpdate(storyId, {
     $inc: { favoriteCount: 1 },
   });
-
-  return user;
+  const populatedUser = await UsersCollection.findById(userId).populate(
+    'favorites',
+  );
+  return populatedUser.favorites;
 };
 
 export const updateUserCurrentService = async (userId, updateData) => {

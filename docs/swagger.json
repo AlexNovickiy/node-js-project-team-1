@@ -346,6 +346,11 @@
                     "description": "Image associated with the story",
                     "format": "binary",
                     "type": "string"
+                  },
+                  "shortDescription": {
+                    "description": "A brief summary of the travel story",
+                    "type": "string",
+                    "example": "A quick overview of my unforgettable journey to Japan."
                   }
                 }
               }
@@ -1505,31 +1510,23 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "user": {
-                          "type": "object",
-                          "properties": {
-                            "_id": {
-                              "type": "string",
-                              "example": "690dd01a85cc808bb9cc909b"
-                            },
-                            "name": {
-                              "type": "string",
-                              "example": "Test User"
-                            },
-                            "email": {
-                              "type": "string",
-                              "example": "test@example.com"
-                            },
-                            "favorites": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              },
-                              "example": [
-                                "68498236a100312bea079008"
-                              ]
+                        "favorites": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            {
+                              "_id": "68498236a100312bea079011",
+                              "img": "https://ftp.goit.study/img/travel-blog/68498236a100312bea079011.webp",
+                              "title": "Швейцарія: Альпи і вершина Юнгфрау",
+                              "article": "Ми сіли на поїзд, який піднімається на вершину Юнгфрау — «даху Європи». Альпи вражали з кожним метром підйому. На вершині нас чекали льодові печери і панорама гір, що здавались безкінечними. Прогулянки навколо показали, що Швейцарія — це країна, де природа і комфорт гармонійно поєднані.",
+                              "category": "68fb50c80ae91338641121f1",
+                              "ownerId": "6881563901add19ee16fd009",
+                              "date": "2024-10-26T00:00:00.000Z",
+                              "favoriteCount": 26
                             }
-                          }
+                          ]
                         }
                       }
                     }
@@ -1588,25 +1585,40 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
                       "example": 200
                     },
+                    "message": {
+                      "type": "string",
+                      "example": "Story successfully added to favorites"
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Removed from favorites"
-                        },
-                        "userId": {
-                          "type": "string",
-                          "example": "690d1e4b1754f3c839daad1c"
-                        },
-                        "storyId": {
-                          "type": "string",
-                          "example": "68498236a100312bea079008"
+                        "favorites": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            {
+                              "_id": "68498236a100312bea079011",
+                              "img": "https://ftp.goit.study/img/travel-blog/68498236a100312bea079011.webp",
+                              "title": "Швейцарія: Альпи і вершина Юнгфрау",
+                              "article": "Ми сіли на поїзд, який піднімається на вершину Юнгфрау — «даху Європи». Альпи вражали з кожним метром підйому. На вершині нас чекали льодові печери і панорама гір, що здавались безкінечними. Прогулянки навколо показали, що Швейцарія — це країна, де природа і комфорт гармонійно поєднані.",
+                              "category": "68fb50c80ae91338641121f1",
+                              "ownerId": "6881563901add19ee16fd009",
+                              "date": "2024-10-26T00:00:00.000Z",
+                              "favoriteCount": 26
+                            }
+                          ]
                         }
                       }
                     }
@@ -1989,6 +2001,12 @@
             "format": "date-time",
             "example": "2024-07-01T12:00:00Z"
           },
+          "shortDescription": {
+            "description": "Short description of the story",
+            "type": "string",
+            "maxLength": 150,
+            "example": "This is a brief summary of the story."
+          },
           "favoriteCount": {
             "description": "Number of favorites",
             "type": "integer",
@@ -2013,6 +2031,7 @@
           "title": "Sample story",
           "article": "Story content here...",
           "category": "65e4decdd286b30065d54b11",
+          "shortDescription": "This is a brief summary of the story.",
           "ownerId": {
             "_id": "6881563901add19ee16fd017",
             "name": "Матвій Савченко",

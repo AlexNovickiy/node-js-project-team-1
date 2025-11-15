@@ -1,16 +1,16 @@
 import {
   addFavorite,
+  getUserByIdService,
   getUserCurrentService,
   getUserCurrentStoriesService,
+  getUsers,
   removeArticle,
   updateUserCurrentService,
-  getUserByIdService,
 } from '../services/users.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
-import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { getUsers } from '../services/users.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getUsersController = async (req, res) => {
   // TODO: Сервіс для getUsers(req.query) (пагінація)
@@ -25,8 +25,8 @@ export const getUsersController = async (req, res) => {
 
 export const getUserByIdController = async (req, res) => {
   // TODO: Сервіс для getUserById(req.params.userId)
-  const { userId } = req.params;  
-  const { page, perPage } = parsePaginationParams(req.query);  
+  const { userId } = req.params;
+  const { page, perPage } = parsePaginationParams(req.query);
   let { sortBy, sortOrder } = parseSortParams(req.query);
   sortBy = 'favoriteCount';
 
@@ -41,7 +41,7 @@ export const getUserByIdController = async (req, res) => {
   res.status(200).json({
     status: 200,
     message: 'User GET by ID placeholder',
-    data: result.data,   
+    data: result.data,
     page: result.page,
     perPage: result.perPage,
     totalItems: result.totalItems,
@@ -49,7 +49,7 @@ export const getUserByIdController = async (req, res) => {
     hasNextPage: result.hasNextPage,
     hasPreviousPage: result.hasPreviousPage,
   });
-};  
+};
 
 export const getCurrentUserController = async (req, res, next) => {
   const { page, perPage } = req.paginationParams;
@@ -124,28 +124,27 @@ export const addFavoriteController = async (req, res) => {
   const userId = req.user.id;
   const storyId = req.body.storyId;
 
-  const updatedUser = await addFavorite(userId, storyId);
+  const favorites = await addFavorite(userId, storyId);
   res.status(200).json({
     status: 200,
     message: 'Story successfully added to favorites',
     data: {
-      user: updatedUser,
+      favorites,
     },
   });
 };
 
 export const removeFavoriteController = async (req, res) => {
-  // TODO: Сервіс для removeFavorite(req.user.id, req.params.storyId)
   const storyId = req.params.storyId;
   const userId = req.user.id;
 
-  const article = await removeArticle(userId, storyId);
+  const favorites = await removeArticle(userId, storyId);
 
   res.status(200).json({
     status: 200,
+    message: 'Removed from favorites',
     data: {
-      message: 'Removed from favorites',
-      ...article,
+      favorites,
     },
   });
 };
