@@ -148,7 +148,7 @@ export const getUserByIdService = async ({
   const filter = { ownerId: userId };
 
   const articlesQuery = StoriesCollection.find(filter)
-    .sort({ [sortBy]: sortOrder })
+    .sort({ [sortBy]: sortOrder, _id: -1 })
     .skip(skip)
     .limit(perPage)
     .populate({ path: 'ownerId', select: 'name avatarUrl' })
