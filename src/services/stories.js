@@ -1,7 +1,14 @@
 import { StoriesCollection } from '../db/models/story.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+export const getStoryByIdService = async (storyId) => {
+  const story = await StoriesCollection.findById(storyId)
+    .populate({ path: 'ownerId', select: 'name' })
+    .populate({ path: 'category', select: 'name' })
+    .lean();
 
+  return story;
+};
 export const getAllStories = async ({
   page = 1,
   perPage = 10,

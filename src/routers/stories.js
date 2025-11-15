@@ -25,7 +25,6 @@ storiesRouter.get(
   ctrlWrapper(getStoryByIdController),
 );
 
-// --- Приватні роути ---
 storiesRouter.use(authenticate);
 
 // POST /api/stories - СТВОРЕННЯ історії
@@ -44,7 +43,5 @@ storiesRouter.patch(
   validateBody(updateStorySchema),
   ctrlWrapper(updateStoryController),
 );
-
-// (Тут можна додати DELETE, якщо потрібно за ТЗ)
 
 export default storiesRouter;
