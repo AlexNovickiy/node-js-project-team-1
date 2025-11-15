@@ -1,8 +1,8 @@
 import createHttpError from 'http-errors';
-import { UsersCollection } from '../db/models/user.js';
-import { StoriesCollection } from '../db/models/story.js';
-import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { SORT_ORDER } from '../constants/index.js';
+import { StoriesCollection } from '../db/models/story.js';
+import { UsersCollection } from '../db/models/user.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 export const getUsers = async (page, perPage, sortBy, sortOrder) => {
   const skip = (page - 1) * perPage;
@@ -151,17 +151,19 @@ export const getUserByIdService = async ({
     .sort({ [sortBy]: sortOrder })
     .skip(skip)
     .limit(perPage)
+    .populate({ path: 'ownerId', select: 'name avatarUrl' })
+    .populate({ path: 'category', select: 'name' })
     .lean();
 
   const [articles, total] = await Promise.all([
     articlesQuery,
     StoriesCollection.countDocuments(filter),
   ]);
-
+  console.log(articles);
   const paginationData = calculatePaginationData(total, perPage, page);
 
   return {
     data: { user, articles },
-    ...paginationData
+    ...paginationData,
   };
 };
