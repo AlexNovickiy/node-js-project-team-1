@@ -346,6 +346,11 @@
                     "description": "Image associated with the story",
                     "format": "binary",
                     "type": "string"
+                  },
+                  "shortDescription": {
+                    "description": "A brief summary of the travel story",
+                    "type": "string",
+                    "example": "A quick overview of my unforgettable journey to Japan."
                   }
                 }
               }
@@ -1746,6 +1751,65 @@
       }
     },
     "/stories/{id}": {
+      "get": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Get story by ID",
+        "operationId": "getStoryById",
+        "security": [],
+        "description": "Returns a single story by its ID with populated owner and category.\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079030"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found story!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found story!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/story"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
       "patch": {
         "tags": [
           "Stories"
@@ -1989,6 +2053,12 @@
             "format": "date-time",
             "example": "2024-07-01T12:00:00Z"
           },
+          "shortDescription": {
+            "description": "Short description of the story",
+            "type": "string",
+            "maxLength": 150,
+            "example": "This is a brief summary of the story."
+          },
           "favoriteCount": {
             "description": "Number of favorites",
             "type": "integer",
@@ -2013,6 +2083,7 @@
           "title": "Sample story",
           "article": "Story content here...",
           "category": "65e4decdd286b30065d54b11",
+          "shortDescription": "This is a brief summary of the story.",
           "ownerId": {
             "_id": "6881563901add19ee16fd017",
             "name": "Матвій Савченко",

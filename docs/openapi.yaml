@@ -88,6 +88,8 @@ paths:
       $ref: '../swagger/paths/categories/get-categories.yaml'
 
   /stories/{id}:
+    get:
+      $ref: '../swagger/paths/stories/{id}/get.yaml'
     patch:
       $ref: '../swagger/paths/stories/{id}/patch.yaml'
 components:
