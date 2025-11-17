@@ -13,7 +13,7 @@ const objectIdValidator = (value, helpers) => {
 export const createStorySchema = Joi.object({
   title: Joi.string().max(80).required(),
   article: Joi.string().max(2500).required(),
-  shortDescription: Joi.string().max(150),
+  shortDescription: Joi.string().max(150).optional(),
   category: Joi.string()
     .custom(objectIdValidator, 'MongoDB ObjectId')
     .required(),
@@ -23,7 +23,6 @@ export const createStorySchema = Joi.object({
 export const updateStorySchema = Joi.object({
   title: Joi.string().max(80),
   article: Joi.string().max(2500),
-  shortDescription: Joi.string().max(150),
+  shortDescription: Joi.string().max(150).optional(),
   category: Joi.string().custom(objectIdValidator, 'MongoDB ObjectId'),
-  
 });
