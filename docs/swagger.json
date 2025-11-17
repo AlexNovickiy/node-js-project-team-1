@@ -12,12 +12,6 @@
   "servers": [
     {
       "url": "https://node-js-project-team-1.onrender.com"
-    },
-    {
-      "url": "http://localhost:3000"
-    },
-    {
-      "url": "http://localhost:5000"
     }
   ],
   "tags": [
@@ -1099,6 +1093,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1621,9 +1618,6 @@
                       "properties": {
                         "favorites": {
                           "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
                           "example": [
                             {
                               "_id": "68498236a100312bea079011",
@@ -1714,7 +1708,33 @@
                         "favorites": {
                           "type": "array",
                           "items": {
-                            "type": "string"
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "img": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "article": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "ownerId": {
+                                "type": "string"
+                              },
+                              "date": {
+                                "type": "string"
+                              },
+                              "favoriteCount": {
+                                "type": "integer"
+                              }
+                            }
                           },
                           "example": [
                             {

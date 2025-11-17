@@ -73,3 +73,5 @@ responses:
                       example: false
   '500':
     $ref: ../../components/responses/500.yaml
+  '400':
+    $ref: ../../components/responses/400.yaml

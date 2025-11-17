@@ -39,7 +39,24 @@ responses:
                 favorites:
                   type: array
                   items:
-                    type: string
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      img:
+                        type: string
+                      title:
+                        type: string
+                      article:
+                        type: string
+                      category:
+                        type: string
+                      ownerId:
+                        type: string
+                      date:
+                        type: string
+                      favoriteCount:
+                        type: integer
                   example:
                     - _id: '68498236a100312bea079011'
                       img: 'https://ftp.goit.study/img/travel-blog/68498236a100312bea079011.webp'
