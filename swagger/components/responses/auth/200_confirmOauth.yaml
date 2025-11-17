@@ -20,4 +20,89 @@ content:
           properties:
             user:
               type: object
-              $ref: '../../schemas/auth/session.yaml'
+              required:
+                - _id
+                - name
+                - email
+                - favorites
+                - createdAt
+                - updatedAt
+              properties:
+                _id:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                avatarUrl:
+                  type: string
+
+                description:
+                  type: string
+
+                favorites:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - _id
+                      - img
+                      - title
+                      - article
+                      - category
+                      - ownerId
+                      - date
+                      - favoriteCount
+                    properties:
+                      _id:
+                        type: string
+                      img:
+                        type: string
+                      title:
+                        type: string
+                      article:
+                        type: string
+
+                      category:
+                        type: object
+                        required:
+                          - _id
+                          - name
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+
+                      ownerId:
+                        type: object
+                        required:
+                          - _id
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+
+                          avatarUrl:
+                            type: string
+
+                          description:
+                            type: string
+
+                      date:
+                        type: string
+                        format: date-time
+                      favoriteCount:
+                        type: number
+                      updatedAt:
+                        type: string
+                        format: date-time
+
+                createdAt:
+                  type: string
+                  format: date-time
+                updatedAt:
+                  type: string
+                  format: date-time
