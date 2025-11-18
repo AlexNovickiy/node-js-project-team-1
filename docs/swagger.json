@@ -14,10 +14,10 @@
       "url": "https://node-js-project-team-1.onrender.com"
     },
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:5000"
     },
     {
-      "url": "http://localhost:5000"
+      "url": "http://127.0.0.1:3000"
     }
   ],
   "tags": [
@@ -1099,6 +1099,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1393,64 +1396,92 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "stories": {
-                          "type": "array",
-                          "description": "The paginated array of story objects.",
-                          "items": {
-                            "$ref": "#/components/schemas/story"
+                        "user": {
+                          "type": "object",
+                          "example": {
+                            "type": "object",
+                            "required": [
+                              "name",
+                              "email",
+                              "avatarUrl",
+                              "description",
+                              "stories"
+                            ],
+                            "properties": {
+                              "_id": {
+                                "description": "User's id",
+                                "type": "string",
+                                "example": "65e4decdd286b30065d54af9"
+                              },
+                              "name": {
+                                "description": "User's name",
+                                "type": "string",
+                                "maxLength": 32,
+                                "example": "John Doe"
+                              },
+                              "email": {
+                                "description": "User's email",
+                                "type": "string",
+                                "format": "email",
+                                "maxLength": 64,
+                                "example": "john.doe@example.com"
+                              },
+                              "avatarUrl": {
+                                "description": "Link to user's avatar",
+                                "type": "string",
+                                "format": "uri",
+                                "default": "",
+                                "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+                              },
+                              "description": {
+                                "description": "Short user description/bio",
+                                "type": "string",
+                                "maxLength": 150,
+                                "default": "",
+                                "example": "A short bio"
+                              },
+                              "stories": {
+                                "description": "Array of own story objects",
+                                "type": "array",
+                                "items": {
+                                  "$ref": "../stories/story.yaml"
+                                }
+                              }
+                            },
+                            "example": {
+                              "_id": "65e4decdd286b30065d54af9",
+                              "name": "John Doe",
+                              "email": "john.doe@example.com",
+                              "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+                              "description": "A short bio",
+                              "stories": [
+                                {
+                                  "_id": "65f0b4a1d286b30065d54b00",
+                                  "title": "Sample story",
+                                  "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png",
+                                  "article": "Story content here...",
+                                  "category": "65e4decdd286b30065d54b11",
+                                  "ownerId": {
+                                    "name": "John Doe",
+                                    "email": "john.doe@example.com",
+                                    "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+                                    "description": "A short bio"
+                                  }
+                                }
+                              ]
+                            }
                           }
-                        },
-                        "pagination": {
-                          "$ref": "#/components/schemas/pagination"
                         }
                       }
                     }
                   }
                 },
-                "examples": {
-                  "storiesFound": {
-                    "summary": "Stories Found",
-                    "value": {
-                      "status": 200,
-                      "message": "Current user stories retrieved successfully.",
-                      "data": {
-                        "stories": [
-                          {
-                            "_id": "65f0b4a1d286b30065d54b00",
-                            "title": "My Story Title",
-                            "img": "https://example.com/story.jpg",
-                            "ownerId": "690d3e43c14a8aa7610df936",
-                            "article": "This is the body of the story.",
-                            "category": "65e4decdd286b30065d54b11"
-                          }
-                        ],
-                        "pagination": {
-                          "page": 1,
-                          "perPage": 10,
-                          "totalItems": 12,
-                          "totalPages": 2,
-                          "hasNextPage": true,
-                          "hasPreviousPage": false
-                        }
-                      }
-                    }
-                  },
-                  "noStoriesFound": {
-                    "summary": "No Stories Found",
-                    "value": {
-                      "status": 200,
-                      "message": "You haven't created any stories of your own yet.",
-                      "data": {
-                        "stories": [],
-                        "pagination": {
-                          "page": 1,
-                          "perPage": 10,
-                          "totalItems": 0,
-                          "totalPages": 0,
-                          "hasNextPage": false,
-                          "hasPreviousPage": false
-                        }
-                      }
+                "example": {
+                  "status": 200,
+                  "message": "Current user stories retrieved successfully.",
+                  "data": {
+                    "user": {
+                      "$ref": "../../components/schemas/users/userWithOwnStories.yaml"
                     }
                   }
                 }
@@ -1621,9 +1652,6 @@
                       "properties": {
                         "favorites": {
                           "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
                           "example": [
                             {
                               "_id": "68498236a100312bea079011",
@@ -1714,7 +1742,33 @@
                         "favorites": {
                           "type": "array",
                           "items": {
-                            "type": "string"
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "img": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "article": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "ownerId": {
+                                "type": "string"
+                              },
+                              "date": {
+                                "type": "string"
+                              },
+                              "favoriteCount": {
+                                "type": "integer"
+                              }
+                            }
                           },
                           "example": [
                             {
@@ -2209,6 +2263,27 @@
             "example": "Once upon a time..."
           },
           "category": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Category ID reference (if not populated)",
+                "example": "65e4decdd286b30065d54b11"
+              },
+              {
+                "type": "object",
+                "description": "Populated category object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "65e4decdd286b30065d54b11"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Adventure"
+                  }
+                }
+              }
+            ],
             "description": "Category id",
             "type": "string",
             "example": "65e4decdd286b30065d54b11"

@@ -75,12 +75,16 @@ export const getUserCurrentService = async (userId, { page, perPage }) => {
   const paginatedFavoriteIds = user.favorites.slice(skip, skip + perPage);
   const paginatedFavorites = await StoriesCollection.find({
     _id: { $in: paginatedFavoriteIds },
-  })
-    .populate('category')
-    .populate({
+  }).populate([
+    {
       path: 'ownerId',
       select: 'name email avatarUrl description',
-    });
+    },
+    {
+      path: 'category',
+      select: '_id name',
+    },
+  ]);
   const userObject = user.toObject();
   delete userObject.favorites;
   const finalUser = {
@@ -98,17 +102,30 @@ export const getUserCurrentStoriesService = async (
   const searchCriteria = {
     ownerId: userId,
   };
+  const user = await UsersCollection.findById(userId);
   const totalItems = await StoriesCollection.countDocuments(searchCriteria);
   const stories = await StoriesCollection.find(searchCriteria)
     .skip(skip)
     .limit(perPage)
-    .sort({ createdAt: -1 })
-    .populate('category')
-    .populate({
-      path: 'ownerId',
-      select: 'name avatarUrl description',
-    });
-  return { stories, totalItems };
+    .sort({ createdAt: -1, favoriteCount: -1 })
+    .populate([
+      {
+        path: 'ownerId',
+        select: 'name email avatarUrl description',
+      },
+      {
+        path: 'category',
+        select: '_id name',
+      },
+    ]);
+
+  const userObject = user.toObject();
+  delete userObject.favorites;
+  const finalUser = {
+    ...userObject,
+    stories,
+  };
+  return { user: finalUser, totalItems };
 };
 
 export const addFavorite = async (userId, storyId) => {

@@ -41,8 +41,6 @@ responses:
               properties:
                 favorites:
                   type: array
-                  items:
-                    type: string
                   example:
                     - _id: '68498236a100312bea079011'
                       img: 'https://ftp.goit.study/img/travel-blog/68498236a100312bea079011.webp'
