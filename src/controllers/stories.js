@@ -2,6 +2,7 @@ import createHttpError from 'http-errors';
 
 import {
   createStory,
+  deleteStoryByIdService,
   getAllStories,
   getStoryByIdService,
   updateStory,
@@ -100,4 +101,19 @@ export const updateStoryController = async (req, res) => {
     message: 'Successfully patched a story!',
     data: result.story,
   });
+};
+export const deleteStoryByIdController = async (req, res, next) => {
+  try {
+    const { storyId } = req.params;
+    const userId = req.user._id;
+
+    const { message } = await deleteStoryByIdService(storyId, userId);
+
+    return res.status(200).json({
+      status: 200,
+      message,
+    });
+  } catch (error) {
+    next(error);
+  }
 };

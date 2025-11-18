@@ -2,7 +2,8 @@ tags:
   - Stories
 summary: Update an existing story
 operationId: updateStory
-security: []
+security:
+  - cookieAccess: []
 description: >
   Allows an authenticated user to update their own story by providing new data.
 parameters:

@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import { StoriesCollection } from '../db/models/story.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
@@ -70,5 +71,24 @@ export const updateStory = async (storyId, ownerId, payload, options = {}) => {
   return {
     story: rawResult.value,
     isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+  };
+};
+
+export const deleteStoryByIdService = async (storyId, userId) => {
+  const story = await StoriesCollection.findById(storyId);
+
+  if (!story) {
+    throw createHttpError(404, 'Story not found');
+  }
+
+  if (story.ownerId.toString() !== userId.toString()) {
+    throw createHttpError(403, 'You are not allowed to delete this story');
+  }
+
+  await StoriesCollection.findByIdAndDelete(storyId);
+
+  return {
+    message: 'Story deleted successfully',
+    story,
   };
 };
