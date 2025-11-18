@@ -76,7 +76,7 @@ export const getCurrentUserController = async (req, res, next) => {
 export const getCurrentUserStoriesController = async (req, res) => {
   const { page, perPage } = req.paginationParams;
   const userId = req.user._id;
-  const { stories, totalItems } = await getUserCurrentStoriesService(userId, {
+  const { user, totalItems } = await getUserCurrentStoriesService(userId, {
     page,
     perPage,
   });
@@ -89,7 +89,7 @@ export const getCurrentUserStoriesController = async (req, res) => {
     status: 200,
     message: responseMessage,
     data: {
-      stories,
+      user,
       pagination,
     },
   });
