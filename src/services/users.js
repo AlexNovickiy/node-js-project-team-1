@@ -157,7 +157,14 @@ export const updateUserCurrentService = async (userId, updateData) => {
     { _id: userId },
     updateData,
     { new: true },
-  );
+  ).populate({
+    path: 'favorites',
+    populate: [
+      { path: 'category' },
+      { path: 'ownerId', select: 'name avatarUrl description' },
+    ],
+  });
+
   return user;
 };
 
