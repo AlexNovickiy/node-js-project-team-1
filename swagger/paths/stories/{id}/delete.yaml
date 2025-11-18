@@ -1,0 +1,61 @@
+tags:
+  - Stories
+
+summary: Delete story by ID
+operationId: deleteStoryById
+security:
+  - cookieAccess: []
+
+description: >
+  Deletes a story by its ID.  
+  Only the owner of the story is allowed to delete it.  
+  Requires authentication (accessToken in cookies).
+
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 68498236a100312bea079030
+
+responses:
+  '200':
+    description: Story deleted successfully!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Story deleted successfully!
+
+  '400':
+    $ref: ../../../components/responses/400.yaml
+
+  '403':
+    description: User is not allowed to delete this story
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 403
+            message:
+              type: string
+              example: You are not allowed to delete this story
+
+  '404':
+    $ref: ../../../components/responses/404.yaml
+
+  '500':
+    $ref: ../../../components/responses/500.yaml

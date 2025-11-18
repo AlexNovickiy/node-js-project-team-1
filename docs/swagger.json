@@ -1932,7 +1932,11 @@
         ],
         "summary": "Update an existing story",
         "operationId": "updateStory",
-        "security": [],
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
         "description": "Allows an authenticated user to update their own story by providing new data.\n",
         "parameters": [
           {
@@ -2009,6 +2013,85 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Delete story by ID",
+        "operationId": "deleteStoryById",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "description": "Deletes a story by its ID.   Only the owner of the story is allowed to delete it.   Requires authentication (accessToken in cookies).\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079030"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Story deleted successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Story deleted successfully!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "description": "User is not allowed to delete this story",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You are not allowed to delete this story"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
             "$ref": "#/components/responses/404"

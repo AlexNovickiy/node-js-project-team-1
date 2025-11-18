@@ -92,6 +92,8 @@ paths:
       $ref: '../swagger/paths/stories/{id}/get.yaml'
     patch:
       $ref: '../swagger/paths/stories/{id}/patch.yaml'
+    delete:
+      $ref: '../swagger/paths/stories/{id}/delete.yaml'
 components:
   securitySchemes:
     cookieAccess:
