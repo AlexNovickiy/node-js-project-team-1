@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import {
   createStoryController,
+  deleteStoryByIdController,
   getStoriesController,
   getStoryByIdController,
   updateStoryController,
@@ -42,6 +43,12 @@ storiesRouter.patch(
   upload.single('storyImage'),
   validateBody(updateStorySchema),
   ctrlWrapper(updateStoryController),
+);
+
+storiesRouter.delete(
+  '/:storyId',
+  isValidId('storyId'),
+  ctrlWrapper(deleteStoryByIdController),
 );
 
 export default storiesRouter;
