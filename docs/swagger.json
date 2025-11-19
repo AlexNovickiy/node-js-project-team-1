@@ -346,6 +346,11 @@
                     "description": "Image associated with the story",
                     "format": "binary",
                     "type": "string"
+                  },
+                  "shortDescription": {
+                    "description": "A brief summary of the travel story",
+                    "type": "string",
+                    "example": "A quick overview of my unforgettable journey to Japan."
                   }
                 }
               }
@@ -1989,6 +1994,12 @@
             "format": "date-time",
             "example": "2024-07-01T12:00:00Z"
           },
+          "shortDescription": {
+            "description": "Short description of the story",
+            "type": "string",
+            "maxLength": 150,
+            "example": "This is a brief summary of the story."
+          },
           "favoriteCount": {
             "description": "Number of favorites",
             "type": "integer",
@@ -2013,6 +2024,7 @@
           "title": "Sample story",
           "article": "Story content here...",
           "category": "65e4decdd286b30065d54b11",
+          "shortDescription": "This is a brief summary of the story.",
           "ownerId": {
             "_id": "6881563901add19ee16fd017",
             "name": "Матвій Савченко",
