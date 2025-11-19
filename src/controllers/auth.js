@@ -123,11 +123,11 @@ export const requestChangeEmailController = async (req, res) => {
 };
 
 export const confirmEmailChangeController = async (req, res) => {
-  await confirmEmailChange(req.body);
+  const user = await confirmEmailChange(req.body);
   res.json({
     message: 'Email was successfully changed!',
     status: 200,
-    data: {},
+    data: { user },
   });
 };
 
