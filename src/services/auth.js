@@ -245,7 +245,7 @@ export const confirmEmailChange = async (payload) => {
     throw createHttpError(409, 'Email already in use');
   }
 
-  await UsersCollection.updateOne(
+  const updatedUser = await UsersCollection.findOneAndUpdate(
     { _id: user._id },
     { email: payload.newEmail },
     { new: true },
@@ -256,6 +256,8 @@ export const confirmEmailChange = async (payload) => {
       { path: 'ownerId', select: 'name avatarUrl description' },
     ],
   });
+
+  return updatedUser;
 };
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
