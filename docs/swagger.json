@@ -1288,6 +1288,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "description": "Name user"
+                  },
                   "description": {
                     "type": "string",
                     "maxLength": 150,

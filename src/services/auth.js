@@ -200,7 +200,9 @@ export const requestChangeEmailToken = async (oldEmail, newEmail) => {
     newEmail,
     link: `${getEnvVar(
       'APP_DOMAIN',
-    )}/confirm-email?token=${token}&new=${encodeURIComponent(newEmail)}`,
+    )}/user-edit/confirm-email?token=${token}&newEmail=${encodeURIComponent(
+      newEmail,
+    )}`,
   });
 
   await sendEmail({
@@ -246,7 +248,14 @@ export const confirmEmailChange = async (payload) => {
   await UsersCollection.updateOne(
     { _id: user._id },
     { email: payload.newEmail },
-  );
+    { new: true },
+  ).populate({
+    path: 'favorites',
+    populate: [
+      { path: 'category' },
+      { path: 'ownerId', select: 'name avatarUrl description' },
+    ],
+  });
 };
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
