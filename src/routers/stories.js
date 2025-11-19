@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import {
   createStoryController,
+  deleteStoryByIdController,
   getStoriesController,
   getStoryByIdController,
   updateStoryController,
@@ -25,7 +26,6 @@ storiesRouter.get(
   ctrlWrapper(getStoryByIdController),
 );
 
-// --- Приватні роути ---
 storiesRouter.use(authenticate);
 
 // POST /api/stories - СТВОРЕННЯ історії
@@ -45,6 +45,10 @@ storiesRouter.patch(
   ctrlWrapper(updateStoryController),
 );
 
-// (Тут можна додати DELETE, якщо потрібно за ТЗ)
+storiesRouter.delete(
+  '/:storyId',
+  isValidId('storyId'),
+  ctrlWrapper(deleteStoryByIdController),
+);
 
 export default storiesRouter;

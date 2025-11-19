@@ -1,0 +1,44 @@
+tags:
+  - Stories
+summary: Get story by ID
+operationId: getStoryById
+security: []
+description: >
+  Returns a single story by its ID with populated owner and category.
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 68498236a100312bea079030
+
+responses:
+  '200':
+    description: Successfully found story!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found story!
+            data:
+              $ref: ../../../components/schemas/stories/story.yaml
+
+  '400':
+    $ref: ../../../components/responses/400.yaml
+
+  '404':
+    $ref: ../../../components/responses/404.yaml
+
+  '500':
+    $ref: ../../../components/responses/500.yaml

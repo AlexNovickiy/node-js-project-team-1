@@ -1,8 +1,10 @@
 import createHttpError from 'http-errors';
 
 import {
-  getAllStories,
   createStory,
+  deleteStoryByIdService,
+  getAllStories,
+  getStoryByIdService,
   updateStory,
 } from '../services/stories.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
@@ -27,9 +29,31 @@ export const getStoriesController = async (req, res) => {
 };
 
 export const getStoryByIdController = async (req, res) => {
-  // TODO: Сервіс для getStoryById(req.params.storyId)
-  const data = { message: 'Story GET by ID endpoint placeholder' };
-  res.status(200).json({ status: 200, data });
+  try {
+    const { storyId } = req.params;
+
+    const story = await getStoryByIdService(storyId);
+
+    if (!story) {
+      return res.status(404).json({
+        status: 404,
+        message: 'Story not found',
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: 'Successfully found story!',
+      data: story,
+    });
+  } catch (error) {
+    console.error('Get story by ID error:', error);
+
+    return res.status(500).json({
+      status: 500,
+      message: 'Internal server error',
+    });
+  }
 };
 
 export const createStoryController = async (req, res, next) => {
@@ -77,4 +101,19 @@ export const updateStoryController = async (req, res) => {
     message: 'Successfully patched a story!',
     data: result.story,
   });
+};
+export const deleteStoryByIdController = async (req, res, next) => {
+  try {
+    const { storyId } = req.params;
+    const userId = req.user._id;
+
+    const { message } = await deleteStoryByIdService(storyId, userId);
+
+    return res.status(200).json({
+      status: 200,
+      message,
+    });
+  } catch (error) {
+    next(error);
+  }
 };

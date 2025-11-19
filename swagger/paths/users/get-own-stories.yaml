@@ -39,47 +39,16 @@ responses:
             data:
               type: object
               properties:
-                stories:
-                  type: array
-                  description: The paginated array of story objects.
-                  items:
-                    $ref: ../../components/schemas/stories/story.yaml
-                pagination:
-                  $ref: ../../components/schemas/pagination/pagination.yaml
-        examples:
-          storiesFound:
-            summary: Stories Found
-            value:
-              status: 200
-              message: Current user stories retrieved successfully.
-              data:
-                stories:
-                  - _id: 65f0b4a1d286b30065d54b00
-                    title: My Story Title
-                    img: 'https://example.com/story.jpg'
-                    ownerId: 690d3e43c14a8aa7610df936
-                    article: This is the body of the story.
-                    category: 65e4decdd286b30065d54b11
-                pagination:
-                  page: 1
-                  perPage: 10
-                  totalItems: 12
-                  totalPages: 2
-                  hasNextPage: true
-                  hasPreviousPage: false
-          noStoriesFound:
-            summary: No Stories Found
-            value:
-              status: 200
-              message: You haven't created any stories of your own yet.
-              data:
-                stories: []
-                pagination:
-                  page: 1
-                  perPage: 10
-                  totalItems: 0
-                  totalPages: 0
-                  hasNextPage: false
-                  hasPreviousPage: false
+                user:
+                  type: object
+                  example:
+                    $ref: '../../components/schemas/users/userWithOwnStories.yaml'
+        example:
+          status: 200
+          message: Current user stories retrieved successfully.
+          data:
+            user:
+              $ref: '../../components/schemas/users/userWithOwnStories.yaml'
+
   '401':
     $ref: ../../components/responses/401.yaml

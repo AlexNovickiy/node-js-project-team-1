@@ -14,11 +14,11 @@ import { SessionsCollection } from '../db/models/session.js';
 import { UsersCollection } from '../db/models/user.js';
 import { createActionToken } from '../utils/createActionToken.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
-import { sendEmail } from '../utils/sendMail.js';
 import {
   getFullNameFromGoogleTokenPayload,
   validateCode,
 } from '../utils/googleOAuth2.js';
+import { sendEmail } from '../utils/sendMail.js';
 
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
@@ -46,7 +46,15 @@ export const registerUser = async (payload) => {
 };
 
 export const loginUser = async (payload) => {
-  const user = await UsersCollection.findOne({ email: payload.email });
+  const user = await UsersCollection.findOne({ email: payload.email }).populate(
+    {
+      path: 'favorites',
+      populate: [
+        { path: 'category' },
+        { path: 'ownerId', select: 'name, avatarUrl, description' },
+      ],
+    },
+  );
   if (!user) {
     throw createHttpError(401, 'User not found');
   }
@@ -192,7 +200,9 @@ export const requestChangeEmailToken = async (oldEmail, newEmail) => {
     newEmail,
     link: `${getEnvVar(
       'APP_DOMAIN',
-    )}/confirm-email?token=${token}&new=${encodeURIComponent(newEmail)}`,
+    )}/user-edit/confirm-email?token=${token}&newEmail=${encodeURIComponent(
+      newEmail,
+    )}`,
   });
 
   await sendEmail({
@@ -235,27 +245,53 @@ export const confirmEmailChange = async (payload) => {
     throw createHttpError(409, 'Email already in use');
   }
 
-  await UsersCollection.updateOne(
+  const updatedUser = await UsersCollection.findOneAndUpdate(
     { _id: user._id },
     { email: payload.newEmail },
-  );
-};
+    { new: true },
+  ).populate({
+    path: 'favorites',
+    populate: [
+      { path: 'category' },
+      { path: 'ownerId', select: 'name avatarUrl description' },
+    ],
+  });
 
+  return updatedUser;
+};
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
   const payload = loginTicket.getPayload();
-  if (!payload) throw createHttpError(401, 'Invalid Google token');
 
-  let user = await UsersCollection.findOne({ email: payload.email });
+  if (!payload) {
+    throw createHttpError(401, 'Invalid Google token');
+  }
+
+  let user = await UsersCollection.findOne({ email: payload.email }).populate({
+    path: 'favorites',
+    populate: [
+      { path: 'category', select: 'name' },
+      { path: 'ownerId', select: 'name' },
+    ],
+  });
 
   if (!user) {
     const password = await bcrypt.hash(randomBytes(10).toString('hex'), 10);
+
     user = await UsersCollection.create({
       email: payload.email,
       name: getFullNameFromGoogleTokenPayload(payload),
       avatarURL: payload.picture || null,
       password,
       role: 'parent',
+    });
+
+    user = await UsersCollection.findById(user._id).populate({
+      path: 'favorites',
+      populate: [
+        { path: 'category', select: 'name' },
+        { path: 'ownerId', select: 'name, avatarUrl, description' },
+      ],
     });
   } else {
     const updatedData = {};
@@ -264,6 +300,7 @@ export const loginOrSignupWithGoogle = async (code) => {
     if (fullName && fullName !== user.name) {
       updatedData.name = fullName;
     }
+
     if (payload.picture && payload.picture !== user.avatarURL) {
       updatedData.avatarURL = payload.picture;
     }
@@ -271,6 +308,12 @@ export const loginOrSignupWithGoogle = async (code) => {
     if (Object.keys(updatedData).length > 0) {
       user = await UsersCollection.findByIdAndUpdate(user._id, updatedData, {
         new: true,
+      }).populate({
+        path: 'favorites',
+        populate: [
+          { path: 'category', select: 'name' },
+          { path: 'ownerId', select: 'name, avatarUrl, description' },
+        ],
       });
     }
   }

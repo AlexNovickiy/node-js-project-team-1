@@ -9,8 +9,8 @@ info:
 
 servers:
   - url: https://node-js-project-team-1.onrender.com
-  - url: http://localhost:3000
   - url: http://localhost:5000
+  - url: http://127.0.0.1:3000
 tags:
   - name: Auth
     description: User authentication and registration
@@ -88,8 +88,12 @@ paths:
       $ref: '../swagger/paths/categories/get-categories.yaml'
 
   /stories/{id}:
+    get:
+      $ref: '../swagger/paths/stories/{id}/get.yaml'
     patch:
       $ref: '../swagger/paths/stories/{id}/patch.yaml'
+    delete:
+      $ref: '../swagger/paths/stories/{id}/delete.yaml'
 components:
   securitySchemes:
     cookieAccess:

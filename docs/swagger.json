@@ -14,10 +14,10 @@
       "url": "https://node-js-project-team-1.onrender.com"
     },
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:5000"
     },
     {
-      "url": "http://localhost:5000"
+      "url": "http://127.0.0.1:3000"
     }
   ],
   "tags": [
@@ -194,7 +194,116 @@
                       "properties": {
                         "user": {
                           "type": "object",
-                          "$ref": "#/components/schemas/session"
+                          "required": [
+                            "_id",
+                            "name",
+                            "email",
+                            "favorites",
+                            "createdAt",
+                            "updatedAt"
+                          ],
+                          "properties": {
+                            "_id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email"
+                            },
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "favorites": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "_id",
+                                  "img",
+                                  "title",
+                                  "article",
+                                  "category",
+                                  "ownerId",
+                                  "date",
+                                  "favoriteCount"
+                                ],
+                                "properties": {
+                                  "_id": {
+                                    "type": "string"
+                                  },
+                                  "img": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "article": {
+                                    "type": "string"
+                                  },
+                                  "category": {
+                                    "type": "object",
+                                    "required": [
+                                      "_id",
+                                      "name"
+                                    ],
+                                    "properties": {
+                                      "_id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "ownerId": {
+                                    "type": "object",
+                                    "required": [
+                                      "_id"
+                                    ],
+                                    "properties": {
+                                      "_id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "avatarUrl": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "favoriteCount": {
+                                    "type": "number"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  }
+                                }
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
                         }
                       }
                     }
@@ -990,6 +1099,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1176,6 +1288,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "description": "Name user"
+                  },
                   "description": {
                     "type": "string",
                     "maxLength": 150,
@@ -1212,7 +1329,117 @@
                       "type": "object",
                       "properties": {
                         "user": {
-                          "$ref": "#/components/schemas/user"
+                          "type": "object",
+                          "required": [
+                            "_id",
+                            "name",
+                            "email",
+                            "favorites",
+                            "createdAt",
+                            "updatedAt"
+                          ],
+                          "properties": {
+                            "_id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email"
+                            },
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "favorites": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "_id",
+                                  "img",
+                                  "title",
+                                  "article",
+                                  "category",
+                                  "ownerId",
+                                  "date",
+                                  "favoriteCount"
+                                ],
+                                "properties": {
+                                  "_id": {
+                                    "type": "string"
+                                  },
+                                  "img": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "article": {
+                                    "type": "string"
+                                  },
+                                  "category": {
+                                    "type": "object",
+                                    "required": [
+                                      "_id",
+                                      "name"
+                                    ],
+                                    "properties": {
+                                      "_id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "ownerId": {
+                                    "type": "object",
+                                    "required": [
+                                      "_id"
+                                    ],
+                                    "properties": {
+                                      "_id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "avatarUrl": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "favoriteCount": {
+                                    "type": "number"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  }
+                                }
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
                         }
                       }
                     }
@@ -1284,64 +1511,92 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "stories": {
-                          "type": "array",
-                          "description": "The paginated array of story objects.",
-                          "items": {
-                            "$ref": "#/components/schemas/story"
+                        "user": {
+                          "type": "object",
+                          "example": {
+                            "type": "object",
+                            "required": [
+                              "name",
+                              "email",
+                              "avatarUrl",
+                              "description",
+                              "stories"
+                            ],
+                            "properties": {
+                              "_id": {
+                                "description": "User's id",
+                                "type": "string",
+                                "example": "65e4decdd286b30065d54af9"
+                              },
+                              "name": {
+                                "description": "User's name",
+                                "type": "string",
+                                "maxLength": 32,
+                                "example": "John Doe"
+                              },
+                              "email": {
+                                "description": "User's email",
+                                "type": "string",
+                                "format": "email",
+                                "maxLength": 64,
+                                "example": "john.doe@example.com"
+                              },
+                              "avatarUrl": {
+                                "description": "Link to user's avatar",
+                                "type": "string",
+                                "format": "uri",
+                                "default": "",
+                                "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+                              },
+                              "description": {
+                                "description": "Short user description/bio",
+                                "type": "string",
+                                "maxLength": 150,
+                                "default": "",
+                                "example": "A short bio"
+                              },
+                              "stories": {
+                                "description": "Array of own story objects",
+                                "type": "array",
+                                "items": {
+                                  "$ref": "../stories/story.yaml"
+                                }
+                              }
+                            },
+                            "example": {
+                              "_id": "65e4decdd286b30065d54af9",
+                              "name": "John Doe",
+                              "email": "john.doe@example.com",
+                              "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+                              "description": "A short bio",
+                              "stories": [
+                                {
+                                  "_id": "65f0b4a1d286b30065d54b00",
+                                  "title": "Sample story",
+                                  "img": "https://res.cloudinary.com/uqwgdu/image/upload/story.png",
+                                  "article": "Story content here...",
+                                  "category": "65e4decdd286b30065d54b11",
+                                  "ownerId": {
+                                    "name": "John Doe",
+                                    "email": "john.doe@example.com",
+                                    "avatarUrl": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
+                                    "description": "A short bio"
+                                  }
+                                }
+                              ]
+                            }
                           }
-                        },
-                        "pagination": {
-                          "$ref": "#/components/schemas/pagination"
                         }
                       }
                     }
                   }
                 },
-                "examples": {
-                  "storiesFound": {
-                    "summary": "Stories Found",
-                    "value": {
-                      "status": 200,
-                      "message": "Current user stories retrieved successfully.",
-                      "data": {
-                        "stories": [
-                          {
-                            "_id": "65f0b4a1d286b30065d54b00",
-                            "title": "My Story Title",
-                            "img": "https://example.com/story.jpg",
-                            "ownerId": "690d3e43c14a8aa7610df936",
-                            "article": "This is the body of the story.",
-                            "category": "65e4decdd286b30065d54b11"
-                          }
-                        ],
-                        "pagination": {
-                          "page": 1,
-                          "perPage": 10,
-                          "totalItems": 12,
-                          "totalPages": 2,
-                          "hasNextPage": true,
-                          "hasPreviousPage": false
-                        }
-                      }
-                    }
-                  },
-                  "noStoriesFound": {
-                    "summary": "No Stories Found",
-                    "value": {
-                      "status": 200,
-                      "message": "You haven't created any stories of your own yet.",
-                      "data": {
-                        "stories": [],
-                        "pagination": {
-                          "page": 1,
-                          "perPage": 10,
-                          "totalItems": 0,
-                          "totalPages": 0,
-                          "hasNextPage": false,
-                          "hasPreviousPage": false
-                        }
-                      }
+                "example": {
+                  "status": 200,
+                  "message": "Current user stories retrieved successfully.",
+                  "data": {
+                    "user": {
+                      "$ref": "../../components/schemas/users/userWithOwnStories.yaml"
                     }
                   }
                 }
@@ -1510,31 +1765,20 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "user": {
-                          "type": "object",
-                          "properties": {
-                            "_id": {
-                              "type": "string",
-                              "example": "690dd01a85cc808bb9cc909b"
-                            },
-                            "name": {
-                              "type": "string",
-                              "example": "Test User"
-                            },
-                            "email": {
-                              "type": "string",
-                              "example": "test@example.com"
-                            },
-                            "favorites": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              },
-                              "example": [
-                                "68498236a100312bea079008"
-                              ]
+                        "favorites": {
+                          "type": "array",
+                          "example": [
+                            {
+                              "_id": "68498236a100312bea079011",
+                              "img": "https://ftp.goit.study/img/travel-blog/68498236a100312bea079011.webp",
+                              "title": "Швейцарія: Альпи і вершина Юнгфрау",
+                              "article": "Ми сіли на поїзд, який піднімається на вершину Юнгфрау — «даху Європи». Альпи вражали з кожним метром підйому. На вершині нас чекали льодові печери і панорама гір, що здавались безкінечними. Прогулянки навколо показали, що Швейцарія — це країна, де природа і комфорт гармонійно поєднані.",
+                              "category": "68fb50c80ae91338641121f1",
+                              "ownerId": "6881563901add19ee16fd009",
+                              "date": "2024-10-26T00:00:00.000Z",
+                              "favoriteCount": 26
                             }
-                          }
+                          ]
                         }
                       }
                     }
@@ -1593,25 +1837,66 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
                       "example": 200
                     },
+                    "message": {
+                      "type": "string",
+                      "example": "Story successfully added to favorites"
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Removed from favorites"
-                        },
-                        "userId": {
-                          "type": "string",
-                          "example": "690d1e4b1754f3c839daad1c"
-                        },
-                        "storyId": {
-                          "type": "string",
-                          "example": "68498236a100312bea079008"
+                        "favorites": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "img": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "article": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "ownerId": {
+                                "type": "string"
+                              },
+                              "date": {
+                                "type": "string"
+                              },
+                              "favoriteCount": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "_id": "68498236a100312bea079011",
+                              "img": "https://ftp.goit.study/img/travel-blog/68498236a100312bea079011.webp",
+                              "title": "Швейцарія: Альпи і вершина Юнгфрау",
+                              "article": "Ми сіли на поїзд, який піднімається на вершину Юнгфрау — «даху Європи». Альпи вражали з кожним метром підйому. На вершині нас чекали льодові печери і панорама гір, що здавались безкінечними. Прогулянки навколо показали, що Швейцарія — це країна, де природа і комфорт гармонійно поєднані.",
+                              "category": "68fb50c80ae91338641121f1",
+                              "ownerId": "6881563901add19ee16fd009",
+                              "date": "2024-10-26T00:00:00.000Z",
+                              "favoriteCount": 26
+                            }
+                          ]
                         }
                       }
                     }
@@ -1751,13 +2036,76 @@
       }
     },
     "/stories/{id}": {
+      "get": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Get story by ID",
+        "operationId": "getStoryById",
+        "security": [],
+        "description": "Returns a single story by its ID with populated owner and category.\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079030"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found story!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found story!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/story"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
       "patch": {
         "tags": [
           "Stories"
         ],
         "summary": "Update an existing story",
         "operationId": "updateStory",
-        "security": [],
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
         "description": "Allows an authenticated user to update their own story by providing new data.\n",
         "parameters": [
           {
@@ -1834,6 +2182,85 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Stories"
+        ],
+        "summary": "Delete story by ID",
+        "operationId": "deleteStoryById",
+        "security": [
+          {
+            "cookieAccess": []
+          }
+        ],
+        "description": "Deletes a story by its ID.   Only the owner of the story is allowed to delete it.   Requires authentication (accessToken in cookies).\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "68498236a100312bea079030"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Story deleted successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Story deleted successfully!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "description": "User is not allowed to delete this story",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You are not allowed to delete this story"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -1951,6 +2378,27 @@
             "example": "Once upon a time..."
           },
           "category": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Category ID reference (if not populated)",
+                "example": "65e4decdd286b30065d54b11"
+              },
+              {
+                "type": "object",
+                "description": "Populated category object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "65e4decdd286b30065d54b11"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Adventure"
+                  }
+                }
+              }
+            ],
             "description": "Category id",
             "type": "string",
             "example": "65e4decdd286b30065d54b11"
@@ -2520,7 +2968,116 @@
                   "properties": {
                     "user": {
                       "type": "object",
-                      "$ref": "#/components/schemas/session"
+                      "required": [
+                        "_id",
+                        "name",
+                        "email",
+                        "favorites",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "favorites": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "_id",
+                              "img",
+                              "title",
+                              "article",
+                              "category",
+                              "ownerId",
+                              "date",
+                              "favoriteCount"
+                            ],
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "img": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "article": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "object",
+                                "required": [
+                                  "_id",
+                                  "name"
+                                ],
+                                "properties": {
+                                  "_id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "ownerId": {
+                                "type": "object",
+                                "required": [
+                                  "_id"
+                                ],
+                                "properties": {
+                                  "_id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "avatarUrl": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "date": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "favoriteCount": {
+                                "type": "number"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            }
+                          }
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }

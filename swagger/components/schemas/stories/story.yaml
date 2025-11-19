@@ -26,6 +26,19 @@ properties:
     maxLength: 2500
     example: 'Once upon a time...'
   category:
+    oneOf:
+      - type: string
+        description: 'Category ID reference (if not populated)'
+        example: 65e4decdd286b30065d54b11
+      - type: object
+        description: 'Populated category object'
+        properties:
+          _id:
+            type: string
+            example: 65e4decdd286b30065d54b11
+          name:
+            type: string
+            example: Adventure
     description: 'Category id'
     type: string
     example: 65e4decdd286b30065d54b11
