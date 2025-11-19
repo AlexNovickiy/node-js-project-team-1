@@ -96,10 +96,8 @@ export const getCurrentUserStoriesController = async (req, res) => {
 };
 
 export const updateCurrentUserController = async (req, res) => {
-  // TODO: Сервіс для updateUser(req.user.id, req.body, req.file)
-
   const userId = req.user._id;
-  const { description } = req.body;
+  const { name, description } = req.body;
   const avatar = req.file;
   let avatarUrl;
 
@@ -108,6 +106,7 @@ export const updateCurrentUserController = async (req, res) => {
   }
 
   const updateData = {};
+  if (name) updateData.name = name;
   if (description) updateData.description = description;
   if (avatarUrl) updateData.avatarUrl = avatarUrl;
 
